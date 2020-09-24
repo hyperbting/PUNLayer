@@ -1,4 +1,4 @@
-﻿public class SerializeReadWrite
+﻿public class SerilizableReadWrite
 {
     public string name;
 
@@ -7,7 +7,7 @@
     //Write to local
     public System.Action<object> Write;
 
-    public SerializeReadWrite(System.Func<object> read, System.Action<object> write)
+    public SerilizableReadWrite(System.Func<object> read, System.Action<object> write)
     {
         Read = read;
         Write = write;

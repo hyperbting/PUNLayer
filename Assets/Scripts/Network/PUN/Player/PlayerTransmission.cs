@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(PhotonView))]
-public class PlayerTransmission : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
+public partial class PlayerTransmission : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
 {
     [SerializeField]
     private Transform follower;
@@ -24,15 +24,15 @@ public class PlayerTransmission : MonoBehaviourPunCallbacks, IPunInstantiateMagi
 
     private void OnDestroy()
     {
-        sh.Unregister(new SerializeReadWrite(ReadPosition, WritePosition) { name = "SyncPos" });
-        sh.Unregister(new SerializeReadWrite(ReadRotation, WriteRotation) { name = "SyncRot" });
+        sh.Unregister(new SerilizableReadWrite(ReadPosition, WritePosition) { name = "SyncPos" });
+        sh.Unregister(new SerilizableReadWrite(ReadRotation, WriteRotation) { name = "SyncRot" });
     }
 
     private void Start()
     {
         sh = GetComponent<ISerializableHelper>();
-        sh.Register(new SerializeReadWrite(ReadPosition, WritePosition) { name="SyncPos"});
-        sh.Register(new SerializeReadWrite(ReadRotation, WriteRotation) { name ="SyncRot"});
+        sh.Register(new SerilizableReadWrite(ReadPosition, WritePosition) { name="SyncPos"});
+        sh.Register(new SerilizableReadWrite(ReadRotation, WriteRotation) { name ="SyncRot"});
 
         pm = GameObject.Find("PlayerManager").GetComponent<IPlayerMaker>();
 
@@ -50,6 +50,9 @@ public class PlayerTransmission : MonoBehaviourPunCallbacks, IPunInstantiateMagi
             follower = transform;
             go.transform.SetParent(transform);
         }
+
+        // Now Deal with Personal Items
+        pm.SyncPersonalItems();
     }
 
     // for Owner

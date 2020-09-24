@@ -1,5 +1,5 @@
 ﻿public interface ISerializableHelper
 {
-    void Register(SerializeReadWrite srw);
-    void Unregister(SerializeReadWrite srw);
+    void Register(SerilizableReadWrite srw);
+    void Unregister(SerilizableReadWrite srw);
 }

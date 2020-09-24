@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 
 public class Player : MonoBehaviour
 {
+    public ItemHolder itHolder;
+    [Space]
     public bool isHost = false;
 
     public float moveSpeed;
@@ -33,6 +35,9 @@ public class Player : MonoBehaviour
     public void Awake()
     {
         pInput = new PUN2Tester();
+
+        if (itHolder == null)
+            itHolder = GetComponent<ItemHolder>();
     }
 
     // Start is called before the first frame update
@@ -59,27 +64,30 @@ public class Player : MonoBehaviour
 
     private void Fire(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
     {
-        if (!Photon.Pun.PhotonNetwork.InRoom || ctx.ReadValue<float>() < 0.5)
+        if (ctx.ReadValue<float>() < 0.5)
             return;
 
-        var go = Photon.Pun.PhotonNetwork.InstantiateRoomObject("PUNNetowrkObject", transform.position, Quaternion.identity);
-        var pv = go.GetComponent<Photon.Pun.PhotonView>();
-        pv.TransferOwnership(Photon.Pun.PhotonNetwork.LocalPlayer);
-        _ = ReleaseOwnerShip(pv);
+        //var go = Photon.Pun.PhotonNetwork.InstantiateRoomObject("NetworkedObjectToken", transform.position, Quaternion.identity);
+        //var pv = go.GetComponent<Photon.Pun.PhotonView>();
+        //pv.TransferOwnership(Photon.Pun.PhotonNetwork.LocalPlayer);
+        //_ = ReleaseOwnerShip(pv);
+
+        //CreatePersonalItem
+        itHolder.CreateItemBase();
     }
 
-    async Task ReleaseOwnerShip(Photon.Pun.PhotonView pv)
-    {
-        await Task.Delay(1);
-        pv.TransferOwnership(null);
-    }
+    //async Task ReleaseOwnerShip(Photon.Pun.PhotonView pv)
+    //{
+    //    await Task.Delay(1);
+    //    pv.TransferOwnership(null);
+    //}
 
     private void FireSub(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
     {
-        if (!Photon.Pun.PhotonNetwork.InRoom || ctx.ReadValue<float>() < 0.5)
-            return;
+        //if (!Photon.Pun.PhotonNetwork.InRoom || ctx.ReadValue<float>() < 0.5)
+        //    return;
 
-        Photon.Pun.PhotonNetwork.Instantiate("PUNNetowrkObject", transform.position, Quaternion.identity);
+        //Photon.Pun.PhotonNetwork.Instantiate("PUNNetowrkObject", transform.position, Quaternion.identity);
     }
 
     private void Move(Vector2 direction)

@@ -6,7 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(PhotonView))]
 public class SerializableHelper : MonoBehaviour, IPunObservable, ISerializableHelper
 {
-    Dictionary<string, SerializeReadWrite> dataToSync = new Dictionary<string,SerializeReadWrite>();
+    Dictionary<string, SerilizableReadWrite> dataToSync = new Dictionary<string, SerilizableReadWrite>();
 
     //public override void OnEnable()
     //{
@@ -19,7 +19,7 @@ public class SerializableHelper : MonoBehaviour, IPunObservable, ISerializableHe
     //}
 
     #region interface
-    public void Register(SerializeReadWrite srw)
+    public void Register(SerilizableReadWrite srw)
     {
         if (!dataToSync.ContainsKey(srw.name))
         {
@@ -28,7 +28,7 @@ public class SerializableHelper : MonoBehaviour, IPunObservable, ISerializableHe
         }
     }
 
-    public void Unregister(SerializeReadWrite srw)
+    public void Unregister(SerilizableReadWrite srw)
     {
         Unregister(srw.name);
     }
@@ -53,7 +53,7 @@ public class SerializableHelper : MonoBehaviour, IPunObservable, ISerializableHe
             for (int i = 0; i < keys.Count; i++)
             {
                 //Debug.Log($"TryGetValue for Key:{keys[i]}");
-                if (dataToSync.TryGetValue(keys[i], out SerializeReadWrite val))
+                if (dataToSync.TryGetValue(keys[i], out SerilizableReadWrite val))
                 {
                     var va = val?.Read();
                     //Debug.Log($" Key:{keys[i]} {va}");
@@ -67,7 +67,7 @@ public class SerializableHelper : MonoBehaviour, IPunObservable, ISerializableHe
             for (int i = 0; i < keys.Count; i++)
             {
                 //Debug.Log($"TryGetValue for Key:{keys[i]}");
-                if (dataToSync.TryGetValue(keys[i], out SerializeReadWrite val))
+                if (dataToSync.TryGetValue(keys[i], out SerilizableReadWrite val))
                 {
                     var va = stream.ReceiveNext();
                     //Debug.Log($"{va} Received");

@@ -54,6 +54,10 @@ public class PlayerManager : MonoBehaviour, IPlayerMaker
         return go;
     }
 
+    public void SyncPersonalItems()
+    {
+    }
+
     public void OnJoinedRoomAct(GameObject networkedPlayerToken)
     {
         Debug.Log($"OnJoinedRoomAct");
