@@ -8,6 +8,10 @@ using System.Threading.Tasks;
 
 public class Player : MonoBehaviour
 {
+    public PlayerTransmission transmissionToken;
+    Transform transmissionTransform;
+    [Space]
+
     public ItemHolder itHolder;
     [Space]
     public bool isHost = false;
@@ -60,6 +64,12 @@ public class Player : MonoBehaviour
         // behind by one frame.
         Look(around);
         Move(move);
+
+        if (transmissionToken != null && transmissionTransform != null)
+        {
+            transmissionTransform.position = transform.position;
+            transmissionTransform.rotation = transform.rotation;
+        }
     }
 
     private void Fire(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
@@ -110,4 +120,19 @@ public class Player : MonoBehaviour
         //m_Rotation.x = Mathf.Clamp(m_Rotation.x - rotate.y * scaledRotateSpeed, -89, 89);
         transform.localEulerAngles = m_Rotation;
     }
+
+    #region SerilizableReadWrite
+    public void RegisterWithTransmissionToken(PlayerTransmission pt)
+    {
+        transmissionToken = pt;
+        transmissionTransform = transmissionToken.transform;
+
+        var listToSerializableSync = new List<SerilizableReadWrite>()
+        {
+            //new SerilizableReadWrite(ReadPosition, WritePosition) { name = "SyncPos" },
+            //new SerilizableReadWrite(ReadRotation, WriteRotation) { name = "SyncRot" }
+        };
+        pt.Setup(listToSerializableSync);
+    }
+    #endregion SerilizableReadWrite
 }

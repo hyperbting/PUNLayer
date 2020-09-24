@@ -17,4 +17,9 @@ public class ServiceManager : MonoBehaviour
             return instance;
         }
     }
+
+    public void Awake()
+    {
+        DontDestroyOnLoad(this);
+    }
 }

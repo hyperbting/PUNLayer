@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4540745332390190242}
   - component: {fileID: 789010574065468813}
   - component: {fileID: 3129467774125685042}
+  - component: {fileID: 8696551306678954641}
   m_Layer: 0
   m_Name: PlayerTransmissionToken
   m_TagString: Untagged
@@ -54,6 +55,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 789010574065468813}
+  - {fileID: 8696551306678954641}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -69,7 +71,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b3b184c44917f14cbd156af4aee3624, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  follower: {fileID: 0}
 --- !u!114 &789010574065468813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -94,3 +95,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc03d2f5c0695e248825907569df421c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8696551306678954641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7690134541824521141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0

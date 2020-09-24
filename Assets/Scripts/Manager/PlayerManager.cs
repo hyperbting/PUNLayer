@@ -62,6 +62,6 @@ public class PlayerManager : MonoBehaviour, IPlayerMaker
     {
         Debug.Log($"OnJoinedRoomAct");
         var ptScript = networkedPlayerToken.GetComponent<PlayerTransmission>();
-        ptScript.Setup(hostPlayer.gameObject.transform);
+        hostPlayer.RegisterWithTransmissionToken(ptScript);
     }
 }

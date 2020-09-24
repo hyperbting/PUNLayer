@@ -10,6 +10,9 @@ public class NetworkSystem : MonoBehaviour, INetworkConnectUser
     public GameObject INetworkConnectGO;
     public INetworkConnect inc;
 
+    [Space]
+    [Header("Debug")]
+    public GameObject DebugUI;
     #region OnEvent
     public Action<GameObject> OnJoinedRoomEvent { get; set; }
     #endregion
@@ -24,7 +27,8 @@ public class NetworkSystem : MonoBehaviour, INetworkConnectUser
     // Start is called before the first frame update
     void Start()
     {
-        
+        if (Debug.isDebugBuild)
+            DebugUI.SetActive(true);
     }
 
     // Update is called once per frame

@@ -7,6 +7,9 @@ public class ItemHolder : MonoBehaviour
     public GameObject PersonalItemPrefab;
     public Dictionary<string, GameObject> stateHolder = new Dictionary<string, GameObject>();
 
+    [SerializeField]
+    int itemNumber = 0;
+
     #region Registration
     public bool RegisterItem(string name, GameObject go)
     {
@@ -26,15 +29,14 @@ public class ItemHolder : MonoBehaviour
     }
     #endregion
 
-    public void CreateItemBase(string assignedName = null)
+    public void CreateItemBase()
     {
         //CreatePersonalItem
         var go = Instantiate(PersonalItemPrefab, transform.position, Quaternion.identity, transform);
         var scr = go.GetComponent<PersonalItem>();
+        scr.Setup(itemNumber.ToString());
+        stateHolder.Add(itemNumber.ToString(), go);
 
-        if (assignedName == null)
-            assignedName = Time.time.ToString();
-        scr.Setup(assignedName);
-        stateHolder.Add(assignedName, go);
+        itemNumber++;
     }
 }

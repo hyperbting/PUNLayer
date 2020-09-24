@@ -10,6 +10,8 @@ public class PersonalItem : MonoBehaviour
     //PlayerTransmission pm;
     [SerializeField]
     string itemName;
+    [SerializeField]
+    List<SyncAttribute> syncTargets = new List<SyncAttribute>();
 
     public void Setup(string itemName)
     {
@@ -24,3 +26,13 @@ public class PersonalItem : MonoBehaviour
     }
     #endregion
 }
+
+public struct SyncAttribute
+{
+    public string name;
+    public Action<object> Read;
+    public Func<object> Write;
+
+    public Action OnValueChanged;
+}
+
