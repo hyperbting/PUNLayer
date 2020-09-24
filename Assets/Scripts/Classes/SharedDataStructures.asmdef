@@ -1,0 +1,15 @@
+{
+    "name": "SharedDataStructures",
+    "references": [
+        "GUID:e82a9e08f241978418796ef64089d0fa"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

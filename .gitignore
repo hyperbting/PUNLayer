@@ -58,3 +58,11 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+.idea/
+Assets/Photon/
+Assets/Samples/
+Assets/Rotary Heart/
+Assets/Rotary Heart.meta
+Packages/Unity-Weld/
+Photon3Unity3D.dll
+Assets/Photon.meta

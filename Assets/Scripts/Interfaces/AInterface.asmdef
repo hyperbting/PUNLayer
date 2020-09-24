@@ -1,0 +1,15 @@
+{
+    "name": "AInterface",
+    "references": [
+        "GUID:39aa0ddd5da34e14e8e5c942f6a60c63"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
