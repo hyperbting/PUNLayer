@@ -28,14 +28,6 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
-                },
-                {
-                    "name": "FireSub",
-                    "type": "Button",
-                    "id": "cfc34ca7-311c-4264-b929-35e2ac762c27",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -177,18 +169,7 @@
                     "path": "<Gamepad>/rightStick",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Gamepad",
-                    "action": "Look",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "8c8e490b-c610-4785-884f-f04217b23ca4",
-                    "path": "<Pointer>/delta",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse;Touch",
+                    "groups": "Gamepad",
                     "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -216,18 +197,18 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "left",
+                    "name": "right",
                     "id": "e829e445-a468-4ee7-96d2-3f8a8e6a8f39",
                     "path": "<Keyboard>/q",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard&Mouse",
                     "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "right",
+                    "name": "left",
                     "id": "520d9537-cc79-4807-bf9b-ac48efbaf180",
                     "path": "<Keyboard>/e",
                     "interactions": "",
@@ -300,17 +281,6 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Fire",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "e98fca97-454f-4969-951f-6cdac7294665",
-                    "path": "<Keyboard>/f",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "FireSub",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

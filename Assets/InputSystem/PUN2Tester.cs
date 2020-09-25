@@ -41,14 +41,6 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
-                },
-                {
-                    ""name"": ""FireSub"",
-                    ""type"": ""Button"",
-                    ""id"": ""cfc34ca7-311c-4264-b929-35e2ac762c27"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -190,18 +182,7 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Gamepad"",
-                    ""action"": ""Look"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""8c8e490b-c610-4785-884f-f04217b23ca4"",
-                    ""path"": ""<Pointer>/delta"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse;Touch"",
+                    ""groups"": ""Gamepad"",
                     ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -229,18 +210,18 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""left"",
+                    ""name"": ""right"",
                     ""id"": ""e829e445-a468-4ee7-96d2-3f8a8e6a8f39"",
                     ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""right"",
+                    ""name"": ""left"",
                     ""id"": ""520d9537-cc79-4807-bf9b-ac48efbaf180"",
                     ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
@@ -313,17 +294,6 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Fire"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""e98fca97-454f-4969-951f-6cdac7294665"",
-                    ""path"": ""<Keyboard>/f"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""FireSub"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -904,7 +874,6 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
-        m_Player_FireSub = m_Player.FindAction("FireSub", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -969,7 +938,6 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_Fire;
-    private readonly InputAction m_Player_FireSub;
     public struct PlayerActions
     {
         private @PUN2Tester m_Wrapper;
@@ -977,7 +945,6 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
-        public InputAction @FireSub => m_Wrapper.m_Player_FireSub;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -996,9 +963,6 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                 @Fire.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFire;
                 @Fire.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFire;
                 @Fire.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFire;
-                @FireSub.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFireSub;
-                @FireSub.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFireSub;
-                @FireSub.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFireSub;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1012,9 +976,6 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                 @Fire.started += instance.OnFire;
                 @Fire.performed += instance.OnFire;
                 @Fire.canceled += instance.OnFire;
-                @FireSub.started += instance.OnFireSub;
-                @FireSub.performed += instance.OnFireSub;
-                @FireSub.canceled += instance.OnFireSub;
             }
         }
     }
@@ -1174,7 +1135,6 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         void OnMove(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
-        void OnFireSub(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

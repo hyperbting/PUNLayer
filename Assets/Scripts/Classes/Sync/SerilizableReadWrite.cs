@@ -1,15 +1,24 @@
-﻿public class SerilizableReadWrite
+﻿[System.Serializable]
+public class SerilizableReadWrite: SerilizableWrite
 {
-    public string name;
-
     //Read from local
     public System.Func<object> Read;
+
+    public SerilizableReadWrite(System.Func<object> read, System.Action<object> write): base(write)
+    {
+        Read = read;
+    }
+}
+
+[System.Serializable]
+public class SerilizableWrite
+{
+    public string name;
     //Write to local
     public System.Action<object> Write;
 
-    public SerilizableReadWrite(System.Func<object> read, System.Action<object> write)
+    public SerilizableWrite( System.Action<object> write)
     {
-        Read = read;
         Write = write;
     }
 }

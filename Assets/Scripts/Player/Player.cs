@@ -48,7 +48,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         pInput.Player.Fire.performed += Fire;
-        pInput.Player.FireSub.performed += FireSub;
+        //pInput.Player.FireSub.performed += FireSub;
 
     }
 
@@ -125,14 +125,26 @@ public class Player : MonoBehaviour
     public void RegisterWithTransmissionToken(PlayerTransmission pt)
     {
         transmissionToken = pt;
-        transmissionTransform = transmissionToken.transform;
+        transmissionTransform = pt.transform;
 
-        var listToSerializableSync = new List<SerilizableReadWrite>()
-        {
-            //new SerilizableReadWrite(ReadPosition, WritePosition) { name = "SyncPos" },
-            //new SerilizableReadWrite(ReadRotation, WriteRotation) { name = "SyncRot" }
-        };
-        pt.Setup(listToSerializableSync);
+        //var listToSerializableSync = new List<SerilizableReadWrite>()
+        //{
+        //    new SerilizableReadWrite(ReadValue, WriteValue) { name = "Random" },
+        //    //new SerilizableReadWrite(ReadPosition, WritePosition) { name = "SyncPos" },
+        //    //new SerilizableReadWrite(ReadRotation, WriteRotation) { name = "SyncRot" }
+        //};
+        //pt.Setup(listToSerializableSync);
+    }
+
+
+    object ReadValue()
+    {
+        return Time.time;
+    }
+
+    void WriteValue(object obj)
+    {
+        Debug.Log($"{(float)obj}");
     }
     #endregion SerilizableReadWrite
 }

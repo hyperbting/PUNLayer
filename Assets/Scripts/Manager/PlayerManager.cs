@@ -8,7 +8,10 @@ public class PlayerManager : MonoBehaviour, IPlayerMaker
     public static PlayerManager Instance;
     public GameObject playerCorePref;
 
+    [Header("Debug")]
+    [SerializeField]
     Player hostPlayer;
+
     private void Awake()
     {
         Instance = this;
@@ -28,6 +31,11 @@ public class PlayerManager : MonoBehaviour, IPlayerMaker
     void Start()
     {
         InstantiatePlayerObject();
+    }
+
+    public GameObject GetHostPlayer()
+    {
+        return hostPlayer.gameObject;
     }
 
     public GameObject InstantiatePlayerObject()

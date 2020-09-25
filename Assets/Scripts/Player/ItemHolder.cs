@@ -39,4 +39,9 @@ public class ItemHolder : MonoBehaviour
 
         itemNumber++;
     }
+
+    public void RegisterOnJoinedRoom()
+    {
+        // I am PhotonView 
+    }
 }
