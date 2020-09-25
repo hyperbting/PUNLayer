@@ -5,11 +5,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(PhotonView))]
-public class StateHelper : MonoBehaviourPunCallbacks
+public class StateHelper : BaseSyncHelper
 {
-
-    Dictionary<string, SerilizableReadWrite> dataToSync = new Dictionary<string, SerilizableReadWrite>();
-    ExitGames.Client.Photon.Hashtable ht = new ExitGames.Client.Photon.Hashtable();
     #region
     public void UpdatePlayerProperties(string key)
     {
