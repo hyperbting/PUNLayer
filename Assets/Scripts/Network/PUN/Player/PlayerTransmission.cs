@@ -28,18 +28,18 @@ public partial class PlayerTransmission : MonoBehaviourPunCallbacks, IPunInstant
         this.srw = srw;
     }
 
-    void RegisterData()
-    {
-        if (srw == null)
-            return;
+    //void RegisterData()
+    //{
+    //    if (srw == null)
+    //        return;
 
-        foreach (var rw in srw)
-        {
-            sh.Register(rw);
-        }
-        Debug.Log($"Register {srw.Count} for Photon:{photonView.OwnerActorNr}");
-        srw.Clear();
-    }
+    //    foreach (var rw in srw)
+    //    {
+    //        sh.Register(rw);
+    //    }
+    //    Debug.Log($"Register {srw.Count} for Photon:{photonView.OwnerActorNr}");
+    //    srw.Clear();
+    //}
 
     public bool started = false;
     private void Start()

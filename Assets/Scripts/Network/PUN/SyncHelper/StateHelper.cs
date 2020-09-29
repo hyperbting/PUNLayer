@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(PhotonView))]
+/// State for Player is implemented by PlayerProperties with OnPlayerPropertiesUpdate() and PhotonNetwork.LocalPlayer.SetCustomProperties()
 public class StateHelper : BaseSyncHelper
 {
     #region

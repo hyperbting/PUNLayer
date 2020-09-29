@@ -65,11 +65,12 @@ public class Player : MonoBehaviour
         Look(around);
         Move(move);
 
-        if (transmissionToken != null && transmissionTransform != null)
+        if (pInput.Player.LookMouseEnable.ReadValue<float>() >= 1)
         {
-            transmissionTransform.position = transform.position;
-            transmissionTransform.rotation = transform.rotation;
+            Look(pInput.Player.LookMouse.ReadValue<Vector2>());
         }
+
+        UpdateTokenTransform();
     }
 
     private void Fire(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
@@ -77,20 +78,9 @@ public class Player : MonoBehaviour
         if (ctx.ReadValue<float>() < 0.5)
             return;
 
-        //var go = Photon.Pun.PhotonNetwork.InstantiateRoomObject("NetworkedObjectToken", transform.position, Quaternion.identity);
-        //var pv = go.GetComponent<Photon.Pun.PhotonView>();
-        //pv.TransferOwnership(Photon.Pun.PhotonNetwork.LocalPlayer);
-        //_ = ReleaseOwnerShip(pv);
-
         //CreatePersonalItem
-        itHolder.CreateItemBase();
+        itHolder.CreateLocalItemBase();
     }
-
-    //async Task ReleaseOwnerShip(Photon.Pun.PhotonView pv)
-    //{
-    //    await Task.Delay(1);
-    //    pv.TransferOwnership(null);
-    //}
 
     private void FireSub(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
     {
@@ -121,11 +111,26 @@ public class Player : MonoBehaviour
         transform.localEulerAngles = m_Rotation;
     }
 
+    private void UpdateTokenTransform()
+    {
+        if (transmissionToken != null && transmissionTransform != null)
+        {
+            transmissionTransform.position = transform.position;
+            transmissionTransform.rotation = transform.rotation;
+        }
+    }
+
     #region SerilizableReadWrite
     public void RegisterWithTransmissionToken(PlayerTransmission pt)
     {
+        Debug.Log("RegisterWithTransmissionToken");
         transmissionToken = pt;
         transmissionTransform = pt.transform;
+        Debug.Log("RegisterWithTransmissionToken BuildSerlizableData");
+        foreach (var kv in itHolder.BuildSerlizableData())
+        {
+            kv.Value
+        }
 
         //var listToSerializableSync = new List<SerilizableReadWrite>()
         //{

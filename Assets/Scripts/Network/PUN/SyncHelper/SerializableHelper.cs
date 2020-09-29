@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(PhotonView))]
+/// Serializable for Player is implemented by OnPhotonSerializeView
 public class SerializableHelper : BaseSyncHelper, IPunObservable, ISerializableHelper
 {
 

@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class ItemHolder : MonoBehaviour
 {
+    public string keyPrefix = "itm_";
+
     public GameObject PersonalItemPrefab;
-    public Dictionary<string, GameObject> stateHolder = new Dictionary<string, GameObject>();
+
+    public Dictionary<string, GameObject> itemHolder = new Dictionary<string, GameObject>();
 
     [SerializeField]
     int itemNumber = 0;
@@ -13,10 +16,10 @@ public class ItemHolder : MonoBehaviour
     #region Registration
     public bool RegisterItem(string name, GameObject go)
     {
-        if (stateHolder.ContainsKey(name))
+        if (itemHolder.ContainsKey(name))
             return false;
 
-        stateHolder[name] = go;
+        itemHolder[name] = go;
 
         // now register with PlayerTransmissionToken
 
@@ -25,23 +28,37 @@ public class ItemHolder : MonoBehaviour
 
     public bool UnregisterItem(string name, out GameObject go)
     {
-        return stateHolder.TryGetValue(name, out go);
+        return itemHolder.TryGetValue(name, out go);
     }
     #endregion
 
-    public void CreateItemBase()
+    public void CreateLocalItemBase()
     {
         //CreatePersonalItem
         var go = Instantiate(PersonalItemPrefab, transform.position, Quaternion.identity, transform);
         var scr = go.GetComponent<PersonalItem>();
         scr.Setup(itemNumber.ToString());
-        stateHolder.Add(itemNumber.ToString(), go);
+        itemHolder.Add(itemNumber.ToString(), go);
 
         itemNumber++;
     }
 
-    public void RegisterOnJoinedRoom()
+    public List<KeyValuePair<string,object>> BuildSerlizableData()
     {
-        // I am PhotonView 
+        var res = new List<KeyValuePair<string, object>>();
+        // Build from itemHolder to PlayerProperties
+
+        foreach (var kvp in itemHolder)
+        {
+            var kes = kvp.Value.GetComponent<ISerializeData>();
+            if (kes == null)
+                continue;
+
+            foreach (var dat in kes.BuildSyncData(keyPrefix + kvp.Key + "_"))
+            {
+                res.Add(dat);
+            }
+        }
+        return res;
     }
 }

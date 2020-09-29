@@ -4,7 +4,7 @@ public class SerilizableReadWrite: SerilizableWrite
     //Read from local
     public System.Func<object> Read;
 
-    public SerilizableReadWrite(System.Func<object> read, System.Action<object> write): base(write)
+    public SerilizableReadWrite(string name, System.Func<object> read, System.Action<object> write) : base(name,  write)
     {
         Read = read;
     }
@@ -20,5 +20,10 @@ public class SerilizableWrite
     public SerilizableWrite( System.Action<object> write)
     {
         Write = write;
+    }
+
+    public SerilizableWrite(string name, System.Action<object> write): this(write)
+    {
+        this.name = name;
     }
 }

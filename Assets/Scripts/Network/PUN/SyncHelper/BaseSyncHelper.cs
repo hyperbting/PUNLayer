@@ -11,7 +11,7 @@ public class BaseSyncHelper : MonoBehaviourPunCallbacks
 
     protected Dictionary<string, SerilizableReadWrite> dataToSync = new Dictionary<string, SerilizableReadWrite>();
 
-    #region interface
+    #region Registration
     public void Register(SerilizableReadWrite srw)
     {
         if (!dataToSync.ContainsKey(srw.name))

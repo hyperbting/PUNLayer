@@ -41,6 +41,22 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""LookMouseEnable"",
+                    ""type"": ""Button"",
+                    ""id"": ""07fdc068-e192-4bb2-a468-7ca2b1e9e34f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""LookMouse"",
+                    ""type"": ""Value"",
+                    ""id"": ""1784d07f-244a-4770-ae88-b56898fa1eae"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -294,6 +310,28 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""dc648073-c04d-4bca-b0e7-628e0ff84423"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""LookMouseEnable"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""77c5b11d-4294-4ccc-850f-e98db2cd172c"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": ""InvertVector2"",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""LookMouse"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -874,6 +912,8 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
+        m_Player_LookMouseEnable = m_Player.FindAction("LookMouseEnable", throwIfNotFound: true);
+        m_Player_LookMouse = m_Player.FindAction("LookMouse", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -938,6 +978,8 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_Fire;
+    private readonly InputAction m_Player_LookMouseEnable;
+    private readonly InputAction m_Player_LookMouse;
     public struct PlayerActions
     {
         private @PUN2Tester m_Wrapper;
@@ -945,6 +987,8 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
+        public InputAction @LookMouseEnable => m_Wrapper.m_Player_LookMouseEnable;
+        public InputAction @LookMouse => m_Wrapper.m_Player_LookMouse;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -963,6 +1007,12 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                 @Fire.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFire;
                 @Fire.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFire;
                 @Fire.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFire;
+                @LookMouseEnable.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLookMouseEnable;
+                @LookMouseEnable.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLookMouseEnable;
+                @LookMouseEnable.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLookMouseEnable;
+                @LookMouse.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLookMouse;
+                @LookMouse.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLookMouse;
+                @LookMouse.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLookMouse;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -976,6 +1026,12 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                 @Fire.started += instance.OnFire;
                 @Fire.performed += instance.OnFire;
                 @Fire.canceled += instance.OnFire;
+                @LookMouseEnable.started += instance.OnLookMouseEnable;
+                @LookMouseEnable.performed += instance.OnLookMouseEnable;
+                @LookMouseEnable.canceled += instance.OnLookMouseEnable;
+                @LookMouse.started += instance.OnLookMouse;
+                @LookMouse.performed += instance.OnLookMouse;
+                @LookMouse.canceled += instance.OnLookMouse;
             }
         }
     }
@@ -1135,6 +1191,8 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         void OnMove(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
+        void OnLookMouseEnable(InputAction.CallbackContext context);
+        void OnLookMouse(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
