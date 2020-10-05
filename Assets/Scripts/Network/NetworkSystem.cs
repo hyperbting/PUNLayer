@@ -5,21 +5,25 @@ using UnityEngine;
 
 public class NetworkSystem : MonoBehaviour, INetworkConnectUser
 {
-    public static NetworkSystem Instance;
-
+    [Header("NetworkConnect is the network core")]
+    [Tooltip("Implement interface of Network Abilities")]
     public GameObject INetworkConnectGO;
-    public INetworkConnect inc;
+
+    [Header("SyncHandler Maintain Properties Sync")]
+    [Tooltip("Automatically create token when OnJoinedRoom/ CreatedAlreadyInRoom")]
+    public GameObject INetworkSyncHandler;
+
+    INetworkConnect inc;
 
     [Space]
     [Header("Debug")]
     public GameObject DebugUI;
     #region OnEvent
-    public Action<GameObject> OnJoinedRoomEvent { get; set; }
+    public Action OnJoinedRoomEvent { get; set; }
     #endregion
 
     private void Awake()
     {
-        Instance = this;
         inc = INetworkConnectGO.GetComponent<INetworkConnect>();
         inc.Init (this);
     }
@@ -36,4 +40,35 @@ public class NetworkSystem : MonoBehaviour, INetworkConnectUser
     {
         
     }
+
+    #region Network Transmission Token
+    //TODO: ObjectPooling!
+    public GameObject RequestTokenHandler(Transform parent)
+    {
+        return Instantiate(INetworkSyncHandler, parent);
+    }
+
+    //static Transform tokenParent;
+    //public Transform BuildTokenParent()
+    //{
+    //    if (tokenParent != null)
+    //        return tokenParent;
+
+    //    var go = GameObject.Find("TokenParent");
+    //    if (go != null)
+    //        tokenParent = go.transform;
+    //    else
+    //        tokenParent = new GameObject("TokenParent").transform;
+
+    //    return tokenParent;
+    //}
+
+    public GameObject RequestSyncToken(Transform trasn)
+    {
+        var go = Photon.Pun.PhotonNetwork.Instantiate("PlayerTransmissionToken", trasn.position, trasn.rotation);
+        //go.transform.SetParent(BuildTokenParent());
+
+        return go;
+    }
+    #endregion
 }

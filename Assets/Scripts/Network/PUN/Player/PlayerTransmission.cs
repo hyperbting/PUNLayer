@@ -6,7 +6,6 @@ using UnityEngine;
 [RequireComponent(typeof(PhotonView))]
 public partial class PlayerTransmission : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
 {
-    static Transform tokenParent;
     [SerializeField]
     GameObject RefPlayer;
 
@@ -15,18 +14,24 @@ public partial class PlayerTransmission : MonoBehaviourPunCallbacks, IPunInstant
 
     private void Awake()
     {
-        if (tokenParent == null)
-            BuildTokenParent();
-
-        transform.SetParent(tokenParent);
     }
 
     // for Owner
-    List<SerilizableReadWrite> srw;
-    public void Setup(List<SerilizableReadWrite> srw)
+    List<SerializableReadWrite > srw = new List<SerializableReadWrite>();
+    public void Setup(List<SerializableReadWrite> srws)
     {
-        this.srw = srw;
+        srw = srws;
+        Invoke("RegisterSerializableReadWrite",0);
     }
+
+    void RegisterSerializableReadWrite()
+    {
+        if (sh != null)
+            sh.Register(srw.ToArray());
+        else
+            Invoke("RegisterSerializableReadWrite",1);
+    }
+
 
     //void RegisterData()
     //{
@@ -49,6 +54,7 @@ public partial class PlayerTransmission : MonoBehaviourPunCallbacks, IPunInstant
 
         if (pm == null)
             Debug.LogWarning("pm NotFound");
+
         if (sh == null)
             Debug.LogWarning("sh NotFound");
 
@@ -71,15 +77,6 @@ public partial class PlayerTransmission : MonoBehaviourPunCallbacks, IPunInstant
         started = true;
 
         //RegisterData();
-    }
-
-    void BuildTokenParent()
-    {
-        var go = GameObject.Find("TokenParent");
-        if (go != null)
-            tokenParent = go.transform;
-        else
-            tokenParent = new GameObject("TokenParent").transform;
     }
 
     public void OnPhotonInstantiate(PhotonMessageInfo info)

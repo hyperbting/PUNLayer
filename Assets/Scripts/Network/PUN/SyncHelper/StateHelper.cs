@@ -15,7 +15,7 @@ public class StateHelper : BaseSyncHelper
         if (photonView.Owner != PhotonNetwork.LocalPlayer)
             return;
 
-        if (dataToSync.TryGetValue((string)key, out SerilizableReadWrite srw))
+        if (dataToSync.TryGetValue((string)key, out SerializableReadWrite  srw))
         {
             ht.Clear();
             ht.Add((string)key, srw.Read());
@@ -34,7 +34,7 @@ public class StateHelper : BaseSyncHelper
 
         foreach (var key in changedProps.Keys)
         {
-            if (dataToSync.TryGetValue((string)key, out SerilizableReadWrite srw))
+            if (dataToSync.TryGetValue((string)key, out SerializableReadWrite  srw))
             {
                 srw.Write(changedProps[key]);
             }

@@ -25,10 +25,7 @@ public interface INetworkConnect
 
 public interface INetworkConnectUser
 {
-    /// <summary>
-    /// which GO to interact and NetworkID
-    /// </summary>
-    Action<GameObject> OnJoinedRoomEvent { get; set; }
+    Action OnJoinedRoomEvent { get; set; }
 }
 
 public enum NetworkState

@@ -7,7 +7,6 @@ using UnityEngine;
 /// Serializable for Player is implemented by OnPhotonSerializeView
 public class SerializableHelper : BaseSyncHelper, IPunObservable, ISerializableHelper
 {
-
     //public override void OnEnable()
     //{
     //    base.OnEnable();
@@ -28,7 +27,7 @@ public class SerializableHelper : BaseSyncHelper, IPunObservable, ISerializableH
             for (int i = 0; i < keys.Count; i++)
             {
                 //Debug.Log($"TryGetValue for Key:{keys[i]}");
-                if (dataToSync.TryGetValue(keys[i], out SerilizableReadWrite val))
+                if (dataToSync.TryGetValue(keys[i], out SerializableReadWrite val))
                 {
                     var va = val?.Read();
                     //Debug.Log($" Key:{keys[i]} {va}");
@@ -42,7 +41,7 @@ public class SerializableHelper : BaseSyncHelper, IPunObservable, ISerializableH
             for (int i = 0; i < keys.Count; i++)
             {
                 //Debug.Log($"TryGetValue for Key:{keys[i]}");
-                if (dataToSync.TryGetValue(keys[i], out SerilizableReadWrite val))
+                if (dataToSync.TryGetValue(keys[i], out SerializableReadWrite  val))
                 {
                     var va = stream.ReceiveNext();
                     //Debug.Log($"{va} Received");

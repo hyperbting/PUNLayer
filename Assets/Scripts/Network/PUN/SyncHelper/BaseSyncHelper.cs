@@ -9,10 +9,10 @@ public class BaseSyncHelper : MonoBehaviourPunCallbacks
 {
     protected ExitGames.Client.Photon.Hashtable ht = new ExitGames.Client.Photon.Hashtable();
 
-    protected Dictionary<string, SerilizableReadWrite> dataToSync = new Dictionary<string, SerilizableReadWrite>();
+    protected Dictionary<string, SerializableReadWrite > dataToSync = new Dictionary<string, SerializableReadWrite >();
 
     #region Registration
-    public void Register(SerilizableReadWrite srw)
+    public void Register(SerializableReadWrite srw)
     {
         if (!dataToSync.ContainsKey(srw.name))
         {
@@ -21,9 +21,21 @@ public class BaseSyncHelper : MonoBehaviourPunCallbacks
         }
     }
 
-    public void Unregister(SerilizableReadWrite srw)
+    public void Register(params SerializableReadWrite[] srws)
+    {
+        foreach (var srw in srws)
+            Register(srw);
+    }
+
+    public void Unregister(SerializableReadWrite srw)
     {
         Unregister(srw.name);
+    }
+
+    public void Unregister(params SerializableReadWrite[] srws)
+    {
+        foreach (var srw in srws)
+            Unregister(srw.name);
     }
 
     public void Unregister(string key)

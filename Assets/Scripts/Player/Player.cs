@@ -47,9 +47,12 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //
         pInput.Player.Fire.performed += Fire;
         //pInput.Player.FireSub.performed += FireSub;
 
+        //Request TokenHandler From NetworkManager
+        var th = ServiceManager.Instance.networkSystem.RequestTokenHandler(this.transform);
     }
 
     // Update is called once per frame
@@ -129,27 +132,25 @@ public class Player : MonoBehaviour
         Debug.Log("RegisterWithTransmissionToken BuildSerlizableData");
         foreach (var kv in itHolder.BuildSerlizableData())
         {
-            kv.Value
+            //kv.Value
         }
 
-        //var listToSerializableSync = new List<SerilizableReadWrite>()
+        //var listToSerializableSync = new List<SerializableReadWrite >()
         //{
-        //    new SerilizableReadWrite(ReadValue, WriteValue) { name = "Random" },
-        //    //new SerilizableReadWrite(ReadPosition, WritePosition) { name = "SyncPos" },
+        //    new SerializableReadWrite ("Random", ReadValue, WriteValue),
         //    //new SerilizableReadWrite(ReadRotation, WriteRotation) { name = "SyncRot" }
         //};
         //pt.Setup(listToSerializableSync);
     }
 
+    //object ReadValue()
+    //{
+    //    return Time.time;
+    //}
 
-    object ReadValue()
-    {
-        return Time.time;
-    }
-
-    void WriteValue(object obj)
-    {
-        Debug.Log($"{(float)obj}");
-    }
+    //void WriteValue(object obj)
+    //{
+    //    Debug.Log($"{(float)obj}");
+    //}
     #endregion SerilizableReadWrite
 }

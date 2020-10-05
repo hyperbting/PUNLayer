@@ -8,7 +8,7 @@ using UnityEngine;
 public class PersonalItem : MonoBehaviour, ISerializeData
 {
     // one or more data to sync for single item
-    List<SerilizableReadWrite> srw = new List<SerilizableReadWrite>();
+    List<SerializableReadWrite > srw = new List<SerializableReadWrite >();
     //PlayerTransmission pm;
     [SerializeField]
     string itemName;
@@ -18,7 +18,7 @@ public class PersonalItem : MonoBehaviour, ISerializeData
         this.name = "pu(" + itemName;
         this.itemName = itemName;
 
-        srw.Add(new SerilizableReadWrite("Name", ()=> { return itemName; }, (object value)=> { itemName = (string)value; }));
+        srw.Add(new SerializableReadWrite ("Name", ()=> { return itemName; }, (object value)=> { itemName = (string)value; }));
     }
 
     #region ISerializeData

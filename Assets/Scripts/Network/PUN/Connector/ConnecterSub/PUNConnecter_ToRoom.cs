@@ -140,8 +140,7 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks
         else
         {
             CurrentPhotonRoomState = PhotonRoomState.OnlineRoom;
-            var go = PhotonNetwork.Instantiate("PlayerTransmissionToken", Vector3.zero, Quaternion.identity);
-            incu.OnJoinedRoomEvent?.Invoke(go);
+            incu.OnJoinedRoomEvent?.Invoke();
         }
     }
 
