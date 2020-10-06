@@ -11,7 +11,7 @@ public class NetworkSystem : MonoBehaviour, INetworkConnectUser
 
     [Header("SyncHandler Maintain Properties Sync")]
     [Tooltip("Automatically create token when OnJoinedRoom/ CreatedAlreadyInRoom")]
-    public GameObject INetworkSyncHandler;
+    public GameObject NetworkSyncHandler;
 
     INetworkConnect inc;
 
@@ -35,40 +35,18 @@ public class NetworkSystem : MonoBehaviour, INetworkConnectUser
             DebugUI.SetActive(true);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     #region Network Transmission Token
-    //TODO: ObjectPooling!
-    public GameObject RequestTokenHandler(Transform parent)
+    public GameObject RequestTokenHandler(SyncTokenType tokenType, Transform parent)
     {
-        return Instantiate(INetworkSyncHandler, parent);
+        //TODO: ObjectPooling!
+        var go = Instantiate(NetworkSyncHandler, parent);
+        go.GetComponent<TokenHandler>().Setup(tokenType, parent);
+        return go;
     }
 
-    //static Transform tokenParent;
-    //public Transform BuildTokenParent()
-    //{
-    //    if (tokenParent != null)
-    //        return tokenParent;
-
-    //    var go = GameObject.Find("TokenParent");
-    //    if (go != null)
-    //        tokenParent = go.transform;
-    //    else
-    //        tokenParent = new GameObject("TokenParent").transform;
-
-    //    return tokenParent;
-    //}
-
-    public GameObject RequestSyncToken(Transform trasn)
+    public GameObject RequestSyncToken(SyncTokenType tType, Transform trasn)
     {
-        var go = Photon.Pun.PhotonNetwork.Instantiate("PlayerTransmissionToken", trasn.position, trasn.rotation);
-        //go.transform.SetParent(BuildTokenParent());
-
-        return go;
+        return inc.RequestSyncToken(tType, trasn);
     }
     #endregion
 }

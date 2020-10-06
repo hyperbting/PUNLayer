@@ -8,7 +8,6 @@ public interface INetworkConnect
 
     #region Checker
     //bool IsOwner();
-    //bool Is
     #endregion
 
     // notify when service is connected and ready for Matchmaking
@@ -18,6 +17,7 @@ public interface INetworkConnect
     Task<bool> JoinGameRoom(string roomName);
 
     #region InRoom
+    GameObject RequestSyncToken(SyncTokenType syncTokenType, Transform refTrasnform);
     //Task<bool> SetRoomProperty(KeyValExpPair kvePair);
     //Task<bool> SetPlayerProperty(Player player, KeyValExpPair kvePair);
     #endregion

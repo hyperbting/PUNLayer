@@ -47,12 +47,15 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (!isHost)
+            return;
+
         //
         pInput.Player.Fire.performed += Fire;
         //pInput.Player.FireSub.performed += FireSub;
 
         //Request TokenHandler From NetworkManager
-        var th = ServiceManager.Instance.networkSystem.RequestTokenHandler(this.transform);
+        var th = ServiceManager.Instance.networkSystem.RequestTokenHandler(SyncTokenType.Player, this.transform);
     }
 
     // Update is called once per frame
@@ -123,7 +126,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    #region SerilizableReadWrite
+    #region SerilizableReadWrite talk to TokenHandler
     public void RegisterWithTransmissionToken(PlayerTransmission pt)
     {
         Debug.Log("RegisterWithTransmissionToken");

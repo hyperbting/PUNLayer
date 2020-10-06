@@ -1,26 +1,22 @@
 ﻿using Photon.Pun;
 using Photon.Realtime;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(PhotonView))]
 /// State for Player is implemented by PlayerProperties with OnPlayerPropertiesUpdate() and PhotonNetwork.LocalPlayer.SetCustomProperties()
+/// State for Item is implemented by RoomProperties with OnRoomPropertiesUpdate() and PhotonNetwork.CurrentRoom.SetCustomProperties()
 public class StateHelper : BaseSyncHelper
 {
-    #region
+    #region Player/ Player owned
     public void UpdatePlayerProperties(string key)
     {
         // only update for Owner
         if (photonView.Owner != PhotonNetwork.LocalPlayer)
             return;
 
-        if (dataToSync.TryGetValue((string)key, out SerializableReadWrite  srw))
+        if (dataToSync.TryGetValue(key, out SerializableReadWrite srw))
         {
-            ht.Clear();
-            ht.Add((string)key, srw.Read());
-
-            PhotonNetwork.LocalPlayer.SetCustomProperties(ht);
+            UpdateProperties(key, srw.Read(), SyncTokenType.Player);
         }
     }
 
@@ -34,11 +30,35 @@ public class StateHelper : BaseSyncHelper
 
         foreach (var key in changedProps.Keys)
         {
-            if (dataToSync.TryGetValue((string)key, out SerializableReadWrite  srw))
+            if (dataToSync.TryGetValue((string)key, out SerializableReadWrite srw))
             {
                 srw.Write(changedProps[key]);
             }
         }
     }
     #endregion
+
+    public void UpdateRoomObjectProperties(string key)
+    {
+        if (dataToSync.TryGetValue(key, out SerializableReadWrite srw))
+        {
+            UpdateProperties(key, srw.Read(), SyncTokenType.General);
+        }
+    }
+
+    public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable changedProps)
+    {
+        base.OnRoomPropertiesUpdate(changedProps);
+
+        //Who should NOT react to this ?
+
+        // apply every state to local
+        foreach (var key in changedProps.Keys)
+        {
+            if (dataToSync.TryGetValue((string)key, out SerializableReadWrite srw))
+            {
+                srw.Write(changedProps[key]);
+            }
+        }
+    }
 }

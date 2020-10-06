@@ -35,6 +35,25 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, IOnEventCallback
 
         return null;
     }
+
+    public GameObject RequestSyncToken(SyncTokenType tType, Transform trasn)
+    {
+        GameObject go = null;
+        switch (tType)
+        {
+            case SyncTokenType.Player:
+                go = Photon.Pun.PhotonNetwork.Instantiate("Token/PlayerTransmissionToken", trasn.position, trasn.rotation);
+                break;
+            default:
+                go = Photon.Pun.PhotonNetwork.Instantiate("Token/TransmissionToken", trasn.position, trasn.rotation);
+                break;
+        }
+
+        if (go == null)
+            Debug.LogWarning($"Issuing Null GameObject");
+
+        return go;
+    }
     #endregion
 
     ExitGames.Client.Photon.Hashtable toChange = new ExitGames.Client.Photon.Hashtable();

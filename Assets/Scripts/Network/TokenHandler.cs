@@ -1,47 +1,50 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TokenHandler : MonoBehaviour, ITokenHandler
+public class TokenHandler : MonoBehaviour
 {
-    public NetworkSystem parentSystem {
-        get
-        {
-            return ServiceManager.Instance.networkSystem;
-        }
-    }
+    SyncTokenType tokenType;
+    Transform refTransform;
 
-    public PlayerTransmission transmissionToken;
-    Transform transmissionTransform;
+    public TransmissionBase transToken;
+
+    [Header("Debug Purpose")]
+    [SerializeField] Transform transmissionTransform;
 
     private void OnEnable()
     {
         //Register for Token with NetworkSystem
-        parentSystem.OnJoinedRoomEvent += OnJoinedRoomAct;
+        ServiceManager.Instance.networkSystem.OnJoinedRoomEvent += OnJoinedRoomAct;
     }
 
     private void OnDisable()
     {
-        parentSystem.OnJoinedRoomEvent -= OnJoinedRoomAct;
+        ServiceManager.Instance.networkSystem.OnJoinedRoomEvent -= OnJoinedRoomAct;
     }
 
-    public void Start()
+    public void Setup(SyncTokenType tType, Transform refTran)
     {
+        tokenType = tType;
+        refTransform = refTran;
     }
 
-    public void OnJoinedRoomAct()
+    public virtual void OnJoinedRoomAct()
     {
-        Debug.Log($"OnJoinedRoomAct");
+        Debug.Log($"[TokenHandler] OnJoinedRoomAct");
+        GameObject ntGO = ServiceManager.Instance.networkSystem.RequestSyncToken(tokenType, refTransform);
+        if (ntGO != null)
+            transToken = ntGO.GetComponent<TransmissionBase>();
 
-        var hostPlayerGO = PlayerManager.Instance.GetHostPlayer();
-        var nt = parentSystem.RequestSyncToken(hostPlayerGO.transform);
-        transmissionToken = nt.GetComponent<PlayerTransmission>();
-
-        hostPlayerGO.GetComponent<Player>().RegisterWithTransmissionToken(transmissionToken);
+        switch (tokenType)
+        {
+            case SyncTokenType.Player:
+                var hostPlayerGO = PlayerManager.Instance.GetHostPlayer();
+                hostPlayerGO.GetComponent<Player>().RegisterWithTransmissionToken(transToken as PlayerTransmission);
+                break;
+            default:
+                break;
+        }
     }
-}
-
-public interface ITokenHandler
-{
-
 }

@@ -10,12 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 3458457266041222475}
   - component: {fileID: 9007865024089837313}
-  - component: {fileID: 4540745332390190242}
+  - component: {fileID: 8624510176210393185}
   - component: {fileID: 789010574065468813}
   - component: {fileID: 3129467774125685042}
   - component: {fileID: 8696551306678954641}
   m_Layer: 0
-  m_Name: PlayerTransmissionToken
+  m_Name: TransmissionToken
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -59,7 +59,7 @@ MonoBehaviour:
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &4540745332390190242
+--- !u!114 &8624510176210393185
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -68,10 +68,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7690134541824521141}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b3b184c44917f14cbd156af4aee3624, type: 3}
+  m_Script: {fileID: 11500000, guid: dae0382315942114093bb2da32cf4a1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RefPlayer: {fileID: 0}
   started: 0
 --- !u!114 &789010574065468813
 MonoBehaviour:
@@ -104,7 +103,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7690134541824521141}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
   m_Name: 

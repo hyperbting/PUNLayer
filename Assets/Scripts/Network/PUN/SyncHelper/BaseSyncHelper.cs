@@ -7,10 +7,16 @@ using UnityEngine;
 [RequireComponent(typeof(PhotonView))]
 public class BaseSyncHelper : MonoBehaviourPunCallbacks
 {
+    /// <summary>
+    /// Tmp Hashtable for WritePreparation
+    /// </summary>
     protected ExitGames.Client.Photon.Hashtable ht = new ExitGames.Client.Photon.Hashtable();
+    protected ExitGames.Client.Photon.Hashtable orght = new ExitGames.Client.Photon.Hashtable();
 
+    /// <summary>
+    /// To Store method to read/ write specific value
+    /// </summary>
     protected Dictionary<string, SerializableReadWrite > dataToSync = new Dictionary<string, SerializableReadWrite >();
-
     #region Registration
     public void Register(SerializableReadWrite srw)
     {
@@ -46,5 +52,23 @@ public class BaseSyncHelper : MonoBehaviourPunCallbacks
         Debug.Log($"{key} Unregistered");
         dataToSync.Remove(key);
     }
-    #endregion   
+    #endregion
+
+    #region direct touch
+    public void UpdateProperties(string key, object value, SyncTokenType stt)
+    {
+        ht.Clear();
+        ht.Add(key, value);
+
+        switch (stt)
+        {
+            case SyncTokenType.Player:
+                PhotonNetwork.LocalPlayer.SetCustomProperties(ht);
+                break;
+            default:
+                PhotonNetwork.CurrentRoom.SetCustomProperties(ht);
+                break;
+        }
+    }
+    #endregion
 }

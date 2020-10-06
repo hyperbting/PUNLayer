@@ -1,5 +1,4 @@
 ﻿using Photon.Pun;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,16 +6,6 @@ using UnityEngine;
 /// Serializable for Player is implemented by OnPhotonSerializeView
 public class SerializableHelper : BaseSyncHelper, IPunObservable, ISerializableHelper
 {
-    //public override void OnEnable()
-    //{
-    //    base.OnEnable();
-    //}
-
-    //public override void OnDisable()
-    //{
-    //    base.OnDisable();
-    //}
-
     #region Photon Callback
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {

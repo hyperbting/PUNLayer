@@ -17,16 +17,6 @@ public class PlayerManager : MonoBehaviour, IPlayerMaker
         Instance = this;
     }
 
-    private void OnEnable()
-    {
-        serviceManager.networkSystem.OnJoinedRoomEvent += OnJoinedRoomAct;
-    }
-
-    private void OnDisable()
-    {
-        serviceManager.networkSystem.OnJoinedRoomEvent -= OnJoinedRoomAct;
-    }
-
     // Start is called before the first frame update
     void Start()
     {
@@ -58,18 +48,8 @@ public class PlayerManager : MonoBehaviour, IPlayerMaker
         var playerScript = go.GetComponent<Player>();
         if (playerScript != null)
         {
+            playerScript.isHost = false;
         }
         return go;
-    }
-
-    public void SyncPersonalItems()
-    {
-    }
-
-    public void OnJoinedRoomAct()
-    {
-        Debug.Log($"OnJoinedRoomAct");
-        //var ptScript = networkedPlayerToken.GetComponent<PlayerTransmission>();
-        //hostPlayer.RegisterWithTransmissionToken(ptScript);
     }
 }
