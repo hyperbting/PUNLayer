@@ -4,19 +4,34 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(PhotonView))]
-public class TransmissionBase : MonoBehaviourPunCallbacks
+public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase
 {
-    public ISerializableHelper sh;
-    //public BaseSyncHelper 
+    [SerializeField] SerializableHelper seriHelper;
+    public SerializableHelper SeriHelper
+    {
+        get
+        {
+            if(seriHelper == null)
+                seriHelper = GetComponent<SerializableHelper>();
+            return seriHelper;
+        }
+    }
+
+    [SerializeField] StateHelper statHelper;
+    public StateHelper StatHelper
+    {
+        get
+        {
+            if (statHelper == null)
+                statHelper = GetComponent<StateHelper>();
+            return statHelper;
+        }
+
+    }
 
     public bool started = false;
     protected virtual void Start()
     {
-        sh = GetComponent<ISerializableHelper>();
-
-        if (sh == null)
-            Debug.LogWarning("sh NotFound");
-
         if (photonView.IsMine)
         {
             Debug.Log($"I Own {photonView.ViewID} {PhotonNetwork.LocalPlayer.UserId} " + photonView.Owner.ToStringFull());
@@ -41,8 +56,8 @@ public class TransmissionBase : MonoBehaviourPunCallbacks
 
     void RegisterSerializableReadWrite()
     {
-        if (sh != null)
-            sh.Register(srw.ToArray());
+        if (seriHelper != null)
+            seriHelper.Register(srw.ToArray());
         else
             Invoke("RegisterSerializableReadWrite", 1);
     }

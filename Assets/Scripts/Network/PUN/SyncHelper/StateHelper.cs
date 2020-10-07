@@ -14,9 +14,9 @@ public class StateHelper : BaseSyncHelper
         if (photonView.Owner != PhotonNetwork.LocalPlayer)
             return;
 
-        if (dataToSync.TryGetValue(key, out SerializableReadWrite srw))
+        if (dataToSync.TryGetValue(key, out SerializableWrite srw))
         {
-            UpdateProperties(key, srw.Read(), SyncTokenType.Player);
+            UpdateProperties(key, (srw as SerializableReadWrite).Read(), SyncTokenType.Player);
         }
     }
 
@@ -30,7 +30,7 @@ public class StateHelper : BaseSyncHelper
 
         foreach (var key in changedProps.Keys)
         {
-            if (dataToSync.TryGetValue((string)key, out SerializableReadWrite srw))
+            if (dataToSync.TryGetValue((string)key, out SerializableWrite srw))
             {
                 srw.Write(changedProps[key]);
             }
@@ -40,9 +40,9 @@ public class StateHelper : BaseSyncHelper
 
     public void UpdateRoomObjectProperties(string key)
     {
-        if (dataToSync.TryGetValue(key, out SerializableReadWrite srw))
+        if (dataToSync.TryGetValue(key, out SerializableWrite srw))
         {
-            UpdateProperties(key, srw.Read(), SyncTokenType.General);
+            UpdateProperties(key, (srw as SerializableReadWrite).Read(), SyncTokenType.General);
         }
     }
 
@@ -55,7 +55,7 @@ public class StateHelper : BaseSyncHelper
         // apply every state to local
         foreach (var key in changedProps.Keys)
         {
-            if (dataToSync.TryGetValue((string)key, out SerializableReadWrite srw))
+            if (dataToSync.TryGetValue((string)key, out SerializableWrite srw))
             {
                 srw.Write(changedProps[key]);
             }

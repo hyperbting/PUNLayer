@@ -19,7 +19,8 @@ public class NetworkSystem : MonoBehaviour, INetworkConnectUser
     [Header("Debug")]
     public GameObject DebugUI;
     #region OnEvent
-    public Action OnJoinedRoomEvent { get; set; }
+    public Action OnJoinedOnlineRoomEvent { get; set; }
+    public Action OnJoinedOfflineRoomEvent { get; set; }
     #endregion
 
     private void Awake()

@@ -1,12 +1,18 @@
-﻿[System.Serializable]
+﻿using System;
+[Serializable]
 public class SerializableReadWrite : SerializableWrite
 {
     //Read from local
-    public System.Func<object> Read;
+    public Func<object> Read;
 
-    public SerializableReadWrite (string name, System.Func<object> read, System.Action<object> write) : base(name,  write)
+    public SerializableReadWrite (string name, Func<object> read, Action<object> write) : base(name,  write)
     {
         Read = read;
+    }
+
+    public override string ToString()
+    {
+        return string.Format($"{base.ToString()},Read");
     }
 }
 
@@ -15,15 +21,20 @@ public class SerializableWrite
 {
     public string name;
     //Write to local
-    public System.Action<object> Write;
+    public Action<object> Write;
 
-    public SerializableWrite( System.Action<object> write)
+    public SerializableWrite(Action<object> write)
     {
         Write = write;
     }
 
-    public SerializableWrite(string name, System.Action<object> write): this(write)
+    public SerializableWrite(string name, Action<object> write): this(write)
     {
         this.name = name;
+    }
+
+    public override string ToString()
+    {
+        return string.Format($"Name:{name},Write");
     }
 }

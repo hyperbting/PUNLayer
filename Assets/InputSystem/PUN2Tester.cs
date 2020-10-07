@@ -57,6 +57,14 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Echo"",
+                    ""type"": ""Button"",
+                    ""id"": ""1a00064f-c630-4fc7-8295-dcafc7b795b3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -332,6 +340,17 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""processors"": ""InvertVector2"",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""LookMouse"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3c914309-a5c3-4482-8c57-444fa36ea27e"",
+                    ""path"": ""<Keyboard>/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Echo"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -914,6 +933,7 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         m_Player_LookMouseEnable = m_Player.FindAction("LookMouseEnable", throwIfNotFound: true);
         m_Player_LookMouse = m_Player.FindAction("LookMouse", throwIfNotFound: true);
+        m_Player_Echo = m_Player.FindAction("Echo", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -980,6 +1000,7 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Fire;
     private readonly InputAction m_Player_LookMouseEnable;
     private readonly InputAction m_Player_LookMouse;
+    private readonly InputAction m_Player_Echo;
     public struct PlayerActions
     {
         private @PUN2Tester m_Wrapper;
@@ -989,6 +1010,7 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
         public InputAction @LookMouseEnable => m_Wrapper.m_Player_LookMouseEnable;
         public InputAction @LookMouse => m_Wrapper.m_Player_LookMouse;
+        public InputAction @Echo => m_Wrapper.m_Player_Echo;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1013,6 +1035,9 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                 @LookMouse.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLookMouse;
                 @LookMouse.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLookMouse;
                 @LookMouse.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLookMouse;
+                @Echo.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEcho;
+                @Echo.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEcho;
+                @Echo.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEcho;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1032,6 +1057,9 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                 @LookMouse.started += instance.OnLookMouse;
                 @LookMouse.performed += instance.OnLookMouse;
                 @LookMouse.canceled += instance.OnLookMouse;
+                @Echo.started += instance.OnEcho;
+                @Echo.performed += instance.OnEcho;
+                @Echo.canceled += instance.OnEcho;
             }
         }
     }
@@ -1193,6 +1221,7 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         void OnFire(InputAction.CallbackContext context);
         void OnLookMouseEnable(InputAction.CallbackContext context);
         void OnLookMouse(InputAction.CallbackContext context);
+        void OnEcho(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

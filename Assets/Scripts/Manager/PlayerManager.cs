@@ -42,9 +42,12 @@ public class PlayerManager : MonoBehaviour, IPlayerMaker
         return go;
     }
 
-    public GameObject InstantiateRemotePlayerObject(string uuid)
+    public GameObject InstantiateRemotePlayerObject(string uuid, Transform parent=null)
     {
-        var go = Instantiate(playerCorePref);
+        if (parent == null)
+            parent = this.transform;
+
+        var go = Instantiate(playerCorePref, parent);
         var playerScript = go.GetComponent<Player>();
         if (playerScript != null)
         {

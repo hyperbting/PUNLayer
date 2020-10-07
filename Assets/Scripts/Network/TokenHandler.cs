@@ -16,12 +16,12 @@ public class TokenHandler : MonoBehaviour
     private void OnEnable()
     {
         //Register for Token with NetworkSystem
-        ServiceManager.Instance.networkSystem.OnJoinedRoomEvent += OnJoinedRoomAct;
+        ServiceManager.Instance.networkSystem.OnJoinedOnlineRoomEvent += OnJoinedOnlineRoomAct;
     }
 
     private void OnDisable()
     {
-        ServiceManager.Instance.networkSystem.OnJoinedRoomEvent -= OnJoinedRoomAct;
+        ServiceManager.Instance.networkSystem.OnJoinedOnlineRoomEvent -= OnJoinedOnlineRoomAct;
     }
 
     public void Setup(SyncTokenType tType, Transform refTran)
@@ -30,12 +30,11 @@ public class TokenHandler : MonoBehaviour
         refTransform = refTran;
     }
 
-    public virtual void OnJoinedRoomAct()
+    public virtual void OnJoinedOnlineRoomAct()
     {
-        Debug.Log($"[TokenHandler] OnJoinedRoomAct");
-        if (ServiceManager.Instance.networkSystem.IsOfflineRoom())
-            return;
+        Debug.Log($"[TokenHandler] OnJoinedOnlineRoomAct");
 
+        // Online InRoom Create a NetworkedSyncToken
         GameObject ntGO = ServiceManager.Instance.networkSystem.RequestSyncToken(tokenType, refTransform);
         if (ntGO != null)
             transToken = ntGO.GetComponent<TransmissionBase>();
@@ -44,7 +43,7 @@ public class TokenHandler : MonoBehaviour
         {
             case SyncTokenType.Player:
                 var hostPlayerGO = PlayerManager.Instance.GetHostPlayer();
-                hostPlayerGO.GetComponent<Player>().RegisterWithTransmissionToken(transToken as PlayerTransmission);
+                hostPlayerGO.GetComponent<ISyncTokenUser>().RegisterWithTransmissionToken(transToken);
                 break;
             default:
                 break;

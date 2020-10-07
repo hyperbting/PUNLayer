@@ -28,8 +28,10 @@ public partial class PlayerTransmission : TransmissionBase, IPunInstantiateMagic
         else
         {
             gameObject.name = "RemotePlayerToken";
-            RefPlayer = pm.InstantiateRemotePlayerObject(photonView.Owner.UserId);
-            RefPlayer.transform.SetParent(transform);
+            RefPlayer = pm.InstantiateRemotePlayerObject(photonView.Owner.UserId, transform);
+
+            var istu = RefPlayer.GetComponent<ISyncTokenUser>();
+            istu.RegisterWithTransmissionToken(this);
         }
 
         //RegisterData();

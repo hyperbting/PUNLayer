@@ -28,7 +28,8 @@ public interface INetworkConnect
 
 public interface INetworkConnectUser
 {
-    Action OnJoinedRoomEvent { get; set; }
+    Action OnJoinedOnlineRoomEvent { get; set; }
+    Action OnJoinedOfflineRoomEvent { get; set; }
 }
 
 public enum NetworkState

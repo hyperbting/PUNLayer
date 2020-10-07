@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, ISyncTokenUser
 {
     public PlayerTransmission transmissionToken;
     Transform transmissionTransform;
     [Space]
 
-    public ItemHolder itHolder;
+    //public ItemHolder itHolder;
     [Space]
     public bool isHost = false;
 
@@ -34,8 +34,8 @@ public class Player : MonoBehaviour
     {
         pInput = new PUN2Tester();
 
-        if (itHolder == null)
-            itHolder = GetComponent<ItemHolder>();
+        //if (itHolder == null)
+        //    itHolder = GetComponent<ItemHolder>();
     }
 
     // Start is called before the first frame update
@@ -46,6 +46,7 @@ public class Player : MonoBehaviour
 
         //
         pInput.Player.Fire.performed += Fire;
+        pInput.Player.Echo.performed += Echo;
 
         //Request TokenHandler From NetworkManager
         var th = ServiceManager.Instance.networkSystem.RequestTokenHandler(SyncTokenType.Player, this.transform);
@@ -78,8 +79,8 @@ public class Player : MonoBehaviour
         if (ctx.ReadValue<float>() < 0.5)
             return;
 
-        //CreatePersonalItem
-        itHolder.CreateLocalItemBase();
+        ////CreatePersonalItem
+        //itHolder.CreateLocalItemBase();
     }
 
     private void Move(Vector2 direction)
@@ -102,6 +103,17 @@ public class Player : MonoBehaviour
         //m_Rotation.x = Mathf.Clamp(m_Rotation.x - rotate.y * scaledRotateSpeed, -89, 89);
         transform.localEulerAngles = m_Rotation;
     }
+
+    private void Echo(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
+    {
+        if (ctx.ReadValue<float>() < 0.5)
+            return;
+
+        if (transmissionToken != null)
+        {
+            transmissionToken.StatHelper.UpdateProperties("k1", Time.fixedTime, SyncTokenType.Player);
+        }
+    }
     #endregion
 
     private void UpdateTokenTransform()
@@ -113,34 +125,16 @@ public class Player : MonoBehaviour
         }
     }
 
-    #region SerilizableReadWrite talk to TokenHandler
-    public void RegisterWithTransmissionToken(PlayerTransmission pt)
+    #region ISyncTokenUser; SerilizableReadWrite talk to TokenHandler; Called By SyncToken when OnJoinedOnlineRoom
+    public void RegisterWithTransmissionToken(ITransmissionBase pt)
     {
         Debug.Log("RegisterWithTransmissionToken");
-        transmissionToken = pt;
-        transmissionTransform = pt.transform;
-        Debug.Log("RegisterWithTransmissionToken BuildSerlizableData");
-        foreach (var kv in itHolder.BuildSerlizableData())
-        {
-            //kv.Value
-        }
+        transmissionToken = pt as PlayerTransmission;
+        transmissionTransform = transmissionToken.transform;
 
-        //var listToSerializableSync = new List<SerializableReadWrite >()
-        //{
-        //    new SerializableReadWrite ("Random", ReadValue, WriteValue),
-        //    //new SerilizableReadWrite(ReadRotation, WriteRotation) { name = "SyncRot" }
-        //};
-        //pt.Setup(listToSerializableSync);
+        Debug.Log($"RegisterWithTransmissionToken BuildSerlizableData");
+        var data = new SerializableWrite("k1", (object obj) => { Debug.Log($"{gameObject.name} {obj}"); });
+        transmissionToken.StatHelper.Register(data);
     }
-
-    //object ReadValue()
-    //{
-    //    return Time.time;
-    //}
-
-    //void WriteValue(object obj)
-    //{
-    //    Debug.Log($"{(float)obj}");
-    //}
     #endregion SerilizableReadWrite
 }

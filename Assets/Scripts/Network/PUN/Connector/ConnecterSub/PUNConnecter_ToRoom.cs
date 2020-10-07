@@ -136,11 +136,12 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks
         if (PhotonNetwork.OfflineMode)
         {
             CurrentPhotonRoomState = PhotonRoomState.OfflineRoom;
+            incu.OnJoinedOfflineRoomEvent?.Invoke();
         }
         else
         {
             CurrentPhotonRoomState = PhotonRoomState.OnlineRoom;
-            incu.OnJoinedRoomEvent?.Invoke();
+            incu.OnJoinedOnlineRoomEvent?.Invoke();
         }
     }
 

@@ -16,9 +16,9 @@ public class BaseSyncHelper : MonoBehaviourPunCallbacks
     /// <summary>
     /// To Store method to read/ write specific value
     /// </summary>
-    protected Dictionary<string, SerializableReadWrite > dataToSync = new Dictionary<string, SerializableReadWrite >();
+    protected Dictionary<string, SerializableWrite> dataToSync = new Dictionary<string, SerializableWrite>();
     #region Registration
-    public void Register(SerializableReadWrite srw)
+    public void Register(SerializableWrite srw)
     {
         if (!dataToSync.ContainsKey(srw.name))
         {
@@ -27,18 +27,18 @@ public class BaseSyncHelper : MonoBehaviourPunCallbacks
         }
     }
 
-    public void Register(params SerializableReadWrite[] srws)
+    public void Register(params SerializableWrite[] srws)
     {
         foreach (var srw in srws)
             Register(srw);
     }
 
-    public void Unregister(SerializableReadWrite srw)
+    public void Unregister(SerializableWrite srw)
     {
         Unregister(srw.name);
     }
 
-    public void Unregister(params SerializableReadWrite[] srws)
+    public void Unregister(params SerializableWrite[] srws)
     {
         foreach (var srw in srws)
             Unregister(srw.name);

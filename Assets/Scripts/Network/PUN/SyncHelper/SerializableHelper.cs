@@ -6,6 +6,11 @@ using UnityEngine;
 /// Serializable for Player is implemented by OnPhotonSerializeView
 public class SerializableHelper : BaseSyncHelper, IPunObservable, ISerializableHelper
 {
+    /// <summary>
+    /// To Store method to read/ write specific value
+    /// </summary>
+    protected new Dictionary<string, SerializableReadWrite> dataToSync = new Dictionary<string, SerializableReadWrite>();
+
     #region Photon Callback
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
