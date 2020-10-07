@@ -172,12 +172,20 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, INetworkConnect
         return false;
     }
 
-    public bool InOnlineRoom()
+    public bool IsOnlineRoom()
     {
         if (PhotonNetwork.OfflineMode)
             return false;
 
-        return PhotonNetwork.CurrentRoom != null;
+        return PhotonNetwork.InRoom;
+    }
+
+    public bool IsOfflineRoom()
+    {
+        if (PhotonNetwork.OfflineMode && PhotonNetwork.InRoom)
+            return true;
+
+        return false;
     }
     #endregion
     #region Getter

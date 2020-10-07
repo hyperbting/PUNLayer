@@ -33,6 +33,9 @@ public class TokenHandler : MonoBehaviour
     public virtual void OnJoinedRoomAct()
     {
         Debug.Log($"[TokenHandler] OnJoinedRoomAct");
+        if (ServiceManager.Instance.networkSystem.IsOfflineRoom())
+            return;
+
         GameObject ntGO = ServiceManager.Instance.networkSystem.RequestSyncToken(tokenType, refTransform);
         if (ntGO != null)
             transToken = ntGO.GetComponent<TransmissionBase>();

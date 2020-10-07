@@ -49,4 +49,11 @@ public class NetworkSystem : MonoBehaviour, INetworkConnectUser
         return inc.RequestSyncToken(tType, trasn);
     }
     #endregion
+
+    #region
+    public bool IsOfflineRoom()
+    {
+        return inc.IsOfflineRoom();
+    }
+    #endregion
 }

@@ -42,10 +42,10 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, IOnEventCallback
         switch (tType)
         {
             case SyncTokenType.Player:
-                go = Photon.Pun.PhotonNetwork.Instantiate("Token/PlayerTransmissionToken", trasn.position, trasn.rotation);
+                go = PhotonNetwork.Instantiate("Token/PlayerTransmissionToken", trasn.position, trasn.rotation);
                 break;
             default:
-                go = Photon.Pun.PhotonNetwork.Instantiate("Token/TransmissionToken", trasn.position, trasn.rotation);
+                go = PhotonNetwork.Instantiate("Token/TransmissionToken", trasn.position, trasn.rotation);
                 break;
         }
 

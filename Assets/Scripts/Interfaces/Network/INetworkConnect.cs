@@ -17,6 +17,9 @@ public interface INetworkConnect
     Task<bool> JoinGameRoom(string roomName);
 
     #region InRoom
+    bool IsOnlineRoom();
+    bool IsOfflineRoom();
+
     GameObject RequestSyncToken(SyncTokenType syncTokenType, Transform refTrasnform);
     //Task<bool> SetRoomProperty(KeyValExpPair kvePair);
     //Task<bool> SetPlayerProperty(Player player, KeyValExpPair kvePair);
