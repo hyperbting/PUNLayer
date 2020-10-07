@@ -1,10 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.InputSystem.Interactions;
-
-using System.Threading;
-using System.Threading.Tasks;
+﻿using UnityEngine;
 
 public class Player : MonoBehaviour
 {
@@ -52,7 +46,6 @@ public class Player : MonoBehaviour
 
         //
         pInput.Player.Fire.performed += Fire;
-        //pInput.Player.FireSub.performed += FireSub;
 
         //Request TokenHandler From NetworkManager
         var th = ServiceManager.Instance.networkSystem.RequestTokenHandler(SyncTokenType.Player, this.transform);
@@ -66,8 +59,8 @@ public class Player : MonoBehaviour
 
         around = pInput.Player.Look.ReadValue<Vector2>();
         move = pInput.Player.Move.ReadValue<Vector2>();
-        // Update orientation first, then move. Otherwise move orientation will lag
-        // behind by one frame.
+
+        // Update orientation first, then move. Otherwise move orientation will lag behind by one frame.
         Look(around);
         Move(move);
 
@@ -79,6 +72,7 @@ public class Player : MonoBehaviour
         UpdateTokenTransform();
     }
 
+    #region InputSystem Actions
     private void Fire(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
     {
         if (ctx.ReadValue<float>() < 0.5)
@@ -86,14 +80,6 @@ public class Player : MonoBehaviour
 
         //CreatePersonalItem
         itHolder.CreateLocalItemBase();
-    }
-
-    private void FireSub(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
-    {
-        //if (!Photon.Pun.PhotonNetwork.InRoom || ctx.ReadValue<float>() < 0.5)
-        //    return;
-
-        //Photon.Pun.PhotonNetwork.Instantiate("PUNNetowrkObject", transform.position, Quaternion.identity);
     }
 
     private void Move(Vector2 direction)
@@ -116,6 +102,7 @@ public class Player : MonoBehaviour
         //m_Rotation.x = Mathf.Clamp(m_Rotation.x - rotate.y * scaledRotateSpeed, -89, 89);
         transform.localEulerAngles = m_Rotation;
     }
+    #endregion
 
     private void UpdateTokenTransform()
     {
