@@ -6,7 +6,6 @@ public class Player : MonoBehaviour, ISyncTokenUser
     Transform transmissionTransform;
     [Space]
 
-    //public ItemHolder itHolder;
     [Space]
     public bool isHost = false;
 
@@ -15,10 +14,8 @@ public class Player : MonoBehaviour, ISyncTokenUser
     public PUN2Tester pInput;
 
     [Header("Debug")]
-    [SerializeField]
-    Vector2 move;
-    [SerializeField]
-    Vector2 around;
+    [SerializeField] Vector2 move;
+    [SerializeField] Vector2 around;
 
     public void OnEnable()
     {
@@ -78,9 +75,6 @@ public class Player : MonoBehaviour, ISyncTokenUser
     {
         if (ctx.ReadValue<float>() < 0.5)
             return;
-
-        ////CreatePersonalItem
-        //itHolder.CreateLocalItemBase();
     }
 
     private void Move(Vector2 direction)
@@ -132,8 +126,9 @@ public class Player : MonoBehaviour, ISyncTokenUser
         transmissionToken = pt as PlayerTransmission;
         transmissionTransform = transmissionToken.transform;
 
+        // Only Player know what to do when PlayerPropertiesUpdate
         Debug.Log($"RegisterWithTransmissionToken BuildSerlizableData");
-        var data = new SerializableWrite("k1", (object obj) => { Debug.Log($"{gameObject.name} {obj}"); });
+        var data = new SerializableWrite("k1", (object obj) => { Debug.Log($"{gameObject.name} k1 {obj}"); });
         transmissionToken.StatHelper.Register(data);
     }
     #endregion SerilizableReadWrite

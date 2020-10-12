@@ -38,14 +38,15 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, IOnEventCallback
 
     public GameObject RequestSyncToken(SyncTokenType tType, Transform trasn)
     {
+        var dataToSend = new object[1] { tType };
         GameObject go = null;
         switch (tType)
         {
             case SyncTokenType.Player:
-                go = PhotonNetwork.Instantiate("Token/PlayerTransmissionToken", trasn.position, trasn.rotation);
+                go = PhotonNetwork.Instantiate("Token/PlayerTransmissionToken", trasn.position, trasn.rotation, 0, dataToSend);
                 break;
             default:
-                go = PhotonNetwork.Instantiate("Token/TransmissionToken", trasn.position, trasn.rotation);
+                go = PhotonNetwork.Instantiate("Token/TransmissionToken", trasn.position, trasn.rotation, 0, dataToSend);
                 break;
         }
 

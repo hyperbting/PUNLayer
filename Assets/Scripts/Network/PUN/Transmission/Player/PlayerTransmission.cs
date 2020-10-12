@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(PhotonView))]
-public partial class PlayerTransmission : TransmissionBase, IPunInstantiateMagicCallback
+public partial class PlayerTransmission : TransmissionBase
 {
     [SerializeField]
     GameObject RefPlayer;
@@ -35,9 +35,5 @@ public partial class PlayerTransmission : TransmissionBase, IPunInstantiateMagic
         }
 
         //RegisterData();
-    }
-
-    public void OnPhotonInstantiate(PhotonMessageInfo info)
-    {
     }
 }

@@ -40,14 +40,23 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase
         }
         else
         {
-            Debug.Log($"{photonView.ViewID} TryLoadData for {photonView.Owner.UserId}" + photonView.InstantiationData);
+            Debug.Log($"{photonView.ViewID} TryLoadData for {photonView.Owner.UserId}, InstantiationDataLength:{photonView.InstantiationData.Length}");
+
+            //Now use InstantiationData
+            switch ((SyncTokenType)photonView.InstantiationData[0])
+            {
+                case SyncTokenType.Player:
+                break;
+                case SyncTokenType.General:
+                default:
+                    break;
+            }
         }
 
         started = true;
 
         //RegisterData();
     }
-
 
     // for Owner
     List<SerializableReadWrite> srw = new List<SerializableReadWrite>();
@@ -112,13 +121,4 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase
         }
     }
     #endregion
-
-    void RegisterSerializableReadWrite()
-    {
-        if (seriHelper != null)
-            seriHelper.Register(srw.ToArray());
-        else
-            Invoke("RegisterSerializableReadWrite", 1);
-    }
-
 }

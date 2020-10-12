@@ -1,5 +1,5 @@
 ﻿using System;
-[Serializable]
+
 public class SerializableReadWrite : SerializableWrite
 {
     public new SyncHelperType syncType = SyncHelperType.PlayerState;
@@ -18,7 +18,6 @@ public class SerializableReadWrite : SerializableWrite
     }
 }
 
-[System.Serializable]
 public class SerializableWrite
 {
     public SyncHelperType syncType = SyncHelperType.Serializable;

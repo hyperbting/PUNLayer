@@ -1,7 +1,8 @@
 {
     "name": "SharedDataStructures",
     "references": [
-        "GUID:e82a9e08f241978418796ef64089d0fa"
+        "GUID:e82a9e08f241978418796ef64089d0fa",
+        "GUID:e5dcabe01d9b37349a2e2829c241d6d8"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
