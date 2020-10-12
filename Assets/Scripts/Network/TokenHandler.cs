@@ -95,6 +95,7 @@ public class TokenHandler : MonoBehaviour
         var datatoSend = InstantiationData.Build(tokenType);
         //datatoSend.Add("name", ServiceManager.Instance.playerManager);
         datatoSend.Add("syncPos","true");
+        datatoSend.Add("syncRot", "true");
 
         GameObject ntGO = ServiceManager.Instance.networkSystem.RequestSyncToken(datatoSend, refTransform);
         if (ntGO != null)

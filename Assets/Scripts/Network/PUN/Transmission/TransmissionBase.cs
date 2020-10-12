@@ -44,8 +44,12 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase
 
                 if (data.TryGetValue("syncPos", out string val) && val == "true")
                 {
-                    Debug.Log($"syncPos");
                     SeriHelper.Register(pta.BuildPosSync());
+                }
+
+                if (data.TryGetValue("syncRot", out val) && val == "true")
+                {
+                    SeriHelper.Register(pta.BuildRotSync());
                 }
                 break;
             default:

@@ -12,7 +12,11 @@ public class ServiceManager : MonoBehaviour
     public static ServiceManager Instance {
         get {
             if (instance == null)
-                instance = GameObject.Find("ServiceManager").GetComponent<ServiceManager>();
+            {
+                var go = GameObject.Find("ServiceManager");
+                if(go != null)
+                    instance = go.GetComponent<ServiceManager>();
+            }
 
             return instance;
         }

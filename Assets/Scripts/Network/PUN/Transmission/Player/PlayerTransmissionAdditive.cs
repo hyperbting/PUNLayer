@@ -35,9 +35,15 @@ public class PlayerTransmissionAdditive : MonoBehaviourPunCallbacks
         }
     }
 
+    #region Sync Methods
     public SerializableReadWrite BuildPosSync()
     {
-        return new SerializableReadWrite( "SyncPos", ReadPos, WritePos );
+        return new SerializableReadWrite("SyncPos", ReadPos, WritePos );
+    }
+
+    public SerializableReadWrite BuildRotSync()
+    {
+        return new SerializableReadWrite("SyncRot", ReadRot, WriteRot);
     }
 
     object ReadPos()
@@ -51,4 +57,15 @@ public class PlayerTransmissionAdditive : MonoBehaviourPunCallbacks
         //Debug.LogWarning("Write Pos");
         RefPlayer.transform.position = (Vector3)obj;
     }
+
+    object ReadRot()
+    {
+        return RefPlayer.transform.rotation;
+    }
+
+    void WriteRot(object obj)
+    {
+        RefPlayer.transform.rotation = (Quaternion)obj;
+    }
+    #endregion
 }
