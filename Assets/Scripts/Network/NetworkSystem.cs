@@ -45,9 +45,9 @@ public class NetworkSystem : MonoBehaviour, INetworkConnectUser
         return go;
     }
 
-    public GameObject RequestSyncToken(SyncTokenType tType, Transform trasn)
+    public GameObject RequestSyncToken(InstantiationData datatoSend, Transform trasn)
     {
-        return inc.RequestSyncToken(tType, trasn);
+        return inc.RequestSyncToken(datatoSend, trasn);
     }
     #endregion
 

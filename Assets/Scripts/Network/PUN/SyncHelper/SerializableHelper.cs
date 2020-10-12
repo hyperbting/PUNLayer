@@ -11,13 +11,41 @@ public class SerializableHelper : BaseSyncHelper, IPunObservable, ISerializableH
     /// </summary>
     protected new Dictionary<string, SerializableReadWrite> dataToSync = new Dictionary<string, SerializableReadWrite>();
 
+    #region Registration
+    public void Register(SerializableReadWrite srw)
+    {
+        if (!dataToSync.ContainsKey(srw.name))
+        {
+            dataToSync.Add(srw.name, srw);
+            Debug.Log($"{srw.name} Registered");
+        }
+    }
+
+    public void Register(params SerializableReadWrite[] srws)
+    {
+        foreach (var srw in srws)
+            Register(srw);
+    }
+
+    public void Unregister(SerializableReadWrite srw)
+    {
+        Unregister(srw.name);
+    }
+
+    public void Unregister(params SerializableReadWrite[] srws)
+    {
+        foreach (var srw in srws)
+            Unregister(srw.name);
+    }
+    #endregion
+
     #region Photon Callback
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         var keys = new List<string>(dataToSync.Keys);
         if (stream.IsWriting)
         {
-            //Debug.Log($"IsWriting");
+            //Debug.Log($"IsWriting {keys.Count}");
             for (int i = 0; i < keys.Count; i++)
             {
                 //Debug.Log($"TryGetValue for Key:{keys[i]}");
@@ -31,7 +59,7 @@ public class SerializableHelper : BaseSyncHelper, IPunObservable, ISerializableH
         }
         else
         {
-            //Debug.Log($"IsReading");
+            //Debug.Log($"IsReading {keys.Count}");
             for (int i = 0; i < keys.Count; i++)
             {
                 //Debug.Log($"TryGetValue for Key:{keys[i]}");

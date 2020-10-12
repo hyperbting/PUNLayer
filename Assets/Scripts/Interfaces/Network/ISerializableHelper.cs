@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 public interface ISerializableHelper
 {
-    void Register(params SerializableWrite[] srw);
-    void Unregister(params SerializableWrite[] srw);
+    void Register(params SerializableReadWrite[] srw);
+    void Unregister(params SerializableReadWrite[] srw);
 }
 
 public interface ISerializeData

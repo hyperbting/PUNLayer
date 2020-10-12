@@ -2,7 +2,7 @@
 
 public class Player : MonoBehaviour, ISyncTokenUser
 {
-    public PlayerTransmission transmissionToken;
+    public TransmissionBase transmissionToken;
     Transform transmissionTransform;
     [Space]
 
@@ -67,7 +67,7 @@ public class Player : MonoBehaviour, ISyncTokenUser
             Look(pInput.Player.LookMouse.ReadValue<Vector2>());
         }
 
-        UpdateTokenTransform();
+        //UpdateTokenTransform();
     }
 
     #region InputSystem Actions
@@ -110,20 +110,11 @@ public class Player : MonoBehaviour, ISyncTokenUser
     }
     #endregion
 
-    private void UpdateTokenTransform()
-    {
-        if (transmissionToken != null && transmissionTransform != null)
-        {
-            transmissionTransform.position = transform.position;
-            transmissionTransform.rotation = transform.rotation;
-        }
-    }
-
     #region ISyncTokenUser; SerilizableReadWrite talk to TokenHandler; Called By SyncToken when OnJoinedOnlineRoom
     public void RegisterWithTransmissionToken(ITransmissionBase pt)
     {
         Debug.Log("RegisterWithTransmissionToken");
-        transmissionToken = pt as PlayerTransmission;
+        transmissionToken = pt as TransmissionBase;
         transmissionTransform = transmissionToken.transform;
 
         // Only Player know what to do when PlayerPropertiesUpdate

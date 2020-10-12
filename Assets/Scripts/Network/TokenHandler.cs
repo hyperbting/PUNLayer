@@ -92,7 +92,11 @@ public class TokenHandler : MonoBehaviour
         Debug.Log($"[TokenHandler] OnJoinedOnlineRoomAct");
 
         // Online InRoom Create a NetworkedSyncToken
-        GameObject ntGO = ServiceManager.Instance.networkSystem.RequestSyncToken(tokenType, refTransform);
+        var datatoSend = InstantiationData.Build(tokenType);
+        //datatoSend.Add("name", ServiceManager.Instance.playerManager);
+        datatoSend.Add("syncPos","true");
+
+        GameObject ntGO = ServiceManager.Instance.networkSystem.RequestSyncToken(datatoSend, refTransform);
         if (ntGO != null)
             transToken = ntGO.GetComponent<TransmissionBase>();
 

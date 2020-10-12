@@ -20,9 +20,6 @@ namespace Tests
                 });
 
             Debug.Log($"data:{data.ToString()} {data.keyValuePairs.Count} {data.ToData().Length}");
-            Debug.Log($"data Object[]:{data.ToData()}");
-            foreach(var obj in data.ToData())
-                Debug.Log($"data Object:{obj.ToString()}");
 
             var ty = (SyncTokenType)data.ToData()[0];
             Debug.Log($"data SyncTokenType:{ty}");
@@ -35,7 +32,15 @@ namespace Tests
             Debug.Log($"data2 Objectify:{data2.ToString()} {data2.keyValuePairs.Count} {data2.ToData().Length}");
 
             var data3 = InstantiationData.Build(data.ToString());
+            data3.Add("k3", "v3");
             Debug.Log($"data3 Stringify:{data3.ToString()} {data3.keyValuePairs.Count} {data3.ToData().Length}");
+
+            var data4 = InstantiationData.Build(SyncTokenType.Player);
+            data4.Add("k1","v1");
+            data4.Add("k2", "v2");
+            data4.Add("k3", "v3");
+            data4.Add("k4", "v4");
+            Debug.Log($"data4 Stringify:{data4.ToString()} {data4.keyValuePairs.Count} {data4.ToData().Length}");
         }
     }
 }

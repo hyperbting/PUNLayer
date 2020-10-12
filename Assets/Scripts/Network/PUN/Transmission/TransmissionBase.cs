@@ -34,28 +34,40 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase
     public bool started = false;
     protected virtual void Start()
     {
+        Debug.Log($"TransmissionBase Start");
+        var data = new InstantiationData(photonView.InstantiationData);
+        switch (data.tokenType)
+        {
+            case SyncTokenType.Player:
+                var pta = gameObject.AddComponent<PlayerTransmissionAdditive>();
+                pta.Init(this);
+
+                if (data.TryGetValue("syncPos", out string val) && val == "true")
+                {
+                    Debug.Log($"syncPos");
+                    SeriHelper.Register(pta.BuildPosSync());
+                }
+                break;
+            default:
+                break;
+        }
+
         if (photonView.IsMine)
         {
             Debug.Log($"I Own {photonView.ViewID} {PhotonNetwork.LocalPlayer.UserId} " + photonView.Owner.ToStringFull());
         }
         else
         {
-            Debug.Log($"{photonView.ViewID} TryLoadData for {photonView.Owner.UserId}, InstantiationDataLength:{photonView.InstantiationData.Length}");
+            // deal with photonView.InstantiationData
+            Debug.Log($"{photonView.ViewID} TryLoadData for {photonView.Owner.UserId}");
+            Debug.Log($"InstantiationDataLength:{photonView.InstantiationData.Length}");
+            for(int i = 0; i < photonView.InstantiationData.Length; i++)
+                Debug.Log($"InstantiationData: {i} {photonView.InstantiationData[i]}");
 
-            //Now use InstantiationData
-            switch ((SyncTokenType)photonView.InstantiationData[0])
-            {
-                case SyncTokenType.Player:
-                break;
-                case SyncTokenType.General:
-                default:
-                    break;
-            }
+
         }
 
         started = true;
-
-        //RegisterData();
     }
 
     // for Owner
