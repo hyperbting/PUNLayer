@@ -11,17 +11,11 @@ namespace Tests
         [Test]
         public void TestInstantiationDataSerialzation()
         {
-            var kvp = new KVP("syncPos", "True");
-            Debug.Log($"kvp:{kvp.ToString()}");
-
-            Debug.Log($"kvp2:{KVP.Build(kvp.ToString())}");
-
             var data = new InstantiationData(
                 new object[2] {
                     SyncTokenType.Player,
-                    new List<KVP> {
-                        new KVP("syncPos","True"),
-                        new KVP("syncRot","False")
+                    new List<string> {
+                        "syncPos","True","syncRot","False"
                     }
                 });
 
@@ -32,10 +26,10 @@ namespace Tests
 
             var ty = (SyncTokenType)data.ToData()[0];
             Debug.Log($"data SyncTokenType:{ty}");
-            var li = (List<KVP>)data.ToData()[1];
-            Debug.Log($"data List<KVP>:{li}");
+            var li = (List<string>)data.ToData()[1];
+            Debug.Log($"data List<string>:{li}");
             foreach( var ll in li)
-                Debug.Log($"<KVP>:{ll}");
+                Debug.Log($"<string>:{ll}");
 
             var data2 = new InstantiationData(data.ToData());
             Debug.Log($"data2 Objectify:{data2.ToString()} {data2.keyValuePairs.Count} {data2.ToData().Length}");

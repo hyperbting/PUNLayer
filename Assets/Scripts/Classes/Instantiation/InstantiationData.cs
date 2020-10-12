@@ -5,9 +5,8 @@ using System.Collections.Generic;
 public class InstantiationData: Dictionary<string,string>
 {
     public SyncTokenType tokenType;
-    public List<KVP> keyValuePairs = new List<KVP>();
+    public List<string> keyValuePairs = new List<string>();
 
-    //Dictionary<string, string> dic = new Dictionary<string, string>();
     #region
     public InstantiationData():base()
     {
@@ -16,7 +15,7 @@ public class InstantiationData: Dictionary<string,string>
     public InstantiationData(object[] data)
     {
         tokenType = (SyncTokenType)data[0];
-        keyValuePairs = (List<KVP>)data[1];
+        keyValuePairs = (List<string>)data[1];
         list2Dic();
     }
 
@@ -50,10 +49,10 @@ public class InstantiationData: Dictionary<string,string>
         // pull from dictionary
         keyValuePairs.Clear();
 
-
         foreach (var kv in this)
         {
-            keyValuePairs.Add(new KVP(kv.Key, kv.Value));
+            keyValuePairs.Add(kv.Key);
+            keyValuePairs.Add(kv.Value);
         }
     }
 
@@ -63,35 +62,12 @@ public class InstantiationData: Dictionary<string,string>
             return;
 
         // put into dictionary
-        foreach (var kv in keyValuePairs)
+        for (int i = 0; i < keyValuePairs.Count; i+=2)
         {
-            this[kv.Key] = kv.Val;
+            this[keyValuePairs[i]] = keyValuePairs[i+1];
         }
 
         keyValuePairs.Clear();
     }
     #endregion
-}
-
-[Serializable]
-public class KVP
-{
-    public string Key;
-    public string Val;
-
-    public KVP(string key, string value)
-    {
-        Key = key;
-        Val = value;
-    }
-
-    public static KVP Build(string whole)
-    {
-        return UnityEngine.JsonUtility.FromJson<KVP>(whole);
-    }
-
-    public override string ToString()
-    {
-        return UnityEngine.JsonUtility.ToJson(this);
-    }
 }
