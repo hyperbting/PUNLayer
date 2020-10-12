@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 
 [Serializable]
-public class InstantiationData
+public class InstantiationData: Dictionary<string,string>
 {
     public SyncTokenType tokenType;
     public List<KVP> keyValuePairs = new List<KVP>();
 
-    Dictionary<string, string> dic = new Dictionary<string, string>();
+    //Dictionary<string, string> dic = new Dictionary<string, string>();
     #region
+    public InstantiationData():base()
+    {
+    }
+
     public InstantiationData(object[] data)
     {
         tokenType = (SyncTokenType)data[0];
@@ -46,10 +50,8 @@ public class InstantiationData
         // pull from dictionary
         keyValuePairs.Clear();
 
-        if (dic == null || dic.Count <= 0)
-            return;
 
-        foreach (var kv in dic)
+        foreach (var kv in this)
         {
             keyValuePairs.Add(new KVP(kv.Key, kv.Value));
         }
@@ -57,15 +59,13 @@ public class InstantiationData
 
     void list2Dic()
     {
-        dic = new Dictionary<string, string>();
-
         if (keyValuePairs == null  || keyValuePairs.Count <= 0)
             return;
 
         // put into dictionary
         foreach (var kv in keyValuePairs)
         {
-            dic[kv.Key] = kv.Val;
+            this[kv.Key] = kv.Val;
         }
 
         keyValuePairs.Clear();
