@@ -2,6 +2,8 @@
 [Serializable]
 public class SerializableReadWrite : SerializableWrite
 {
+    public new SyncHelperType syncType = SyncHelperType.PlayerState;
+
     //Read from local
     public Func<object> Read;
 
@@ -19,6 +21,8 @@ public class SerializableReadWrite : SerializableWrite
 [System.Serializable]
 public class SerializableWrite
 {
+    public SyncHelperType syncType = SyncHelperType.Serializable;
+
     public string name;
     //Write to local
     public Action<object> Write;
@@ -37,4 +41,12 @@ public class SerializableWrite
     {
         return string.Format($"Name:{name},Write");
     }
+}
+
+public enum SyncHelperType
+{
+    None,
+    PlayerState,
+    RoomState,
+    Serializable
 }
