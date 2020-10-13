@@ -5,4 +5,6 @@
 
 public interface ITransmissionBase
 {
+    ISerializableHelper SeriHelper { get; }
+    ISerializableHelper StatHelper { get; }
 }

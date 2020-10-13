@@ -3,7 +3,6 @@
 public class Player : MonoBehaviour, ISyncTokenUser
 {
     public TransmissionBase transmissionToken;
-    Transform transmissionTransform;
     [Space]
 
     [Space]
@@ -103,10 +102,10 @@ public class Player : MonoBehaviour, ISyncTokenUser
         if (ctx.ReadValue<float>() < 0.5)
             return;
 
-        if (transmissionToken != null)
-        {
-            transmissionToken.StatHelper.UpdateProperties("k1", Time.fixedTime, SyncTokenType.Player);
-        }
+        if (transmissionToken == null)
+            return;
+
+        (transmissionToken.StatHelper as StateHelper).UpdatePlayerProperties("k1", Time.fixedTime);
     }
     #endregion
 
@@ -115,11 +114,13 @@ public class Player : MonoBehaviour, ISyncTokenUser
     {
         Debug.Log("RegisterWithTransmissionToken");
         transmissionToken = pt as TransmissionBase;
-        transmissionTransform = transmissionToken.transform;
 
         // Only Player know what to do when PlayerPropertiesUpdate
-        Debug.Log($"RegisterWithTransmissionToken BuildSerlizableData");
-        var data = new SerializableWrite("k1", (object obj) => { Debug.Log($"{gameObject.name} k1 {obj}"); });
+        Debug.Log($"RegisterWithTransmissionToken For Echo");
+        var data = new SerializableReadWrite(
+            "k1", 
+            null, 
+            (object obj) => { Debug.Log($"{gameObject.name} k1 {obj}"); });
         transmissionToken.StatHelper.Register(data);
     }
     #endregion SerilizableReadWrite

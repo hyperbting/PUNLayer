@@ -4,41 +4,8 @@ using UnityEngine;
 
 [RequireComponent(typeof(PhotonView))]
 /// Serializable for Player is implemented by OnPhotonSerializeView
-public class SerializableHelper : BaseSyncHelper, IPunObservable, ISerializableHelper
+public class SerializableHelper : BaseSyncHelper, IPunObservable
 {
-    /// <summary>
-    /// To Store method to read/ write specific value
-    /// </summary>
-    protected new Dictionary<string, SerializableReadWrite> dataToSync = new Dictionary<string, SerializableReadWrite>();
-
-    #region Registration
-    public void Register(SerializableReadWrite srw)
-    {
-        if (!dataToSync.ContainsKey(srw.name))
-        {
-            dataToSync.Add(srw.name, srw);
-            Debug.Log($"{srw.name} Registered");
-        }
-    }
-
-    public void Register(params SerializableReadWrite[] srws)
-    {
-        foreach (var srw in srws)
-            Register(srw);
-    }
-
-    public void Unregister(SerializableReadWrite srw)
-    {
-        Unregister(srw.name);
-    }
-
-    public void Unregister(params SerializableReadWrite[] srws)
-    {
-        foreach (var srw in srws)
-            Unregister(srw.name);
-    }
-    #endregion
-
     #region Photon Callback
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {

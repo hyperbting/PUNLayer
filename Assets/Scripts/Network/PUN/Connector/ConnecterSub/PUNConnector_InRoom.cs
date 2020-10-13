@@ -38,10 +38,13 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, IOnEventCallback
 
     public GameObject RequestSyncToken(InstantiationData dataToSend, Transform trasn)
     {
-        dataToSend.Add("uuid",PhotonNetwork.LocalPlayer.UserId);
+        //dataToSend.Add("uuid",PhotonNetwork.LocalPlayer.UserId);
 
         GameObject go = null;
-        go = PhotonNetwork.Instantiate("Token/TransmissionToken", trasn.position, trasn.rotation, 0, dataToSend.ToData());
+        if(dataToSend.tokenType == SyncTokenType.Player)            
+            go = PhotonNetwork.Instantiate("Token/TransmissionToken", trasn.position, trasn.rotation, 0, dataToSend.ToData());
+        else
+            go = PhotonNetwork.InstantiateRoomObject("Token/TransmissionToken", trasn.position, trasn.rotation, 0, dataToSend.ToData());
 
         if (go == null)
             Debug.LogWarning($"Issuing Null GameObject");

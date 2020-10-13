@@ -1,5 +1,7 @@
 ﻿using Photon.Pun;
 using Photon.Realtime;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 [RequireComponent(typeof(PhotonView))]
@@ -14,9 +16,9 @@ public class StateHelper : BaseSyncHelper
         if (photonView.Owner != PhotonNetwork.LocalPlayer)
             return;
 
-        if (dataToSync.TryGetValue(key, out SerializableWrite srw))
+        if (dataToSync.TryGetValue(key, out SerializableReadWrite srw))
         {
-            UpdateProperties(key, (srw as SerializableReadWrite).Read(), SyncTokenType.Player);
+            UpdatePlayerProperties(key, srw.Read());
         }
     }
 
@@ -30,7 +32,7 @@ public class StateHelper : BaseSyncHelper
 
         foreach (var key in changedProps.Keys)
         {
-            if (dataToSync.TryGetValue((string)key, out SerializableWrite srw))
+            if (dataToSync.TryGetValue((string)key, out SerializableReadWrite srw))
             {
                 srw.Write(changedProps[key]);
             }
@@ -38,12 +40,14 @@ public class StateHelper : BaseSyncHelper
     }
     #endregion
 
-    public void UpdateRoomObjectProperties(string key)
+    public async Task<bool> UpdateRoomProperties(string key)
     {
-        if (dataToSync.TryGetValue(key, out SerializableWrite srw))
+        if (dataToSync.TryGetValue(key, out SerializableReadWrite srw))
         {
-            UpdateProperties(key, (srw as SerializableReadWrite).Read(), SyncTokenType.General);
+            return await UpdateRoomProperties(key, srw.Read());
         }
+
+        return false;
     }
 
     public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable changedProps)
@@ -55,7 +59,7 @@ public class StateHelper : BaseSyncHelper
         // apply every state to local
         foreach (var key in changedProps.Keys)
         {
-            if (dataToSync.TryGetValue((string)key, out SerializableWrite srw))
+            if (dataToSync.TryGetValue((string)key, out SerializableReadWrite srw))
             {
                 srw.Write(changedProps[key]);
             }

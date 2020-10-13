@@ -3,18 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerTransmissionAdditive : MonoBehaviourPunCallbacks
+public class PlayerAdditive : MonoBehaviourPunCallbacks
 {
-    [SerializeField]
-    GameObject RefPlayer;
+    public GameObject RefPlayer;
 
     public IPlayerMaker pm;
 
-    public void Init(ITransmissionBase itb)
+    ITransmissionBase itb;
+
+    public void Init(ITransmissionBase itb, InstantiationData data)
     {
-        //// PlayerTransmission using PhotonTransformView to Sync Pos and Rot
-        //var ptv = gameObject.AddComponent<PhotonTransformView>();
-        //photonView.ObservedComponents.Add(ptv);
+        this.itb = itb;
 
         pm = GameObject.Find("PlayerManager").GetComponent<IPlayerMaker>();
         if (pm == null)
@@ -33,17 +32,28 @@ public class PlayerTransmissionAdditive : MonoBehaviourPunCallbacks
             var istu = RefPlayer.GetComponent<ISyncTokenUser>();
             istu.RegisterWithTransmissionToken(itb);
         }
+
+        SetupSync(data);
     }
 
     #region Sync Methods
-    public SerializableReadWrite BuildPosSync()
+    void SetupSync(InstantiationData data)
     {
-        return new SerializableReadWrite("SyncPos", ReadPos, WritePos );
-    }
+        if (data.TryGetValue("syncPlayerPos", out string val) && val == "true")
+        {
+            itb.SeriHelper.Register(new SerializableReadWrite("SyncPos", ReadPos, WritePos));
+        }
 
-    public SerializableReadWrite BuildRotSync()
-    {
-        return new SerializableReadWrite("SyncRot", ReadRot, WriteRot);
+        if (data.TryGetValue("syncPlayerRot", out val) && val == "true")
+        {
+            itb.SeriHelper.Register(new SerializableReadWrite("SyncRot", ReadRot, WriteRot));
+        }
+
+        if (data.TryGetValue("syncPUNTrans", out val) && val == "true")
+        {
+            var scr = gameObject.AddComponent<TransformAdditive>();
+            scr.RefTransform = RefPlayer.transform;
+        }
     }
 
     object ReadPos()
@@ -68,4 +78,10 @@ public class PlayerTransmissionAdditive : MonoBehaviourPunCallbacks
         RefPlayer.transform.rotation = (Quaternion)obj;
     }
     #endregion
+
+    public void UseTransformAdditive(Transform refTrans)
+    {
+        var scr = gameObject.AddComponent<TransformAdditive>();
+        scr.RefTransform = refTrans;
+    }
 }

@@ -6,6 +6,8 @@ using UnityEngine;
 public class TokenHandler : MonoBehaviour
 {
     Dictionary<string, SerializableReadWrite> dic = new Dictionary<string, SerializableReadWrite>();
+    [Header("Created On Joined Room")]
+    [SerializeField] TransmissionBase transToken;
 
     [Header("Debug Purpose")]
     [SerializeField]
@@ -13,9 +15,8 @@ public class TokenHandler : MonoBehaviour
     SyncTokenType tokenType;
     [SerializeField]
     Transform refTransform;
-    [Space]
-    [SerializeField] TransmissionBase transToken;
-    [SerializeField] Transform transmissionTransform;
+
+    ISyncTokenUser tokenUser;
 
     private void OnEnable()
     {
@@ -39,7 +40,14 @@ public class TokenHandler : MonoBehaviour
     {
         tokenType = tType;
         refTransform = refTran;
+
+        tokenUser = refTran.GetComponent<ISyncTokenUser>();
     }
+
+    //public void Register(ISyncTokenUser tokenUser)
+    //{
+    //    this.tokenUser = tokenUser;
+    //}
 
     #region PlayerProperties: direct set
     public bool PushStateInto(string key, object data)
@@ -56,59 +64,28 @@ public class TokenHandler : MonoBehaviour
     }
     #endregion
 
-    #region Register
-    public void Register(params SerializableReadWrite[] srws)
-    {
-        foreach (var srw in srws)
-        {
-            // Already In Room
-            if (HavingToken())
-            {
-                transToken.Register(srws);
-            }
-
-            dic[srw.name] = srw;
-        }
-    }
-
-    public void Unregister(params SerializableReadWrite[] srws)
-    {
-        foreach (var srw in srws)
-            if (dic.ContainsKey(srw.name))
-            {
-                dic.Remove(srw.name);
-
-                // Already In Room
-                if (HavingToken())
-                {
-                    transToken.Unregister(srw);
-                }
-            }
-    }
-    #endregion
-
     public virtual void OnJoinedOnlineRoomAct()
     {
         Debug.Log($"[TokenHandler] OnJoinedOnlineRoomAct");
 
         // Online InRoom Create a NetworkedSyncToken
         var datatoSend = InstantiationData.Build(tokenType);
-        //datatoSend.Add("name", ServiceManager.Instance.playerManager);
-        datatoSend.Add("syncPos","true");
-        datatoSend.Add("syncRot", "true");
+        datatoSend.Add("syncPUNTrans", "true");
+        //datatoSend.Add("syncPlayerPos","true");
+        //datatoSend.Add("syncPlayerRot", "true");
 
         GameObject ntGO = ServiceManager.Instance.networkSystem.RequestSyncToken(datatoSend, refTransform);
         if (ntGO != null)
             transToken = ntGO.GetComponent<TransmissionBase>();
 
-        switch (tokenType)
-        {
-            case SyncTokenType.Player:
-                var hostPlayerGO = PlayerManager.Instance.GetHostPlayer();
-                hostPlayerGO.GetComponent<ISyncTokenUser>().RegisterWithTransmissionToken(transToken);
-                break;
-            default:
-                break;
-        }
+        tokenUser.RegisterWithTransmissionToken(transToken);
+
+        //switch (tokenType)
+        //{
+        //    case SyncTokenType.Player:
+        //        break;
+        //    default:
+        //        break;
+        //}
     }
 }

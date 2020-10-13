@@ -7,9 +7,9 @@ public class SerializableReadWrite : SerializableWrite
     //Read from local
     public Func<object> Read;
 
-    public SerializableReadWrite (string name, Func<object> read, Action<object> write) : base(name,  write)
+    public SerializableReadWrite (string name, Func<object> readFromLocal, Action<object> writeWhenPropUpdate) : base(name, writeWhenPropUpdate)
     {
-        Read = read;
+        Read = readFromLocal;
     }
 
     public override string ToString()

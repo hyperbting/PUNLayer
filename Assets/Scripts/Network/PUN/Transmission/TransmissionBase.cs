@@ -1,6 +1,4 @@
 ﻿using Photon.Pun;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(PhotonView))]
@@ -8,26 +6,25 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase
 {
     #region Properties
     [SerializeField] SerializableHelper seriHelper;
-    public SerializableHelper SeriHelper
+    public ISerializableHelper SeriHelper
     {
         get
         {
             if(seriHelper == null)
                 seriHelper = GetComponent<SerializableHelper>();
-            return seriHelper;
+            return seriHelper as ISerializableHelper;
         }
     }
 
     [SerializeField] StateHelper statHelper;
-    public StateHelper StatHelper
+    public ISerializableHelper StatHelper
     {
         get
         {
             if (statHelper == null)
                 statHelper = GetComponent<StateHelper>();
-            return statHelper;
+            return statHelper as ISerializableHelper;
         }
-
     }
     #endregion
 
@@ -39,20 +36,13 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase
         switch (data.tokenType)
         {
             case SyncTokenType.Player:
-                var pta = gameObject.AddComponent<PlayerTransmissionAdditive>();
-                pta.Init(this);
-
-                if (data.TryGetValue("syncPos", out string val) && val == "true")
-                {
-                    SeriHelper.Register(pta.BuildPosSync());
-                }
-
-                if (data.TryGetValue("syncRot", out val) && val == "true")
-                {
-                    SeriHelper.Register(pta.BuildRotSync());
-                }
+                var pta = gameObject.AddComponent<PlayerAdditive>();
+                pta.Init(this, data);
                 break;
             default:
+            case SyncTokenType.General:
+                var rta = gameObject.AddComponent<RoomAdditive>();
+                rta.Init(this, data);
                 break;
         }
 
@@ -67,20 +57,25 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase
             Debug.Log($"InstantiationDataLength:{photonView.InstantiationData.Length}");
             for(int i = 0; i < photonView.InstantiationData.Length; i++)
                 Debug.Log($"InstantiationData: {i} {photonView.InstantiationData[i]}");
-
-
         }
 
         started = true;
     }
 
-    // for Owner
-    List<SerializableReadWrite> srw = new List<SerializableReadWrite>();
-    public void Setup(List<SerializableReadWrite> srws)
+    //// for Owner
+    //List<SerializableReadWrite> srw = new List<SerializableReadWrite>();
+    //public void Setup(List<SerializableReadWrite> srws)
+    //{
+    //    srw = srws;
+    //    Invoke("RegisterSerializableReadWrite", 0);
+    //}
+
+    #region Setup SerializableHelper/ StateHelper
+    public void Setup(bool useSerialize=false)
     {
-        srw = srws;
-        Invoke("RegisterSerializableReadWrite", 0);
+        (SeriHelper as SerializableHelper).enabled = useSerialize;
     }
+    #endregion
 
     #region Register
     public void Register(params SerializableReadWrite[] srws)
@@ -128,11 +123,11 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase
         switch (stType)
         {
             case SyncTokenType.Player:
-                statHelper.UpdateProperties(key, data, SyncTokenType.Player);
+                statHelper.UpdatePlayerProperties(key, data);
                 break;
             default:
             case SyncTokenType.General:
-                statHelper.UpdateProperties(key, data, SyncTokenType.General);
+                _ = statHelper.UpdateRoomProperties(key, data);
                 break;
         }
     }

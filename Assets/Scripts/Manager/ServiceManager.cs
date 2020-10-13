@@ -6,7 +6,6 @@ public class ServiceManager : MonoBehaviour
 {
     public NetworkSystem networkSystem;
     public PlayerManager playerManager;
-    //public InteractableManager interactableManager;
 
     static ServiceManager instance;
     public static ServiceManager Instance {
