@@ -14,9 +14,10 @@ public class TokenHandler : MonoBehaviour
     [Tooltip("Determine Interat with either Room/Player Properties")]
     SyncTokenType tokenType;
     [SerializeField]
-    Transform refTransform;
+    object refObject;
 
     ISyncTokenUser tokenUser;
+    ITokenProvider tokenProvider;
 
     private void OnEnable()
     {
@@ -36,23 +37,62 @@ public class TokenHandler : MonoBehaviour
     }
     #endregion
 
-    public void Setup(SyncTokenType tType, Transform refTran)
+    public void Setup(ITokenProvider itp, SyncTokenType tType, object refObj)
     {
-        tokenType = tType;
-        refTransform = refTran;
+        tokenProvider = itp;
 
-        tokenUser = refTran.GetComponent<ISyncTokenUser>();
+        tokenType = tType;
+        refObject = refObj;
+
+        tokenUser = (refObject as GameObject).GetComponent<ISyncTokenUser>();
     }
 
-    //public void Register(ISyncTokenUser tokenUser)
-    //{
-    //    this.tokenUser = tokenUser;
-    //}
+    public void Register(SyncTokenType tType, params SerializableReadWrite[] srws)
+    {
+        if (!HavingToken())
+        {
+            Debug.LogWarning($"Not Yet InRoom for Register");
+            return;
+        }
+
+        switch (tokenType)
+        {
+            case SyncTokenType.Player:
+                transToken.StatHelper.Register(srws);
+                break;
+            case SyncTokenType.General:
+                transToken.SeriHelper.Register(srws);
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void Unregister(SyncTokenType tType, params SerializableReadWrite[] srws)
+    {
+        if (!HavingToken())
+        {
+            Debug.LogWarning($"Not Yet InRoom for Unregister");
+            return;
+        }
+
+        switch (tokenType)
+        {
+            case SyncTokenType.Player:
+                transToken.StatHelper.Unregister(srws);
+                break;
+            case SyncTokenType.General:
+                transToken.SeriHelper.Unregister(srws);
+                break;
+            default:
+                break;
+        }
+    }
 
     #region PlayerProperties: direct set
     public bool PushStateInto(string key, object data)
     {
-        if (transToken == null)
+        if (!HavingToken())
         {
             Debug.Log($"NotInRoom");
             return false;
@@ -74,7 +114,7 @@ public class TokenHandler : MonoBehaviour
         //datatoSend.Add("syncPlayerPos","true");
         //datatoSend.Add("syncPlayerRot", "true");
 
-        GameObject ntGO = ServiceManager.Instance.networkSystem.RequestSyncToken(datatoSend, refTransform);
+        GameObject ntGO = tokenProvider.RequestSyncToken(datatoSend, refObject) as GameObject;
         if (ntGO != null)
             transToken = ntGO.GetComponent<TransmissionBase>();
 

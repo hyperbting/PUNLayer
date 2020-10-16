@@ -2,7 +2,8 @@
 
 public class Player : MonoBehaviour, ISyncTokenUser
 {
-    public TransmissionBase transmissionToken;
+    public TokenHandler tokHandler;
+
     [Space]
 
     [Space]
@@ -45,7 +46,8 @@ public class Player : MonoBehaviour, ISyncTokenUser
         pInput.Player.Echo.performed += Echo;
 
         //Request TokenHandler From NetworkManager
-        var th = ServiceManager.Instance.networkSystem.RequestTokenHandler(SyncTokenType.Player, this.transform);
+        tokHandler = (ServiceManager.Instance.networkSystem.RequestTokenHandler(SyncTokenType.Player, gameObject) as GameObject)
+            .GetComponent<TokenHandler>();
     }
 
     // Update is called once per frame
@@ -102,10 +104,10 @@ public class Player : MonoBehaviour, ISyncTokenUser
         if (ctx.ReadValue<float>() < 0.5)
             return;
 
-        if (transmissionToken == null)
+        if (tokHandler == null || !tokHandler.HavingToken())
             return;
 
-        (transmissionToken.StatHelper as StateHelper).UpdatePlayerProperties("k1", Time.fixedTime);
+        tokHandler.PushStateInto("k1", Time.fixedTime);
     }
     #endregion
 
@@ -113,7 +115,6 @@ public class Player : MonoBehaviour, ISyncTokenUser
     public void RegisterWithTransmissionToken(ITransmissionBase pt)
     {
         Debug.Log("RegisterWithTransmissionToken");
-        transmissionToken = pt as TransmissionBase;
 
         // Only Player know what to do when PlayerPropertiesUpdate
         Debug.Log($"RegisterWithTransmissionToken For Echo");
@@ -121,7 +122,7 @@ public class Player : MonoBehaviour, ISyncTokenUser
             "k1", 
             null, 
             (object obj) => { Debug.Log($"{gameObject.name} k1 {obj}"); });
-        transmissionToken.StatHelper.Register(data);
+        tokHandler.Register(SyncTokenType.Player, data);
     }
     #endregion SerilizableReadWrite
 }

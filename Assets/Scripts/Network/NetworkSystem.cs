@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NetworkSystem : MonoBehaviour, INetworkConnectUser
+public class NetworkSystem : MonoBehaviour, INetworkConnectUser, ITokenProvider
 {
     [Header("NetworkConnect is the network core")]
     [Tooltip("Implement interface of Network Abilities")]
@@ -36,18 +36,19 @@ public class NetworkSystem : MonoBehaviour, INetworkConnectUser
             DebugUI.SetActive(true);
     }
 
-    #region Network Transmission Token
-    public GameObject RequestTokenHandler(SyncTokenType tokenType, Transform parent)
+    #region ITokenProvider. Network Transmission Token
+    public object RequestTokenHandler(SyncTokenType tokenType, object refObj)
     {
         //TODO: ObjectPooling!
-        var go = Instantiate(NetworkSyncHandler, parent);
-        go.GetComponent<TokenHandler>().Setup(tokenType, parent);
+        var go = Instantiate(NetworkSyncHandler, (refObj as GameObject).transform);
+        go.GetComponent<TokenHandler>().Setup(this, tokenType, refObj);
         return go;
     }
 
-    public GameObject RequestSyncToken(InstantiationData datatoSend, Transform trasn)
+    public object RequestSyncToken(InstantiationData datatoSend, object refObj)
     {
-        return inc.RequestSyncToken(datatoSend, trasn);
+        var refTran = (refObj as GameObject).transform;
+        return inc.RequestSyncToken(datatoSend, refTran) as object;
     }
     #endregion
 
