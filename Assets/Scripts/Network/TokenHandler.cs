@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class TokenHandler : MonoBehaviour, ITokenHandler
 {
-    readonly Dictionary<string, SerializableReadWrite> dic = new Dictionary<string, SerializableReadWrite>();
+    //readonly Dictionary<string, SerializableReadWrite> dic = new Dictionary<string, SerializableReadWrite>();
     [Header("Created On Joined Room")]
     [SerializeField] TransmissionBase transToken;
 
@@ -47,46 +47,24 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
         tokenUser = (refObject as GameObject).GetComponent<ISyncHandlerUser>();
     }
 
-    public void Register(SyncTokenType tType, params SerializableReadWrite[] srws)
+    public void Register(params SerializableReadWrite[] srws)
     {
         if (!HavingToken())
         {
             Debug.LogWarning($"Not Yet InRoom for Register");
             return;
         }
-
-        switch (tokenType)
-        {
-            case SyncTokenType.Player:
-                transToken.StatHelper.Register(srws);
-                break;
-            case SyncTokenType.General:
-                transToken.SeriHelper.Register(srws);
-                break;
-            default:
-                break;
-        }
+        transToken.Register(srws);
     }
 
-    public void Unregister(SyncTokenType tType, params SerializableReadWrite[] srws)
+    public void Unregister(params SerializableReadWrite[] srws)
     {
         if (!HavingToken())
         {
             Debug.LogWarning($"Not Yet InRoom for Unregister");
             return;
         }
-
-        switch (tokenType)
-        {
-            case SyncTokenType.Player:
-                transToken.StatHelper.Unregister(srws);
-                break;
-            case SyncTokenType.General:
-                transToken.SeriHelper.Unregister(srws);
-                break;
-            default:
-                break;
-        }
+        transToken.Unregister(srws);
     }
 
     #region PlayerProperties: direct set

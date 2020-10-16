@@ -10,7 +10,7 @@ using UnityEngine;
 public class OwnershipAdditive : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks
 {
 
-    ITransmissionBase itb;
+    ITransmissionBase parent;
 
     [SerializeField] OwnershipOption ownershipOption = OwnershipOption.Request;
 
@@ -38,7 +38,7 @@ public class OwnershipAdditive : MonoBehaviourPunCallbacks, IPunOwnershipCallbac
 
     public void Init(ITransmissionBase itb, InstantiationData data)
     {
-        this.itb = itb;
+        this.parent = itb;
     }
 
     #region

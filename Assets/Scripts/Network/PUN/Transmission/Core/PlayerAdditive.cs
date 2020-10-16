@@ -9,11 +9,11 @@ public class PlayerAdditive : MonoBehaviourPunCallbacks
 
     public IPlayerMaker pm;
 
-    ITransmissionBase itb;
+    ITransmissionBase parent;
 
     public void Init(ITransmissionBase itb, InstantiationData data)
     {
-        this.itb = itb;
+        this.parent = itb;
 
         pm = GameObject.Find("PlayerManager").GetComponent<IPlayerMaker>();
         if (pm == null)
@@ -30,7 +30,7 @@ public class PlayerAdditive : MonoBehaviourPunCallbacks
             RefPlayer = pm.InstantiateRemotePlayerObject(photonView.Owner.UserId, gameObject.transform);
 
             var istu = RefPlayer.GetComponent<ISyncHandlerUser>();
-            istu.RegisterSyncProcess();
+            istu.RegisterSyncProcess(itb, data);
         }
 
         SetupSync(data);
@@ -41,12 +41,12 @@ public class PlayerAdditive : MonoBehaviourPunCallbacks
     {
         if (data.TryGetValue("syncPlayerPos", out string val) && val == "true")
         {
-            itb.SeriHelper.Register(new SerializableReadWrite("SyncPos", ReadPos, WritePos));
+            parent.SeriHelper.Register(new SerializableReadWrite("SyncPos", ReadPos, WritePos));
         }
 
         if (data.TryGetValue("syncPlayerRot", out val) && val == "true")
         {
-            itb.SeriHelper.Register(new SerializableReadWrite("SyncRot", ReadRot, WriteRot));
+            parent.SeriHelper.Register(new SerializableReadWrite("SyncRot", ReadRot, WriteRot));
         }
 
         if (data.TryGetValue("syncPUNTrans", out val) && val == "true")

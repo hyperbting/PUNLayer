@@ -1,7 +1,7 @@
 ﻿// Player
 public interface ISyncHandlerUser
 {
-    void RegisterSyncProcess();
+    void SetupSync(ITransmissionBase itb, InstantiationData data);
 }
 
 // Player get one when created, use this to sync when IsHost
@@ -13,8 +13,8 @@ public interface ITokenHandler
 
     #region Init
     void Setup(ITokenProvider itp, SyncTokenType tType, object refObj);
-    void Register(SyncTokenType tType, params SerializableReadWrite[] srws);
-    void Unregister(SyncTokenType tType, params SerializableReadWrite[] srws);
+    void Register(params SerializableReadWrite[] srws);
+    void Unregister(params SerializableReadWrite[] srws);
     #endregion
 
     #region Usage
@@ -34,4 +34,7 @@ public interface ITransmissionBase
 {
     ISerializableHelper SeriHelper { get; }
     ISerializableHelper StatHelper { get; }
+
+    void Register(params SerializableReadWrite[] srws);
+    void Unregister(params SerializableReadWrite[] srws);
 }

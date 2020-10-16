@@ -114,20 +114,42 @@ public class Player : MonoBehaviour, ISyncHandlerUser
     #endregion
 
     #region ISyncHandlerUser; talk to TokenHandler; Called By SyncToken when OnJoinedOnlineRoom
-    public void RegisterSyncProcess()
+    public void SetupSync(ITransmissionBase itb, InstantiationData data)
     {
-        Debug.Log("RegisterSyncPrecess");
+        //Debug.Log("SetupSync");
 
-        if (tokHandler == null)
-            return;
+        //// Only Player know what to do when PlayerPropertiesUpdate
+        //Debug.Log($"SetupSync for Echo Method");
+        //var sdata = new SerializableReadWrite(
+        //    "k1",
+        //    null,
+        //    (object obj) => { Debug.Log($"{gameObject.name} k1 {obj}"); }){ syncType=SyncHelperType.PlayerState};
 
-        // Only Player know what to do when PlayerPropertiesUpdate
-        Debug.Log($"RegisterSyncPrecess for Echo Method");
-        var data = new SerializableReadWrite(
-            "k1", 
-            null, 
-            (object obj) => { Debug.Log($"{gameObject.name} k1 {obj}"); });
-        tokHandler.Register(SyncTokenType.Player, data);
+        //itb.Register(sdata);
+
+        if (data.TryGetValue("syncPlayerPos", out string val) && val == "true")
+        {
+            itb.Register(BuildEchoSerializableReadWrite());
+        }
+    }
+
+    SerializableReadWrite BuildEchoSerializableReadWrite()
+    {
+        return new SerializableReadWrite(
+            "k1",
+            null,
+            EchoPropToLocal
+            ){ syncType = SyncHelperType.PlayerState };
+    }
+
+    //object EchoLocalToProp()
+    //{
+    //    return Time.fixedTime;
+    //}
+
+    void EchoPropToLocal(object obj)
+    {
+        Debug.Log($"{gameObject.name} k1 {obj}"); 
     }
     #endregion SerilizableReadWrite
 }
