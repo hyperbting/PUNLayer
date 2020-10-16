@@ -43,6 +43,10 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase
             case SyncTokenType.General:
                 var rta = gameObject.AddComponent<RoomAdditive>();
                 rta.Init(this, data);
+
+                var osa = gameObject.AddComponent<OwnershipAdditive>();
+                osa.Init(this, data);
+
                 break;
         }
 
