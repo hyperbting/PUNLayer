@@ -25,7 +25,7 @@ public class OwnershipAdditive : MonoBehaviourPunCallbacks, IPunOwnershipCallbac
         switch (photonView.OwnershipTransfer)
         {
             case OwnershipOption.Fixed:
-                Debug.LogWarning($"Improper OwnershipOption, now set to {photonView.OwnershipTransfer}");
+                Debug.LogWarning($"Improper OwnershipOption, now set to {ownershipOption}");
 
                 //must set to proper default
                 photonView.OwnershipTransfer = ownershipOption;

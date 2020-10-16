@@ -41,7 +41,7 @@ public class NetworkSystem : MonoBehaviour, INetworkConnectUser, ITokenProvider
     {
         //TODO: ObjectPooling!
         var go = Instantiate(NetworkSyncHandler, (refObj as GameObject).transform);
-        go.GetComponent<TokenHandler>().Setup(this, tokenType, refObj);
+        go.GetComponent<ITokenHandler>().Setup(this, tokenType, refObj);
         return go;
     }
 

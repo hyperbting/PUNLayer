@@ -15,9 +15,10 @@ public class InstantiationData: Dictionary<string,string>
     public InstantiationData(object[] data)
     {
         tokenType = (SyncTokenType)data[0];
-        //keyValuePairs = (List<string>)data[1];
+
         for (int i = 1; i < data.Length; i++)
             keyValuePairs.Add((string)data[i]);
+
         list2Dic();
     }
 
@@ -25,8 +26,6 @@ public class InstantiationData: Dictionary<string,string>
     {
         var dataList = new List<object>() { tokenType };
 
-        //dic2List();
-        //dataList.Add(keyValuePairs);
         foreach (var kv in this)
         {
             dataList.Add(kv.Key);
@@ -39,9 +38,10 @@ public class InstantiationData: Dictionary<string,string>
 
     public static InstantiationData Build(SyncTokenType tokenType)
     {
-        var newone = new InstantiationData();
-        newone.tokenType = tokenType;
-        return newone;
+        return new InstantiationData
+        {
+            tokenType = tokenType
+        };
     }
 
     public static InstantiationData Build(string str)

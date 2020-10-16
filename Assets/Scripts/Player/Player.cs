@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-public class Player : MonoBehaviour, ISyncTokenUser
+public class Player : MonoBehaviour, ISyncHandlerUser
 {
-    public TokenHandler tokHandler;
+    ITokenHandler tokHandler;
 
     [Space]
 
@@ -39,15 +39,17 @@ public class Player : MonoBehaviour, ISyncTokenUser
     void Start()
     {
         if (!isHost)
+        {
             return;
+        }
 
-        //
+        //// isHost()
         pInput.Player.Fire.performed += Fire;
         pInput.Player.Echo.performed += Echo;
 
         //Request TokenHandler From NetworkManager
         tokHandler = (ServiceManager.Instance.networkSystem.RequestTokenHandler(SyncTokenType.Player, gameObject) as GameObject)
-            .GetComponent<TokenHandler>();
+            .GetComponent<ITokenHandler>();
     }
 
     // Update is called once per frame
@@ -111,13 +113,16 @@ public class Player : MonoBehaviour, ISyncTokenUser
     }
     #endregion
 
-    #region ISyncTokenUser; SerilizableReadWrite talk to TokenHandler; Called By SyncToken when OnJoinedOnlineRoom
-    public void RegisterWithTransmissionToken(ITransmissionBase pt)
+    #region ISyncHandlerUser; talk to TokenHandler; Called By SyncToken when OnJoinedOnlineRoom
+    public void RegisterSyncProcess()
     {
-        Debug.Log("RegisterWithTransmissionToken");
+        Debug.Log("RegisterSyncPrecess");
+
+        if (tokHandler == null)
+            return;
 
         // Only Player know what to do when PlayerPropertiesUpdate
-        Debug.Log($"RegisterWithTransmissionToken For Echo");
+        Debug.Log($"RegisterSyncPrecess for Echo Method");
         var data = new SerializableReadWrite(
             "k1", 
             null, 

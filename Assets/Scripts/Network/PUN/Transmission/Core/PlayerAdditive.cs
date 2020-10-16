@@ -29,8 +29,8 @@ public class PlayerAdditive : MonoBehaviourPunCallbacks
             gameObject.name = "RemotePlayerToken";
             RefPlayer = pm.InstantiateRemotePlayerObject(photonView.Owner.UserId, gameObject.transform);
 
-            var istu = RefPlayer.GetComponent<ISyncTokenUser>();
-            istu.RegisterWithTransmissionToken(itb);
+            var istu = RefPlayer.GetComponent<ISyncHandlerUser>();
+            istu.RegisterSyncProcess();
         }
 
         SetupSync(data);

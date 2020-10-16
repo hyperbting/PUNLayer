@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TokenHandler : MonoBehaviour
+public class TokenHandler : MonoBehaviour, ITokenHandler
 {
-    Dictionary<string, SerializableReadWrite> dic = new Dictionary<string, SerializableReadWrite>();
+    readonly Dictionary<string, SerializableReadWrite> dic = new Dictionary<string, SerializableReadWrite>();
     [Header("Created On Joined Room")]
     [SerializeField] TransmissionBase transToken;
 
@@ -16,7 +16,7 @@ public class TokenHandler : MonoBehaviour
     [SerializeField]
     object refObject;
 
-    ISyncTokenUser tokenUser;
+    ISyncHandlerUser tokenUser;
     ITokenProvider tokenProvider;
 
     private void OnEnable()
@@ -30,7 +30,7 @@ public class TokenHandler : MonoBehaviour
         ServiceManager.Instance.networkSystem.OnJoinedOnlineRoomEvent -= OnJoinedOnlineRoomAct;
     }
 
-    #region
+    #region Checker
     public bool HavingToken()
     {
         return transToken != null;
@@ -44,7 +44,7 @@ public class TokenHandler : MonoBehaviour
         tokenType = tType;
         refObject = refObj;
 
-        tokenUser = (refObject as GameObject).GetComponent<ISyncTokenUser>();
+        tokenUser = (refObject as GameObject).GetComponent<ISyncHandlerUser>();
     }
 
     public void Register(SyncTokenType tType, params SerializableReadWrite[] srws)
@@ -116,16 +116,8 @@ public class TokenHandler : MonoBehaviour
 
         GameObject ntGO = tokenProvider.RequestSyncToken(datatoSend, refObject) as GameObject;
         if (ntGO != null)
+        {
             transToken = ntGO.GetComponent<TransmissionBase>();
-
-        tokenUser.RegisterWithTransmissionToken(transToken);
-
-        //switch (tokenType)
-        //{
-        //    case SyncTokenType.Player:
-        //        break;
-        //    default:
-        //        break;
-        //}
+        }
     }
 }
