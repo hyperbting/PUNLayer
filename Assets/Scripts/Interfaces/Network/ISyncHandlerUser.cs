@@ -1,4 +1,6 @@
 ﻿// Player
+using System;
+
 public interface ISyncHandlerUser
 {
     void SetupSync(ITransmissionBase itb, InstantiationData data);
@@ -15,6 +17,9 @@ public interface ITokenHandler
     void Setup(ITokenProvider itp, SyncTokenType tType, object refObj);
     void Register(params SerializableReadWrite[] srws);
     void Unregister(params SerializableReadWrite[] srws);
+
+    Action<InstantiationData> OnJoinedOnlineRoomEventBeforeTokenCreation { get; set; }
+    //Action<ITransmissionBase> OnJoinedOnlineRoomEventAfterTokenCreation { get; set; }
     #endregion
 
     #region Usage
@@ -38,3 +43,8 @@ public interface ITransmissionBase
     void Register(params SerializableReadWrite[] srws);
     void Unregister(params SerializableReadWrite[] srws);
 }
+
+//public interface ITokenAdditive
+//{
+//    void Init(ITransmissionBase itb, InstantiationData data);
+//}

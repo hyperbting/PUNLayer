@@ -10,14 +10,15 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
     [SerializeField] TransmissionBase transToken;
 
     [Header("Debug Purpose")]
-    [SerializeField]
     [Tooltip("Determine Interat with either Room/Player Properties")]
-    SyncTokenType tokenType;
-    [SerializeField]
-    object refObject;
+    [SerializeField] SyncTokenType tokenType;
+    [SerializeField] object refObject;
 
     ISyncHandlerUser tokenUser;
     ITokenProvider tokenProvider;
+
+    public Action<InstantiationData> OnJoinedOnlineRoomEventBeforeTokenCreation { get; set; }
+    //public Action<ITransmissionBase> OnJoinedOnlineRoomEventAfterTokenCreation { get; set; }
 
     private void OnEnable()
     {
@@ -88,14 +89,14 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
 
         // Online InRoom Create a NetworkedSyncToken
         var datatoSend = InstantiationData.Build(tokenType);
-        datatoSend.Add("syncPUNTrans", "true");
-        //datatoSend.Add("syncPlayerPos","true");
-        //datatoSend.Add("syncPlayerRot", "true");
+
+        OnJoinedOnlineRoomEventBeforeTokenCreation?.Invoke(datatoSend);
 
         GameObject ntGO = tokenProvider.RequestSyncToken(datatoSend, refObject) as GameObject;
         if (ntGO != null)
         {
             transToken = ntGO.GetComponent<TransmissionBase>();
+            OnJoinedOnlineRoomEventAfterTokenCreation?.Invoke(transToken);
         }
     }
 }

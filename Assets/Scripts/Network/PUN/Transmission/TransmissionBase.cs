@@ -37,15 +37,15 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase
         switch (data.tokenType)
         {
             case SyncTokenType.Player:
-                var pta = gameObject.AddComponent<PlayerAdditive>();
+                var pta = gameObject.AddComponent<PlayerCoreAdditive>();
                 pta.Init(this, data);
                 break;
             default:
             case SyncTokenType.General:
-                var rta = gameObject.AddComponent<RoomAdditive>();
+                var rta = gameObject.AddComponent<RoomCoreAdditive>();
                 rta.Init(this, data);
 
-                var osa = gameObject.AddComponent<OwnershipAdditive>();
+                var osa = gameObject.AddComponent<OwnershipSubAdditive>();
                 osa.Init(this, data);
 
                 break;

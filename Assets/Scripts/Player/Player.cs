@@ -42,14 +42,7 @@ public class Player : MonoBehaviour, ISyncHandlerUser
         {
             return;
         }
-
-        //// isHost()
-        pInput.Player.Fire.performed += Fire;
-        pInput.Player.Echo.performed += Echo;
-
-        //Request TokenHandler From NetworkManager
-        tokHandler = (ServiceManager.Instance.networkSystem.RequestTokenHandler(SyncTokenType.Player, gameObject) as GameObject)
-            .GetComponent<ITokenHandler>();
+        SetupSync();
     }
 
     // Update is called once per frame
@@ -114,20 +107,34 @@ public class Player : MonoBehaviour, ISyncHandlerUser
     #endregion
 
     #region ISyncHandlerUser; talk to TokenHandler; Called By SyncToken when OnJoinedOnlineRoom
+    void SetupSync()
+    {
+        if (!isHost)
+        {
+            return;
+        }
+
+        //// isHost()
+        pInput.Player.Fire.performed += Fire;
+        pInput.Player.Echo.performed += Echo;
+
+        //Request TokenHandler From NetworkManager
+        tokHandler = (ServiceManager.Instance.networkSystem.RequestTokenHandler(SyncTokenType.Player, gameObject) as GameObject)
+            .GetComponent<ITokenHandler>();
+
+        //What Ability this obj will have
+        tokHandler.OnJoinedOnlineRoomEventBeforeTokenCreation += (initdata) => {
+            initdata.Add("syncPUNTrans", "true");
+            initdata.Add("ablePlayerEcho", "true");
+        };
+
+        //tokHandler.OnJoinedOnlineRoomEventAfterTokenCreation += (trans) => { };
+    }
+
     public void SetupSync(ITransmissionBase itb, InstantiationData data)
     {
         //Debug.Log("SetupSync");
-
-        //// Only Player know what to do when PlayerPropertiesUpdate
-        //Debug.Log($"SetupSync for Echo Method");
-        //var sdata = new SerializableReadWrite(
-        //    "k1",
-        //    null,
-        //    (object obj) => { Debug.Log($"{gameObject.name} k1 {obj}"); }){ syncType=SyncHelperType.PlayerState};
-
-        //itb.Register(sdata);
-
-        if (data.TryGetValue("syncPlayerPos", out string val) && val == "true")
+        if (data.TryGetValue("ablePlayerEcho", out string val) && val == "true")
         {
             itb.Register(BuildEchoSerializableReadWrite());
         }
@@ -152,4 +159,6 @@ public class Player : MonoBehaviour, ISyncHandlerUser
         Debug.Log($"{gameObject.name} k1 {obj}"); 
     }
     #endregion SerilizableReadWrite
+
+
 }
