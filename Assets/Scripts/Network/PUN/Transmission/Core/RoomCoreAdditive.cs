@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RoomAdditive : MonoBehaviourPunCallbacks
+[RequireComponent(typeof(PhotonView))]
+public class RoomCoreAdditive : MonoBehaviourPunCallbacks//, ITokenAdditive
 {
     public GameObject refObject;
 

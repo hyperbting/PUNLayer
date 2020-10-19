@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 [RequireComponent(typeof(PhotonView))]
-public class OwnershipAdditive : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks
+public class OwnershipSubAdditive : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks//, ITokenAdditive
 {
 
     ITransmissionBase parent;

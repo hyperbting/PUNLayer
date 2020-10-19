@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(PhotonView))]
-public class TransformAdditive : MonoBehaviourPunCallbacks
+public class TransformSubAdditive : MonoBehaviourPunCallbacks//, ITokenAdditive
 {
     public Transform RefTransform;
 

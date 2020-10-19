@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAdditive : MonoBehaviourPunCallbacks
+[RequireComponent(typeof(PhotonView))]
+public class PlayerCoreAdditive : MonoBehaviourPunCallbacks//, ITokenAdditive
 {
     public GameObject RefPlayer;
 
@@ -30,7 +31,7 @@ public class PlayerAdditive : MonoBehaviourPunCallbacks
             RefPlayer = pm.InstantiateRemotePlayerObject(photonView.Owner.UserId, gameObject.transform);
 
             var istu = RefPlayer.GetComponent<ISyncHandlerUser>();
-            istu.RegisterSyncProcess(itb, data);
+            istu.SetupSync(itb, data);
         }
 
         SetupSync(data);
@@ -51,7 +52,7 @@ public class PlayerAdditive : MonoBehaviourPunCallbacks
 
         if (data.TryGetValue("syncPUNTrans", out val) && val == "true")
         {
-            var scr = gameObject.AddComponent<TransformAdditive>();
+            var scr = gameObject.AddComponent<TransformSubAdditive>();
             scr.RefTransform = RefPlayer.transform;
         }
     }
@@ -81,7 +82,7 @@ public class PlayerAdditive : MonoBehaviourPunCallbacks
 
     public void UseTransformAdditive(Transform refTrans)
     {
-        var scr = gameObject.AddComponent<TransformAdditive>();
+        var scr = gameObject.AddComponent<TransformSubAdditive>();
         scr.RefTransform = refTrans;
     }
 }
