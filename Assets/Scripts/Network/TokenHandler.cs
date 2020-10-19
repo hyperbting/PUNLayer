@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TokenHandler : MonoBehaviour, ITokenHandler
@@ -35,7 +33,7 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
     public bool HavingToken()
     {
         return transToken != null;
-    }
+		}
     #endregion
 
     public void Setup(ITokenProvider itp, SyncTokenType tType, object refObj)
@@ -76,11 +74,11 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
             Debug.Log($"NotInRoom");
             return false;
         }
-
+    	
         // Bsed on registered tokenType, use corresponding helper, Data will sync through Player/RoomProperties 
         transToken.UpdateProperties(tokenType, key, data);
         return true;
-    }
+	}
     #endregion
 
     public virtual void OnJoinedOnlineRoomAct()
@@ -96,7 +94,7 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
         if (ntGO != null)
         {
             transToken = ntGO.GetComponent<TransmissionBase>();
-            OnJoinedOnlineRoomEventAfterTokenCreation?.Invoke(transToken);
+            //OnJoinedOnlineRoomEventAfterTokenCreation?.Invoke(transToken);
         }
     }
 }
