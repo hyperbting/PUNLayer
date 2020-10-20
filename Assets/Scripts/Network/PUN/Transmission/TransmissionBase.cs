@@ -51,19 +51,8 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase
                 break;
         }
 
-        if (photonView.IsMine)
-        {
-            Debug.Log($"I Own {photonView.ViewID} {PhotonNetwork.LocalPlayer.UserId} " + photonView.Owner.ToStringFull());
-        }
-        else
-        {
-            // deal with photonView.InstantiationData
-            Debug.Log($"{photonView.ViewID} TryLoadData for {photonView.Owner.UserId}");
-            Debug.Log($"InstantiationDataLength:{photonView.InstantiationData.Length}");
-            for(int i = 0; i < photonView.InstantiationData.Length; i++)
-                Debug.Log($"InstantiationData: {i} {photonView.InstantiationData[i]}");
-        }
-
+        //foreach (var ita in gameObject.GetComponents<ITokenAdditive>())
+        //    ita.Init(this. data);
         started = true;
     }
 
@@ -137,4 +126,9 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase
         }
     }
     #endregion
+
+    public Photon.Realtime.Player GetOwner()
+    {
+        return photonView.Owner;
+    }
 }

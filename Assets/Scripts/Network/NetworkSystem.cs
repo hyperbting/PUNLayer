@@ -47,8 +47,15 @@ public class NetworkSystem : MonoBehaviour, INetworkConnectUser, ITokenProvider
 
     public object RequestSyncToken(InstantiationData datatoSend, object refObj)
     {
-        var refTran = (refObj as GameObject).transform;
+        Transform refTran = null;
+        if (refObj != null)
+            refTran = (refObj as GameObject).transform;
         return inc.RequestSyncToken(datatoSend, refTran) as object;
+    }
+
+    public object RequestManualSyncToken(InstantiationData datatoSend)
+    {
+        return inc.ManualBuildSyncToken(datatoSend);
     }
     #endregion
 

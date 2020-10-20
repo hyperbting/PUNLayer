@@ -81,6 +81,75 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
 	}
     #endregion
 
+    #region
+    public void CreateInRoomObject()
+    {
+        if (!HavingToken())
+        {
+            Debug.Log($"NotInRoom");
+            return;
+        }
+
+        var datatoSend = InstantiationData.Build(SyncTokenType.General);
+        datatoSend.Add("RenameGO", "InRoomObject");
+        GameObject ntGO = tokenProvider.RequestSyncToken(datatoSend, gameObject) as GameObject;
+        if (ntGO != null)
+        {
+            //ntGO.name = "InRoomObject";
+            //transToken = ntGO.GetComponent<TransmissionBase>();
+        }
+    }
+
+    public GameObject targetObj;
+    public void RequestOwnership()
+    {
+        if (targetObj == null)
+        {
+            Debug.Log($"targetObj missing");
+            return;
+        }
+        var scr = targetObj.GetComponent<OwnershipSubAdditive>();
+        if (scr == null)
+        {
+            Debug.Log($"targetObj OwnershipSubAdditive missing");
+            return;
+        }
+
+        if (trasnTokenGO == null)
+        {
+            Debug.Log($"trasnTokenGO missing");
+            return;
+        }
+
+        var tb = trasnTokenGO.GetComponent<TransmissionBase>();
+        if (tb == null)
+        {
+            Debug.Log($"TransmissionBase missing");
+            return;
+        }
+
+        _ = scr.RequestOwnership(tb.GetOwner());
+    }
+
+    public void ReleaseOwnership()
+    {
+        if (targetObj == null)
+        {
+            Debug.Log($"targetObj missing");
+            return;
+        }
+        var scr = targetObj.GetComponent<OwnershipSubAdditive>();
+        if (scr == null)
+        {
+            Debug.Log($"targetObj OwnershipSubAdditive missing");
+            return;
+        }
+
+        scr.ReleaseOwnership();
+    }
+    #endregion
+
+    GameObject trasnTokenGO;
     public virtual void OnJoinedOnlineRoomAct()
     {
         Debug.Log($"[TokenHandler] OnJoinedOnlineRoomAct");
@@ -90,10 +159,10 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
 
         OnJoinedOnlineRoomEventBeforeTokenCreation?.Invoke(datatoSend);
 
-        GameObject ntGO = tokenProvider.RequestSyncToken(datatoSend, refObject) as GameObject;
-        if (ntGO != null)
+        trasnTokenGO = tokenProvider.RequestSyncToken(datatoSend, refObject) as GameObject;
+        if (trasnTokenGO != null)
         {
-            transToken = ntGO.GetComponent<TransmissionBase>();
+            transToken = trasnTokenGO.GetComponent<TransmissionBase>();
             //OnJoinedOnlineRoomEventAfterTokenCreation?.Invoke(transToken);
         }
     }

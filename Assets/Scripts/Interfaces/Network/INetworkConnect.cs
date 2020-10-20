@@ -21,6 +21,7 @@ public interface INetworkConnect
     bool IsOfflineRoom();
 
     GameObject RequestSyncToken(InstantiationData dataToSend, Transform refTrasnform);
+    GameObject ManualBuildSyncToken(InstantiationData dataToSend);
     //Task<bool> SetRoomProperty(KeyValExpPair kvePair);
     //Task<bool> SetPlayerProperty(Player player, KeyValExpPair kvePair);
     #endregion

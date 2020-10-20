@@ -14,7 +14,7 @@ public class PlayerCoreAdditive : MonoBehaviourPunCallbacks//, ITokenAdditive
 
     public void Init(ITransmissionBase itb, InstantiationData data)
     {
-        this.parent = itb;
+        parent = itb;
 
         pm = GameObject.Find("PlayerManager").GetComponent<IPlayerMaker>();
         if (pm == null)

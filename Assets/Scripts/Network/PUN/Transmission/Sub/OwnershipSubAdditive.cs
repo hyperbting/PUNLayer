@@ -38,13 +38,28 @@ public class OwnershipSubAdditive : MonoBehaviourPunCallbacks, IPunOwnershipCall
 
     public void Init(ITransmissionBase itb, InstantiationData data)
     {
-        this.parent = itb;
+        parent = itb;
+
+        if (photonView.Owner == null)
+        {
+            Debug.Log($"InRoomObject:{photonView.ViewID} OwnedByRoom");
+        }
+        else if (photonView.IsMine)
+        {
+            Debug.Log($"I({PhotonNetwork.LocalPlayer.UserId}) Own {photonView.ViewID}" + photonView.Owner.ToStringFull());
+        }
+        else
+        {
+            // deal with photonView.InstantiationData
+            Debug.Log($"{photonView.ViewID} TryLoadData with data {data.ToString()}");
+        }
     }
 
     #region
     TaskCompletionSource<bool> tcs;
     public async Task<bool> RequestOwnership(Player newOwner)
     {
+        Debug.Log($"RequestOwnership: IsMine:{photonView.IsMine}, ControlledBy {photonView.Controller}");
         switch (photonView.OwnershipTransfer)
         {
             case OwnershipOption.Request:
@@ -54,6 +69,7 @@ public class OwnershipSubAdditive : MonoBehaviourPunCallbacks, IPunOwnershipCall
                 await Task.WhenAny(tcs.Task, Task.Delay(10000));
                 tcs.TrySetResult(false);
 
+                Debug.Log($"RequestOwnership Result:{tcs.Task.Result} {photonView.OwnerActorNr}");
                 return await tcs.Task;
             case OwnershipOption.Takeover:
                 photonView.TransferOwnership(newOwner);
@@ -65,6 +81,18 @@ public class OwnershipSubAdditive : MonoBehaviourPunCallbacks, IPunOwnershipCall
 
         return false;
     }
+
+    public void ReleaseOwnership()
+    {
+        if (!photonView.IsMine)
+        {
+            Debug.LogWarning($"ReleaseOwnership: this owned by {photonView.Owner}");
+            return;
+        }
+
+        Debug.Log($"ReleaseOwnership: this owned by {photonView.Owner}, IsMine:{photonView.IsMine}, ControlledBy {photonView.Controller}");
+        photonView.TransferOwnership(0);
+    }
     #endregion
 
     #region
@@ -73,7 +101,12 @@ public class OwnershipSubAdditive : MonoBehaviourPunCallbacks, IPunOwnershipCall
         if (targetView != photonView)
             return;
 
+        Debug.Log($"OnOwnershipRequest: {targetView.ToString()} RequestBy {requestingPlayer.ToString()} ...");
         ownershipRequestEvent?.Invoke(requestingPlayer);
+
+        //I am MC, targetViewBelong to scene
+        if (PhotonNetwork.IsMasterClient && targetView.Owner == null)
+            targetView.TransferOwnership(requestingPlayer);
     }
 
     void IPunOwnershipCallbacks.OnOwnershipTransfered(PhotonView targetView, Player previousOwner)
@@ -84,6 +117,7 @@ public class OwnershipSubAdditive : MonoBehaviourPunCallbacks, IPunOwnershipCall
         tcs?.TrySetResult(true);
 
         ownershipTransferedEvent?.Invoke(previousOwner, targetView.Owner);
+        Debug.Log($"OnOwnershipTransfered: {targetView.ToString()} {(previousOwner==null ? "Scene" : previousOwner.ToString())} to {(targetView.Owner == null ? "Scene" : targetView.Owner.ToString())}");
     }
     #endregion
 }

@@ -11,12 +11,10 @@ public class TransformSubAdditive : MonoBehaviourPunCallbacks//, ITokenAdditive
     [Header("Appear When Sync with SyncWithPUNTranform")]
     [SerializeField] PhotonTransformView photonTV;
 
-    [SerializeField] TransmissionBase transBase;
+    [SerializeField] ITransmissionBase parent;
 
     void Awake()
     {
-        transBase = GetComponent<TransmissionBase>();
-
         if (photonTV != null)
             return;
 
@@ -40,5 +38,10 @@ public class TransformSubAdditive : MonoBehaviourPunCallbacks//, ITokenAdditive
             RefTransform.position = transform.position;
             RefTransform.rotation = transform.rotation;
         }
+    }
+
+    public void Init(ITransmissionBase itb, InstantiationData data)
+    {
+        parent = itb;
     }
 }

@@ -8,11 +8,13 @@ public class RoomCoreAdditive : MonoBehaviourPunCallbacks//, ITokenAdditive
 {
     public GameObject refObject;
 
-    ITransmissionBase itb;
+    ITransmissionBase parent;
 
     public void Init(ITransmissionBase itb, InstantiationData data)
     {
-        this.itb = itb;
+        parent = itb;
+
+        gameObject.tag = "RoomObject";
 
         //Load Prefab with InstantiationData data
         refObject = Load(data);
@@ -32,6 +34,8 @@ public class RoomCoreAdditive : MonoBehaviourPunCallbacks//, ITokenAdditive
 
     GameObject Load(InstantiationData data)
     {
+        if (data.ContainsKey("RenameGO"))
+            gameObject.name = data["RenameGO"];
 
         return null;
     }

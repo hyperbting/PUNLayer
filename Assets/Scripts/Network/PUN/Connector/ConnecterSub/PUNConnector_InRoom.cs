@@ -9,6 +9,8 @@ using UnityEngine;
 
 public partial class PUNConnecter : MonoBehaviourPunCallbacks, IOnEventCallback
 {
+    public GameObject transmissionTokenPrefab;
+
     #region Progress Record
     Dictionary<string, KeyValResultPair> rpInProgress = new Dictionary<string, KeyValResultPair>();
     Dictionary<PlayerKey, KeyValResultPair> ppInProgress = new Dictionary<PlayerKey, KeyValResultPair>();
@@ -41,15 +43,78 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, IOnEventCallback
         //dataToSend.Add("uuid",PhotonNetwork.LocalPlayer.UserId);
 
         GameObject go = null;
-        if(dataToSend.tokenType == SyncTokenType.Player)            
+        if (dataToSend.tokenType == SyncTokenType.Player)
             go = PhotonNetwork.Instantiate("Token/TransmissionToken", trasn.position, trasn.rotation, 0, dataToSend.ToData());
         else
-            go = PhotonNetwork.InstantiateRoomObject("Token/TransmissionToken", trasn.position, trasn.rotation, 0, dataToSend.ToData());
+        {
+            if (PhotonNetwork.IsMasterClient)
+                go = PhotonNetwork.InstantiateRoomObject("Token/TransmissionToken", trasn.position, trasn.rotation, 0, dataToSend.ToData());
+            else
+            {
+                Debug.LogWarning($"Non MC Cannot InstantiateRoomObject");
+            }
+        }
 
         if (go == null)
             Debug.LogWarning($"Issuing Null GameObject");
 
         return go;
+    }
+
+    public GameObject ManualBuildSyncToken(InstantiationData dataToSend)
+    {
+        var go = Instantiate(transmissionTokenPrefab);
+        var pView = go.GetComponent<PhotonView>();
+
+        if (PhotonNetwork.AllocateViewID(photonView))
+        {
+            var raiseEventOptions = new RaiseEventOptions
+            {
+                Receivers = ReceiverGroup.Others,
+                CachingOption = EventCaching.AddToRoomCache
+            };
+
+            var sendOptions = new SendOptions { Reliability = true };
+
+            dataToSend.Add("viewID", photonView.ViewID.ToString());
+
+            PhotonNetwork.RaiseEvent(
+                (byte)RaiseEvnetCode.CustomManualInstantiationEventCode, 
+                dataToSend.ToData(), 
+                raiseEventOptions, 
+                sendOptions);
+
+            return go;
+        }
+
+        Debug.LogError("Failed to allocate a ViewId.");
+        Destroy(go);
+        return null;
+    }
+
+    public void ManualBuildSyncTokenOnEvent(EventData photonEvent)
+    {
+        byte eventCode = photonEvent.Code;
+        if ((RaiseEvnetCode)eventCode == RaiseEvnetCode.CustomManualInstantiationEventCode)
+        {
+            var instData = new InstantiationData((object[])photonEvent.CustomData);
+            var tok = Instantiate(transmissionTokenPrefab);
+
+            //setup based on InstantiationData
+
+            PhotonView photonView = tok.GetComponent<PhotonView>();
+            if (instData.TryGetValue("viewID", out string vid))
+                photonView.ViewID = int.Parse(vid);
+            else
+                Debug.LogWarning($"ViewID Missing!");
+        }
+    }
+    #endregion
+
+    #region IOnEventCallback
+    public void OnEvent(EventData photonEvent)
+    {
+        OnEventAction?.Invoke(photonEvent);
     }
     #endregion
 
@@ -176,14 +241,6 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, IOnEventCallback
     }
     #endregion
 
-    #region IOnEventCallback
-    public void OnEvent(EventData photonEvent)
-    {
-        byte eventCode = photonEvent.Code;
-        //Debug.Log($"{scriptName} OnEvent: " + photonEvent.ToStringFull());
-    }
-    #endregion
-
     #region
     void CompareWithPPInProgress(Player player, string key, object val)
     {
@@ -257,4 +314,11 @@ public class KeyValResultPair : KeyValExpPair
     {
         setPropResult = new TaskCompletionSource<bool>();
     }
+}
+
+
+
+public enum RaiseEvnetCode: byte
+{
+    CustomManualInstantiationEventCode = 199
 }

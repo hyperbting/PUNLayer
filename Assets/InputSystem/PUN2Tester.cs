@@ -65,6 +65,22 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""RequestOwnership"",
+                    ""type"": ""Button"",
+                    ""id"": ""cf0bfc53-aabf-43fc-89ad-579c263f4293"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""ReleaseOwnership"",
+                    ""type"": ""Button"",
+                    ""id"": ""35cf000a-84ef-4d4b-a62f-bbbe07055091"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -351,6 +367,28 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Echo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ff86f443-72c0-473a-b9bd-69b5162247bf"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""RequestOwnership"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b329991b-d148-4aac-b9e2-6865b605e4a8"",
+                    ""path"": ""<Keyboard>/k"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""ReleaseOwnership"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -934,6 +972,8 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         m_Player_LookMouseEnable = m_Player.FindAction("LookMouseEnable", throwIfNotFound: true);
         m_Player_LookMouse = m_Player.FindAction("LookMouse", throwIfNotFound: true);
         m_Player_Echo = m_Player.FindAction("Echo", throwIfNotFound: true);
+        m_Player_RequestOwnership = m_Player.FindAction("RequestOwnership", throwIfNotFound: true);
+        m_Player_ReleaseOwnership = m_Player.FindAction("ReleaseOwnership", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1001,6 +1041,8 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_LookMouseEnable;
     private readonly InputAction m_Player_LookMouse;
     private readonly InputAction m_Player_Echo;
+    private readonly InputAction m_Player_RequestOwnership;
+    private readonly InputAction m_Player_ReleaseOwnership;
     public struct PlayerActions
     {
         private @PUN2Tester m_Wrapper;
@@ -1011,6 +1053,8 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         public InputAction @LookMouseEnable => m_Wrapper.m_Player_LookMouseEnable;
         public InputAction @LookMouse => m_Wrapper.m_Player_LookMouse;
         public InputAction @Echo => m_Wrapper.m_Player_Echo;
+        public InputAction @RequestOwnership => m_Wrapper.m_Player_RequestOwnership;
+        public InputAction @ReleaseOwnership => m_Wrapper.m_Player_ReleaseOwnership;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1038,6 +1082,12 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                 @Echo.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEcho;
                 @Echo.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEcho;
                 @Echo.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEcho;
+                @RequestOwnership.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRequestOwnership;
+                @RequestOwnership.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRequestOwnership;
+                @RequestOwnership.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRequestOwnership;
+                @ReleaseOwnership.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReleaseOwnership;
+                @ReleaseOwnership.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReleaseOwnership;
+                @ReleaseOwnership.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReleaseOwnership;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1060,6 +1110,12 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                 @Echo.started += instance.OnEcho;
                 @Echo.performed += instance.OnEcho;
                 @Echo.canceled += instance.OnEcho;
+                @RequestOwnership.started += instance.OnRequestOwnership;
+                @RequestOwnership.performed += instance.OnRequestOwnership;
+                @RequestOwnership.canceled += instance.OnRequestOwnership;
+                @ReleaseOwnership.started += instance.OnReleaseOwnership;
+                @ReleaseOwnership.performed += instance.OnReleaseOwnership;
+                @ReleaseOwnership.canceled += instance.OnReleaseOwnership;
             }
         }
     }
@@ -1222,6 +1278,8 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         void OnLookMouseEnable(InputAction.CallbackContext context);
         void OnLookMouse(InputAction.CallbackContext context);
         void OnEcho(InputAction.CallbackContext context);
+        void OnRequestOwnership(InputAction.CallbackContext context);
+        void OnReleaseOwnership(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

@@ -103,6 +103,29 @@ public class Player : MonoBehaviour, ISyncHandlerUser
             return;
 
         tokHandler.PushStateInto("k1", Time.fixedTime);
+        tokHandler.CreateInRoomObject();
+    }
+
+    private void RequestOwner(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
+    {
+        if (ctx.ReadValue<float>() < 0.5)
+            return;
+
+        if (tokHandler == null || !tokHandler.HavingToken())
+            return;
+        Debug.Log($"tokHandler.RequestOwnership");
+        tokHandler.RequestOwnership();
+    }
+
+    private void ReleaseOwner(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
+    {
+        if (ctx.ReadValue<float>() < 0.5)
+            return;
+
+        if (tokHandler == null || !tokHandler.HavingToken())
+            return;
+        Debug.Log($"tokHandler.ReleaseOwner");
+        tokHandler.ReleaseOwnership();
     }
     #endregion
 
@@ -117,6 +140,8 @@ public class Player : MonoBehaviour, ISyncHandlerUser
         //// isHost()
         pInput.Player.Fire.performed += Fire;
         pInput.Player.Echo.performed += Echo;
+        pInput.Player.RequestOwnership.performed += RequestOwner;
+        pInput.Player.ReleaseOwnership.performed += ReleaseOwner;
 
         //Request TokenHandler From NetworkManager
         tokHandler = (ServiceManager.Instance.networkSystem.RequestTokenHandler(SyncTokenType.Player, gameObject) as GameObject)

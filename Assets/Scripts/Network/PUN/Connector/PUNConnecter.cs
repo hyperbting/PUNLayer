@@ -48,6 +48,8 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, INetworkConnect
     public Action<Player> OnPlayerEnteredRoomAction;
     public Action<Player> OnPlayerLeftRoomAction;
 
+    public Action<ExitGames.Client.Photon.EventData> OnEventAction;
+
     /// <summary>
     /// Key, Value
     /// </summary>
@@ -63,6 +65,8 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, INetworkConnect
 
         OnPlayerPropertyUpdateAction += CompareWithPPInProgress;
         OnRoomPropertyUpdateAction += CompareWithRPInProgress;
+
+        OnEventAction += ManualBuildSyncTokenOnEvent;
     }
 
     public override void OnDisable()
@@ -72,6 +76,8 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, INetworkConnect
 
         OnPlayerPropertyUpdateAction -= CompareWithPPInProgress;
         OnRoomPropertyUpdateAction -= CompareWithRPInProgress;
+
+        OnEventAction -= ManualBuildSyncTokenOnEvent;
     }
 
     private void Awake()

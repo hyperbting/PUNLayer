@@ -52,6 +52,22 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "RequestOwnership",
+                    "type": "Button",
+                    "id": "cf0bfc53-aabf-43fc-89ad-579c263f4293",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "ReleaseOwnership",
+                    "type": "Button",
+                    "id": "35cf000a-84ef-4d4b-a62f-bbbe07055091",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -338,6 +354,28 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Echo",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ff86f443-72c0-473a-b9bd-69b5162247bf",
+                    "path": "<Keyboard>/i",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "RequestOwnership",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b329991b-d148-4aac-b9e2-6865b605e4a8",
+                    "path": "<Keyboard>/k",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "ReleaseOwnership",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
