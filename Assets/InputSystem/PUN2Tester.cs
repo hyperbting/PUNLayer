@@ -81,6 +81,14 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""LoadScene"",
+                    ""type"": ""Button"",
+                    ""id"": ""d773235e-a206-4177-ab51-b3b08427cab8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -389,6 +397,17 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""ReleaseOwnership"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bc67e9fd-0dfd-4b29-8c23-0e9b33e19961"",
+                    ""path"": ""<Keyboard>/slash"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""LoadScene"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -974,6 +993,7 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         m_Player_Echo = m_Player.FindAction("Echo", throwIfNotFound: true);
         m_Player_RequestOwnership = m_Player.FindAction("RequestOwnership", throwIfNotFound: true);
         m_Player_ReleaseOwnership = m_Player.FindAction("ReleaseOwnership", throwIfNotFound: true);
+        m_Player_LoadScene = m_Player.FindAction("LoadScene", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1043,6 +1063,7 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Echo;
     private readonly InputAction m_Player_RequestOwnership;
     private readonly InputAction m_Player_ReleaseOwnership;
+    private readonly InputAction m_Player_LoadScene;
     public struct PlayerActions
     {
         private @PUN2Tester m_Wrapper;
@@ -1055,6 +1076,7 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         public InputAction @Echo => m_Wrapper.m_Player_Echo;
         public InputAction @RequestOwnership => m_Wrapper.m_Player_RequestOwnership;
         public InputAction @ReleaseOwnership => m_Wrapper.m_Player_ReleaseOwnership;
+        public InputAction @LoadScene => m_Wrapper.m_Player_LoadScene;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1088,6 +1110,9 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                 @ReleaseOwnership.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReleaseOwnership;
                 @ReleaseOwnership.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReleaseOwnership;
                 @ReleaseOwnership.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReleaseOwnership;
+                @LoadScene.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLoadScene;
+                @LoadScene.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLoadScene;
+                @LoadScene.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLoadScene;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1116,6 +1141,9 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                 @ReleaseOwnership.started += instance.OnReleaseOwnership;
                 @ReleaseOwnership.performed += instance.OnReleaseOwnership;
                 @ReleaseOwnership.canceled += instance.OnReleaseOwnership;
+                @LoadScene.started += instance.OnLoadScene;
+                @LoadScene.performed += instance.OnLoadScene;
+                @LoadScene.canceled += instance.OnLoadScene;
             }
         }
     }
@@ -1280,6 +1308,7 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         void OnEcho(InputAction.CallbackContext context);
         void OnRequestOwnership(InputAction.CallbackContext context);
         void OnReleaseOwnership(InputAction.CallbackContext context);
+        void OnLoadScene(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

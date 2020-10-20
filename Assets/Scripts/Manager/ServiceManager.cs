@@ -23,6 +23,9 @@ public class ServiceManager : MonoBehaviour
 
     public void Awake()
     {
+        if (instance != null)
+            Destroy(gameObject);
+
         DontDestroyOnLoad(this);
     }
 }

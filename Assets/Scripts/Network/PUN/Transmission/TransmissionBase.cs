@@ -31,7 +31,11 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase
     public bool started = false;
     protected virtual void Start()
     {
-        var data = new InstantiationData(photonView.InstantiationData);
+        InstantiationData data = null;
+        if (photonView.InstantiationData != null)
+            data = new InstantiationData(photonView.InstantiationData);
+        else
+            return;
 
         Debug.Log($"TransmissionBase Start {data}");
         switch (data.tokenType)

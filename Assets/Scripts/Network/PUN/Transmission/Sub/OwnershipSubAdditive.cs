@@ -95,22 +95,24 @@ public class OwnershipSubAdditive : MonoBehaviourPunCallbacks, IPunOwnershipCall
     }
     #endregion
 
-    #region
-    void IPunOwnershipCallbacks.OnOwnershipRequest(PhotonView targetView, Player requestingPlayer)
+    #region Photon.Pun.IPunOwnershipCallbacks
+    void IPunOwnershipCallbacks.OnOwnershipRequest(PhotonView targetView, Player requester)
     {
+        // only deal with the case that targetView is the same as my photonView
         if (targetView != photonView)
             return;
 
-        Debug.Log($"OnOwnershipRequest: {targetView.ToString()} RequestBy {requestingPlayer.ToString()} ...");
-        ownershipRequestEvent?.Invoke(requestingPlayer);
+        Debug.Log($"OnOwnershipRequest: {targetView.ToString()} RequestBy {requester.ToString()} ...");
+        ownershipRequestEvent?.Invoke(requester);
 
         //I am MC, targetViewBelong to scene
         if (PhotonNetwork.IsMasterClient && targetView.Owner == null)
-            targetView.TransferOwnership(requestingPlayer);
+            targetView.TransferOwnership(requester);
     }
 
     void IPunOwnershipCallbacks.OnOwnershipTransfered(PhotonView targetView, Player previousOwner)
     {
+        // only deal with the case that targetView is the same as my photonView
         if (targetView != photonView)
             return;
 

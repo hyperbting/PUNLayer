@@ -127,6 +127,16 @@ public class Player : MonoBehaviour, ISyncHandlerUser
         Debug.Log($"tokHandler.ReleaseOwner");
         tokHandler.ReleaseOwnership();
     }
+
+    public int sceneID = 0;
+    private void LoadScene(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
+    {
+        if (ctx.ReadValue<float>() < 0.5)
+            return;
+
+        Debug.Log($"Load Scene {sceneID}");
+        UnityEngine.SceneManagement.SceneManager.LoadScene(sceneID, UnityEngine.SceneManagement.LoadSceneMode.Single);
+    }
     #endregion
 
     #region ISyncHandlerUser; talk to TokenHandler; Called By SyncToken when OnJoinedOnlineRoom
@@ -142,6 +152,8 @@ public class Player : MonoBehaviour, ISyncHandlerUser
         pInput.Player.Echo.performed += Echo;
         pInput.Player.RequestOwnership.performed += RequestOwner;
         pInput.Player.ReleaseOwnership.performed += ReleaseOwner;
+
+        pInput.Player.LoadScene.performed += LoadScene;
 
         //Request TokenHandler From NetworkManager
         tokHandler = (ServiceManager.Instance.networkSystem.RequestTokenHandler(SyncTokenType.Player, gameObject) as GameObject)
