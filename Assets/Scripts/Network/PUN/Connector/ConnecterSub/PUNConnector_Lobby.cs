@@ -83,8 +83,15 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks
     #region All the way To MasterServer
     public void SetupConnectSetting()
     {
-        PhotonNetwork.GameVersion = Application.version;
-        PhotonNetwork.NetworkingClient.AppId = serSettings.AppSettings.AppIdRealtime;
+        try
+        {
+            PhotonNetwork.GameVersion = Application.version;
+            PhotonNetwork.NetworkingClient.AppId = SerSettings.AppSettings.AppIdRealtime;
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError(e);
+        }
     }
 
     /// <summary>

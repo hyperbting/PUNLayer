@@ -13,7 +13,19 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, INetworkConnect
     public INetworkConnectUser incu;
 
     private readonly string scriptName = "PUNConnecter";
-    public ServerSettings serSettings;
+    [SerializeField] ServerSettings serSettings;
+    public ServerSettings SerSettings
+    {
+        get
+        {
+            if (serSettings != null)
+                return serSettings;
+
+            Debug.LogError("ServerSettings Missing!");
+            return null;
+        }
+    }
+
 
     #region
     Action<PhotonRoomState, PhotonRoomState> OnPhotonRoomStateChange;
