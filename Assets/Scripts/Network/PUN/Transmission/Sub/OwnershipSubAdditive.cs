@@ -59,7 +59,13 @@ public class OwnershipSubAdditive : MonoBehaviourPunCallbacks, IPunOwnershipCall
     TaskCompletionSource<bool> tcs;
     public async Task<bool> RequestOwnership(Player newOwner)
     {
-        Debug.Log($"RequestOwnership: IsMine:{photonView.IsMine}, ControlledBy {photonView.Controller}");
+        Debug.Log($"RequestOwnership: OwnedBy {photonView.OwnerActorNr}");
+        if (photonView.Owner == PhotonNetwork.LocalPlayer)
+        {
+            Debug.Log($"RequestOwnership: AlreadyControlledByMyself");
+            return true;
+        }
+
         switch (photonView.OwnershipTransfer)
         {
             case OwnershipOption.Request:
