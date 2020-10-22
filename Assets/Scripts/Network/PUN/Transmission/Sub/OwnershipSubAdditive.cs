@@ -102,7 +102,7 @@ public class OwnershipSubAdditive : MonoBehaviourPunCallbacks, IPunOwnershipCall
         if (targetView != photonView)
             return;
 
-        Debug.Log($"OnOwnershipRequest: {targetView.ToString()} RequestBy {requester.ToString()} ...");
+        Debug.Log($"OnOwnershipRequest {targetView.ViewID}: {targetView.ToString()} RequestBy {requester.ToString()} ...");
         ownershipRequestEvent?.Invoke(requester);
 
         //I am MC, targetViewBelong to scene
