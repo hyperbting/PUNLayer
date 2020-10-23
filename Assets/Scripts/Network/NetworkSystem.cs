@@ -33,7 +33,7 @@ public class NetworkSystem : MonoBehaviour, INetworkConnectUser, ITokenProvider
     void Start()
     {
         if (Debug.isDebugBuild)
-            DebugUI.SetActive(true);
+            DebugUI?.SetActive(true);
     }
 
     #region ITokenProvider. Network Transmission Token
