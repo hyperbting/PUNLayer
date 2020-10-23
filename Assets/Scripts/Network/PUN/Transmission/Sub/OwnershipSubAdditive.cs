@@ -56,7 +56,7 @@ public class OwnershipSubAdditive : MonoBehaviourPunCallbacks, IPunOwnershipCall
     }
 
     #region
-    TaskCompletionSource<bool> tcs;
+    TaskCompletionSource<bool> tcsRequest;
     public async Task<bool> RequestOwnership(Player newOwner)
     {
         Debug.Log($"RequestOwnership: OwnedBy {photonView.OwnerActorNr}");
@@ -71,12 +71,12 @@ public class OwnershipSubAdditive : MonoBehaviourPunCallbacks, IPunOwnershipCall
             case OwnershipOption.Request:
                 photonView.RequestOwnership();
 
-                tcs = new TaskCompletionSource<bool>();
-                await Task.WhenAny(tcs.Task, Task.Delay(10000));
-                tcs.TrySetResult(false);
+                tcsRequest = new TaskCompletionSource<bool>();
+                await Task.WhenAny(tcsRequest.Task, Task.Delay(10000));
+                tcsRequest.TrySetResult(false);
 
-                Debug.Log($"RequestOwnership Result:{tcs.Task.Result} {photonView.OwnerActorNr}");
-                return await tcs.Task;
+                Debug.Log($"RequestOwnership Result:{tcsRequest.Task.Result} {photonView.OwnerActorNr}");
+                return await tcsRequest.Task;
             case OwnershipOption.Takeover:
                 photonView.TransferOwnership(newOwner);
                 return true;
@@ -88,16 +88,24 @@ public class OwnershipSubAdditive : MonoBehaviourPunCallbacks, IPunOwnershipCall
         return false;
     }
 
-    public void ReleaseOwnership()
+    TaskCompletionSource<bool> tcsRelease;
+    public async Task<bool> ReleaseOwnership()
     {
         if (!photonView.IsMine)
         {
             Debug.LogWarning($"ReleaseOwnership: this owned by {photonView.Owner}");
-            return;
+            return false;
         }
 
         Debug.Log($"ReleaseOwnership: this owned by {photonView.Owner}, IsMine:{photonView.IsMine}, ControlledBy {photonView.Controller}");
         photonView.TransferOwnership(0);
+
+        tcsRelease = new TaskCompletionSource<bool>();
+        await Task.WhenAny(tcsRelease.Task, Task.Delay(10000));
+        tcsRelease.TrySetResult(false);
+
+        Debug.Log($"ReleaseOwnership Result:{tcsRelease.Task.Result} {photonView.OwnerActorNr}");
+        return await tcsRequest.Task;
     }
     #endregion
 
@@ -122,10 +130,14 @@ public class OwnershipSubAdditive : MonoBehaviourPunCallbacks, IPunOwnershipCall
         if (targetView != photonView)
             return;
 
-        tcs?.TrySetResult(true);
+        if (targetView.OwnerActorNr == PhotonNetwork.LocalPlayer.ActorNumber)
+            tcsRequest?.TrySetResult(true);
+
+        if (targetView.OwnerActorNr == 0)
+            tcsRelease?.TrySetResult(true);
 
         ownershipTransferedEvent?.Invoke(previousOwner, targetView.Owner);
-        Debug.Log($"OnOwnershipTransfered: {targetView.ToString()} {(previousOwner==null ? "Scene" : previousOwner.ToString())} to {(targetView.Owner == null ? "Scene" : targetView.Owner.ToString())}");
+        Debug.Log($"OnOwnershipTransfered: {targetView.ToString()} {(previousOwner==null ? "<Scene>" : previousOwner.ToString())} to {(targetView.Owner == null ? "<Scene>" : targetView.Owner.ToString())}");
     }
     #endregion
 }

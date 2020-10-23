@@ -37,6 +37,20 @@ public class NetworkSystem : MonoBehaviour, INetworkConnectUser, ITokenProvider
     }
 
     #region ITokenProvider. Network Transmission Token
+    public ITokenHandler RequestTokenHandlerAttachment(SyncTokenType tokenType, object refScript)
+    {
+        var go = (refScript as Component).gameObject;
+        if (go == null)
+        {
+            Debug.LogWarning($"RequestTokenHandler {refScript} is not Attach2GameObject");
+            return null;
+        }
+
+        var res = go.AddComponent<TokenHandler>();
+        res.Setup(this, tokenType, go);
+        return res;
+    }
+
     public object RequestTokenHandler(SyncTokenType tokenType, object refObj)
     {
         //TODO: ObjectPooling!

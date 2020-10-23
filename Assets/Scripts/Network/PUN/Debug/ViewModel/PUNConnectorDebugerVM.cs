@@ -172,10 +172,4 @@ public class PUNConnectorDebugerVM : MonoBehaviour, INotifyPropertyChanged
     {
         _ = PUNConnecter.Instance.FetchRegionList();
     }
-
-
-    //private void OnRoomNamePropertyChanged(string propertyName)
-    //{
-    //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    //}
 }

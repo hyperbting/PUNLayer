@@ -35,7 +35,7 @@ public class RoomCoreAdditive : MonoBehaviourPunCallbacks//, ITokenAdditive
     GameObject Load(InstantiationData data)
     {
         if (data.ContainsKey("RenameGO"))
-            gameObject.name = data["RenameGO"];
+            gameObject.name = data["RenameGO"] + $"<{photonView.ViewID}>";
 
         return null;
     }

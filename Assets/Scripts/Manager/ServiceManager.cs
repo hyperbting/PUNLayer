@@ -9,7 +9,8 @@ public class ServiceManager : MonoBehaviour
 
     static ServiceManager instance;
     public static ServiceManager Instance {
-        get {
+        get
+        {
             if (instance == null)
             {
                 var go = GameObject.Find("ServiceManager");

@@ -103,7 +103,7 @@ public class Player : MonoBehaviour, ISyncHandlerUser
             return;
 
         tokHandler.PushStateInto("k1", Time.fixedTime);
-        tokHandler.CreateInRoomObject();
+        var obj = tokHandler.CreateInRoomObject();
     }
 
     private void RequestOwner(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
@@ -156,8 +156,11 @@ public class Player : MonoBehaviour, ISyncHandlerUser
         pInput.Player.LoadScene.performed += LoadScene;
 
         //Request TokenHandler From NetworkManager
-        tokHandler = (ServiceManager.Instance.networkSystem.RequestTokenHandler(SyncTokenType.Player, gameObject) as GameObject)
-            .GetComponent<ITokenHandler>();
+        ServiceManager.Instance.networkSystem.RequestTokenHandlerAttachment(SyncTokenType.Player, this);
+        tokHandler = GetComponent<ITokenHandler>();
+
+        //tokHandler = (ServiceManager.Instance.networkSystem.RequestTokenHandler(SyncTokenType.Player, gameObject) as GameObject)
+        //    .GetComponent<ITokenHandler>();
 
         //What Ability this obj will have
         tokHandler.OnJoinedOnlineRoomEventBeforeTokenCreation += (initdata) => {

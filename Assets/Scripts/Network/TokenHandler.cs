@@ -82,22 +82,27 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
     #endregion
 
     #region
-    public void CreateInRoomObject()
+    public object CreateInRoomObject()
     {
         if (!HavingToken())
         {
             Debug.Log($"NotInRoom");
-            return;
+            return null;
         }
 
         var datatoSend = InstantiationData.Build(SyncTokenType.General);
         datatoSend.Add("RenameGO", "InRoomObject");
-        GameObject ntGO = tokenProvider.RequestSyncToken(datatoSend, gameObject) as GameObject;
+        var obj = tokenProvider.RequestSyncToken(datatoSend, gameObject);
+
+        var ntGO = obj as GameObject;
         if (ntGO != null)
         {
+            targetObj = ntGO;
             //ntGO.name = "InRoomObject";
             //transToken = ntGO.GetComponent<TransmissionBase>();
         }
+
+        return obj;
     }
 
     public GameObject targetObj;

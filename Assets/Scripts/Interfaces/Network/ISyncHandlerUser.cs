@@ -25,7 +25,7 @@ public interface ITokenHandler
     #region Usage
     bool PushStateInto(string key, object data);
 
-    void CreateInRoomObject();
+    object CreateInRoomObject();
     void RequestOwnership();
     void ReleaseOwnership();
     #endregion
@@ -34,9 +34,15 @@ public interface ITokenHandler
 // provide ITokenHandler to ISyncHandlerUser
 public interface ITokenProvider
 {
+    #region giving Network Ability
+    ITokenHandler RequestTokenHandlerAttachment(SyncTokenType tokenType, object refScript);
     object RequestTokenHandler(SyncTokenType tokenType, object refObj);
+    #endregion
+
+    #region Used by ITokenHandler
     object RequestSyncToken(InstantiationData datatoSend, object refObj);
     object RequestManualSyncToken(InstantiationData datatoSen);
+    #endregion
 }
 
 // ITokenHandler Request one of this From ITokenProvider When OnJoinedRoom
