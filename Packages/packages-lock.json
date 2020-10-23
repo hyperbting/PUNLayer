@@ -37,12 +37,6 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
-    "com.unity.example": {
-      "version": "file:Unity-Weld",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
     "com.unity.ext.nunit": {
       "version": "1.0.0",
       "depth": 1,

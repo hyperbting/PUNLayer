@@ -46,3 +46,4 @@ MonoBehaviour:
   serviceManager: {fileID: 0}
   playerCorePref: {fileID: 8133059419245758297, guid: 3dc557ad6afdbf64e9ff3425378073cb,
     type: 3}
+  hostPlayer: {fileID: 0}

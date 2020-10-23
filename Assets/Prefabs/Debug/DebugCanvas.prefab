@@ -129,7 +129,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 36584457915485440}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f9073289c7daa4449c6f754f7771742, type: 3}
+  m_Script: {fileID: -1360956885, guid: a374911736984bc46b893a545ddb80c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   viewModelMethodName: PUNConnectorDebugerVM.FetchRegionList
@@ -535,7 +535,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1088807226151473097}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f9073289c7daa4449c6f754f7771742, type: 3}
+  m_Script: {fileID: -1360956885, guid: a374911736984bc46b893a545ddb80c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   viewModelMethodName: PUNConnectorDebugerVM.JoinRoom
@@ -690,7 +690,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1335792962465880468}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26990677ffff9664d853a81fcb765384, type: 3}
+  m_Script: {fileID: -1957390036, guid: a374911736984bc46b893a545ddb80c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   viewModelPropertyName: PUNConnectorDebugerVM.RPOriginText
@@ -1267,7 +1267,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2277419217272901379}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f9073289c7daa4449c6f754f7771742, type: 3}
+  m_Script: {fileID: -1360956885, guid: a374911736984bc46b893a545ddb80c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   viewModelMethodName: PUNConnectorDebugerVM.UpdateRoomList
@@ -1893,7 +1893,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3519296984139914869}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f9073289c7daa4449c6f754f7771742, type: 3}
+  m_Script: {fileID: -1360956885, guid: a374911736984bc46b893a545ddb80c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   viewModelMethodName: PUNConnectorDebugerVM.LeaveRoom
@@ -2390,7 +2390,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4211106705628751088}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f9073289c7daa4449c6f754f7771742, type: 3}
+  m_Script: {fileID: -1360956885, guid: a374911736984bc46b893a545ddb80c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   viewModelMethodName: PUNConnectorDebugerVM.OfflineMode
@@ -2871,7 +2871,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5311778585007433279}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26990677ffff9664d853a81fcb765384, type: 3}
+  m_Script: {fileID: -1957390036, guid: a374911736984bc46b893a545ddb80c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   viewModelPropertyName: PUNConnectorDebugerVM.RPKeyText
@@ -3597,7 +3597,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6950964984389231813}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26990677ffff9664d853a81fcb765384, type: 3}
+  m_Script: {fileID: -1957390036, guid: a374911736984bc46b893a545ddb80c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   viewModelPropertyName: PUNConnectorDebugerVM.RPNewText
@@ -3989,7 +3989,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7578482021207031283}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26990677ffff9664d853a81fcb765384, type: 3}
+  m_Script: {fileID: -1957390036, guid: a374911736984bc46b893a545ddb80c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   viewModelPropertyName: PUNConnectorDebugerVM.RoomName
@@ -4153,7 +4153,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7866450208256683771}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f9073289c7daa4449c6f754f7771742, type: 3}
+  m_Script: {fileID: -1360956885, guid: a374911736984bc46b893a545ddb80c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   viewModelMethodName: PUNConnectorDebugerVM.Connect
@@ -4397,7 +4397,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8154662705412312824}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f9073289c7daa4449c6f754f7771742, type: 3}
+  m_Script: {fileID: -1360956885, guid: a374911736984bc46b893a545ddb80c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   viewModelMethodName: PUNConnectorDebugerVM.TrySetPlayerProperties
@@ -4552,7 +4552,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8510677070984218904}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f9073289c7daa4449c6f754f7771742, type: 3}
+  m_Script: {fileID: -1360956885, guid: a374911736984bc46b893a545ddb80c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   viewModelMethodName: PUNConnectorDebugerVM.TrySetRoomProperties
