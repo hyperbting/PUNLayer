@@ -29,6 +29,7 @@ public class PUNConnectorDebugerVM : MonoBehaviour, INotifyPropertyChanged
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RoomName"));//OnRoomNamePropertyChanged("RoomName");
         }
     }
+
     private string rpKeyText;
     [Binding]
     public string RPKeyText
@@ -49,6 +50,7 @@ public class PUNConnectorDebugerVM : MonoBehaviour, INotifyPropertyChanged
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RPKeyText"));
         }
     }
+
     private string rpNewText;
     [Binding]
     public string RPNewText
@@ -69,6 +71,7 @@ public class PUNConnectorDebugerVM : MonoBehaviour, INotifyPropertyChanged
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RPNewText"));
         }
     }
+
     private string rpOriginText;
     [Binding]
     public string RPOriginText
