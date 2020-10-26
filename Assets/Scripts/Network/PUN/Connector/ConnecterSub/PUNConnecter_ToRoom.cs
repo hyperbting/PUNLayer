@@ -57,7 +57,7 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks
         joiningRoom = true;
 
         var rooOpt = new RoomOptions() {
-            PlayerTtl = 60000,
+            //PlayerTtl = 60000,
             PublishUserId = true
         };
         joinRoomResult = new TaskCompletionSource<bool>();
