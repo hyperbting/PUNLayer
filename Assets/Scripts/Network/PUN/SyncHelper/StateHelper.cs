@@ -32,7 +32,7 @@ public class StateHelper : BaseSyncHelper
 
         foreach (var key in changedProps.Keys)
         {
-            if (dataToSync.TryGetValue((string)key, out SerializableReadWrite srw))
+            if (dataToSync.TryGetValue(key.ToString(), out SerializableReadWrite srw))
             {
                 srw.Write(changedProps[key]);
             }
@@ -59,7 +59,7 @@ public class StateHelper : BaseSyncHelper
         // apply every state to local
         foreach (var key in changedProps.Keys)
         {
-            if (dataToSync.TryGetValue((string)key, out SerializableReadWrite srw))
+            if (dataToSync.TryGetValue(key.ToString(), out SerializableReadWrite srw))
             {
                 srw.Write(changedProps[key]);
             }

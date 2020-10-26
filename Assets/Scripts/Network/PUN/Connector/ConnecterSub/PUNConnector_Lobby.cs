@@ -85,6 +85,7 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks
     {
         try
         {
+            PhotonNetwork.NickName = " ";
             PhotonNetwork.GameVersion = Application.version;
             PhotonNetwork.NetworkingClient.AppId = SerSettings.AppSettings.AppIdRealtime;
         }

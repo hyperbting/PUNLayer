@@ -120,7 +120,7 @@ public class BaseSyncHelper : MonoBehaviourPunCallbacks, ISerializableHelper
     {
         foreach (var de in propertiesThatChanged)
         {
-            if (updateKey == (string)de.Key && updateVal == de.Value)
+            if (updateKey == de.Key.ToString() && updateVal == de.Value)
             {
                 updateKey = null;
                 updateVal = null;

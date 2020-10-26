@@ -150,7 +150,7 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
             return;
         }
 
-        scr.ReleaseOwnership();
+        _ = scr.ReleaseOwnership();
     }
     #endregion
 
