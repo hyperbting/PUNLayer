@@ -61,6 +61,21 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, IOnEventCallback
         return go;
     }
 
+    // create obj first, attach PhotonView?, assign id
+    public bool ManualAttachPhotonView(GameObject go, InstantiationData dataToSend)
+    {
+        var pView = go.AddComponent<PhotonView>();
+
+        if (PhotonNetwork.IsMasterClient && PhotonNetwork.AllocateViewID(pView))
+        {
+            dataToSend.Add("viewID", photonView.ViewID.ToString());
+            return true;
+        }
+
+        Debug.LogError("Failed to allocate a ViewId.");
+        return false;
+    }
+
     public GameObject ManualBuildSyncToken(InstantiationData dataToSend)
     {
         var go = Instantiate(transmissionTokenPrefab);

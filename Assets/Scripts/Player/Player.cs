@@ -106,6 +106,17 @@ public class Player : MonoBehaviour, ISyncHandlerUser
         var obj = tokHandler.CreateInRoomObject();
     }
 
+    private void Emit(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
+    {
+        if (ctx.ReadValue<float>() < 0.5)
+            return;
+
+        if (tokHandler == null || !tokHandler.HavingToken())
+            return;
+
+        RaiseEventHelper.instance.RaiseEvent(new object[] { "Emit",Time.time.ToString() });
+    }
+
     private void RequestOwner(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
     {
         if (ctx.ReadValue<float>() < 0.5)
@@ -137,6 +148,15 @@ public class Player : MonoBehaviour, ISyncHandlerUser
         Debug.Log($"Load Scene {sceneID}");
         UnityEngine.SceneManagement.SceneManager.LoadScene(sceneID, UnityEngine.SceneManagement.LoadSceneMode.Single);
     }
+
+    private void SetInterestGroup(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
+    {
+        if (ctx.ReadValue<float>() < 0.5)
+            return;
+
+        Debug.Log($"Set InterestGroup");
+        (tokHandler as TokenHandler).SetInterestGroup();
+    }
     #endregion
 
     #region ISyncHandlerUser; talk to TokenHandler; Called By SyncToken when OnJoinedOnlineRoom
@@ -150,10 +170,14 @@ public class Player : MonoBehaviour, ISyncHandlerUser
         //// isHost()
         pInput.Player.Fire.performed += Fire;
         pInput.Player.Echo.performed += Echo;
+        pInput.Player.Emit.performed += Emit;
+
         pInput.Player.RequestOwnership.performed += RequestOwner;
         pInput.Player.ReleaseOwnership.performed += ReleaseOwner;
 
         pInput.Player.LoadScene.performed += LoadScene;
+
+        pInput.Player.ChangeGroup.performed += SetInterestGroup;
 
         //Request TokenHandler From NetworkManager
         ServiceManager.Instance.networkSystem.RequestTokenHandlerAttachment(SyncTokenType.Player, this);
@@ -169,6 +193,8 @@ public class Player : MonoBehaviour, ISyncHandlerUser
         };
 
         //tokHandler.OnJoinedOnlineRoomEventAfterTokenCreation += (trans) => { };
+
+        RaiseEventHelper.instance.dic.Add("Emit", EmitPropToLocal);
     }
 
     public void SetupSync(ITransmissionBase itb, InstantiationData data)
@@ -197,6 +223,13 @@ public class Player : MonoBehaviour, ISyncHandlerUser
     void EchoPropToLocal(object obj)
     {
         Debug.Log($"{gameObject.name} k1 {obj}"); 
+    }
+
+    void EmitPropToLocal(object[] objs)
+    {
+        Debug.Log($"Emit EmitPropToLocal:");
+        foreach(var obj in objs)
+            Debug.Log($"{obj}");
     }
     #endregion SerilizableReadWrite
 

@@ -54,6 +54,14 @@
                     "interactions": ""
                 },
                 {
+                    "name": "Emit",
+                    "type": "Button",
+                    "id": "6b8fd1b6-048f-44b4-9b6f-386339287ee3",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
                     "name": "RequestOwnership",
                     "type": "Button",
                     "id": "cf0bfc53-aabf-43fc-89ad-579c263f4293",
@@ -73,6 +81,14 @@
                     "name": "LoadScene",
                     "type": "Button",
                     "id": "d773235e-a206-4177-ab51-b3b08427cab8",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "ChangeGroup",
+                    "type": "Button",
+                    "id": "89f3dda3-916e-4017-ba33-c3d58d97818f",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -483,6 +499,72 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Echo",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Ctrl+F",
+                    "id": "3c88c172-8fc1-425e-a4f1-bcb26e97a010",
+                    "path": "ButtonWithOneModifier",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Emit",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "modifier",
+                    "id": "7044f2ec-4392-49e7-9e47-bea77a192aee",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Emit",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "button",
+                    "id": "5fdc9ccd-8fff-4b6b-94e4-97c83b6084c8",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Emit",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Button With One Modifier",
+                    "id": "9ce6b327-a5d5-4855-8826-8afacc58a23d",
+                    "path": "ButtonWithOneModifier",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeGroup",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "modifier",
+                    "id": "b739d5c2-475d-443d-98d3-831a0215f8b5",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "ChangeGroup",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "button",
+                    "id": "719b5f57-0dd6-4bb3-ad64-efce4cca57c2",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "ChangeGroup",
                     "isComposite": false,
                     "isPartOfComposite": true
                 }

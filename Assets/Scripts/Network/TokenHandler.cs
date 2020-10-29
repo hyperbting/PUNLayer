@@ -36,6 +36,24 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
 		}
     #endregion
 
+    #region Getter
+    public object GetGameObject()
+    {
+        return gameObject as object;
+    }
+    #endregion
+
+    #region Setter
+    [SerializeField] byte[] instrestedGroupID = new byte[] { 0 };
+    [SerializeField] byte[] unInstrestedGroupID = new byte[] {};
+    public void SetInterestGroup()
+    {
+        //Debug.Log($"SetInterestGroup {groupID}");
+        //transToken.photonView.Group = groupID;
+        Photon.Pun.PhotonNetwork.SetInterestGroups(unInstrestedGroupID, instrestedGroupID);
+    }
+    #endregion
+
     public void Setup(ITokenProvider itp, SyncTokenType tType, object refObj)
     {
         tokenProvider = itp;

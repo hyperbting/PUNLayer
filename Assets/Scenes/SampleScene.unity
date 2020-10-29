@@ -571,6 +571,11 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6424484732340965977, guid: 11c9bc78efee8e04f913334a0a641c1d,
+        type: 3}
+      propertyPath: cachingOption
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 7582585174374030078, guid: 11c9bc78efee8e04f913334a0a641c1d,
         type: 3}
       propertyPath: m_Name

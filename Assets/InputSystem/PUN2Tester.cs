@@ -67,6 +67,14 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
+                    ""name"": ""Emit"",
+                    ""type"": ""Button"",
+                    ""id"": ""6b8fd1b6-048f-44b4-9b6f-386339287ee3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
                     ""name"": ""RequestOwnership"",
                     ""type"": ""Button"",
                     ""id"": ""cf0bfc53-aabf-43fc-89ad-579c263f4293"",
@@ -86,6 +94,14 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""name"": ""LoadScene"",
                     ""type"": ""Button"",
                     ""id"": ""d773235e-a206-4177-ab51-b3b08427cab8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""ChangeGroup"",
+                    ""type"": ""Button"",
+                    ""id"": ""89f3dda3-916e-4017-ba33-c3d58d97818f"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -496,6 +512,72 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Echo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Ctrl+F"",
+                    ""id"": ""3c88c172-8fc1-425e-a4f1-bcb26e97a010"",
+                    ""path"": ""ButtonWithOneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Emit"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""7044f2ec-4392-49e7-9e47-bea77a192aee"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Emit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""button"",
+                    ""id"": ""5fdc9ccd-8fff-4b6b-94e4-97c83b6084c8"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Emit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Button With One Modifier"",
+                    ""id"": ""9ce6b327-a5d5-4855-8826-8afacc58a23d"",
+                    ""path"": ""ButtonWithOneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeGroup"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""b739d5c2-475d-443d-98d3-831a0215f8b5"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""ChangeGroup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""button"",
+                    ""id"": ""719b5f57-0dd6-4bb3-ad64-efce4cca57c2"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""ChangeGroup"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 }
@@ -1079,9 +1161,11 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         m_Player_LookMouseEnable = m_Player.FindAction("LookMouseEnable", throwIfNotFound: true);
         m_Player_LookMouse = m_Player.FindAction("LookMouse", throwIfNotFound: true);
         m_Player_Echo = m_Player.FindAction("Echo", throwIfNotFound: true);
+        m_Player_Emit = m_Player.FindAction("Emit", throwIfNotFound: true);
         m_Player_RequestOwnership = m_Player.FindAction("RequestOwnership", throwIfNotFound: true);
         m_Player_ReleaseOwnership = m_Player.FindAction("ReleaseOwnership", throwIfNotFound: true);
         m_Player_LoadScene = m_Player.FindAction("LoadScene", throwIfNotFound: true);
+        m_Player_ChangeGroup = m_Player.FindAction("ChangeGroup", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1149,9 +1233,11 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_LookMouseEnable;
     private readonly InputAction m_Player_LookMouse;
     private readonly InputAction m_Player_Echo;
+    private readonly InputAction m_Player_Emit;
     private readonly InputAction m_Player_RequestOwnership;
     private readonly InputAction m_Player_ReleaseOwnership;
     private readonly InputAction m_Player_LoadScene;
+    private readonly InputAction m_Player_ChangeGroup;
     public struct PlayerActions
     {
         private @PUN2Tester m_Wrapper;
@@ -1162,9 +1248,11 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         public InputAction @LookMouseEnable => m_Wrapper.m_Player_LookMouseEnable;
         public InputAction @LookMouse => m_Wrapper.m_Player_LookMouse;
         public InputAction @Echo => m_Wrapper.m_Player_Echo;
+        public InputAction @Emit => m_Wrapper.m_Player_Emit;
         public InputAction @RequestOwnership => m_Wrapper.m_Player_RequestOwnership;
         public InputAction @ReleaseOwnership => m_Wrapper.m_Player_ReleaseOwnership;
         public InputAction @LoadScene => m_Wrapper.m_Player_LoadScene;
+        public InputAction @ChangeGroup => m_Wrapper.m_Player_ChangeGroup;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1192,6 +1280,9 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                 @Echo.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEcho;
                 @Echo.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEcho;
                 @Echo.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEcho;
+                @Emit.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEmit;
+                @Emit.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEmit;
+                @Emit.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEmit;
                 @RequestOwnership.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRequestOwnership;
                 @RequestOwnership.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRequestOwnership;
                 @RequestOwnership.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRequestOwnership;
@@ -1201,6 +1292,9 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                 @LoadScene.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLoadScene;
                 @LoadScene.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLoadScene;
                 @LoadScene.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLoadScene;
+                @ChangeGroup.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChangeGroup;
+                @ChangeGroup.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChangeGroup;
+                @ChangeGroup.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChangeGroup;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1223,6 +1317,9 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                 @Echo.started += instance.OnEcho;
                 @Echo.performed += instance.OnEcho;
                 @Echo.canceled += instance.OnEcho;
+                @Emit.started += instance.OnEmit;
+                @Emit.performed += instance.OnEmit;
+                @Emit.canceled += instance.OnEmit;
                 @RequestOwnership.started += instance.OnRequestOwnership;
                 @RequestOwnership.performed += instance.OnRequestOwnership;
                 @RequestOwnership.canceled += instance.OnRequestOwnership;
@@ -1232,6 +1329,9 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                 @LoadScene.started += instance.OnLoadScene;
                 @LoadScene.performed += instance.OnLoadScene;
                 @LoadScene.canceled += instance.OnLoadScene;
+                @ChangeGroup.started += instance.OnChangeGroup;
+                @ChangeGroup.performed += instance.OnChangeGroup;
+                @ChangeGroup.canceled += instance.OnChangeGroup;
             }
         }
     }
@@ -1394,9 +1494,11 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         void OnLookMouseEnable(InputAction.CallbackContext context);
         void OnLookMouse(InputAction.CallbackContext context);
         void OnEcho(InputAction.CallbackContext context);
+        void OnEmit(InputAction.CallbackContext context);
         void OnRequestOwnership(InputAction.CallbackContext context);
         void OnReleaseOwnership(InputAction.CallbackContext context);
         void OnLoadScene(InputAction.CallbackContext context);
+        void OnChangeGroup(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

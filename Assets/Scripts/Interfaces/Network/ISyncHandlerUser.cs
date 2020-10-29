@@ -13,6 +13,10 @@ public interface ITokenHandler
     bool HavingToken();
     #endregion
 
+    #region
+    object GetGameObject();
+    #endregion
+
     #region Init
     void Setup(ITokenProvider itp, SyncTokenType tType, object refObj);
     void Register(params SerializableReadWrite[] srws);

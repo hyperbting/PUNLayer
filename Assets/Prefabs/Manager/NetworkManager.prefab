@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 9084956219538092927}
   - component: {fileID: 1814850812336116561}
   - component: {fileID: 5818026722847892546}
+  - component: {fileID: 6424484732340965977}
   m_Layer: 0
   m_Name: PUN
   m_TagString: Untagged
@@ -74,13 +75,25 @@ MonoBehaviour:
   connectingToNameServer: 0
   connectingToMasterServer: 0
   disconnecting: 0
-  serSettings: {fileID: 11400000, guid: 4077446285264824a8fb59db1c276448, type: 2}
+  serSettings: {fileID: 0}
   currentPhotonRoomState: 0
   serMasterTarget:
     smTargetType: 0
     photonRegion: 
     ipAddress: 
     serverPort: 0
+--- !u!114 &6424484732340965977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1130031723264045706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d22dd26eb457cc419356fae36697465, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7582585174374030078
 GameObject:
   m_ObjectHideFlags: 0
