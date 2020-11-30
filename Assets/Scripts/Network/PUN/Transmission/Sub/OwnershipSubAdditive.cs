@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 [RequireComponent(typeof(PhotonView))]
-public class OwnershipSubAdditive : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks//, ITokenAdditive
+public class OwnershipSubAdditive : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, IOwnershipInteractable//, ITokenAdditive
 {
 
     ITransmissionBase parent;
@@ -56,6 +56,15 @@ public class OwnershipSubAdditive : MonoBehaviourPunCallbacks, IPunOwnershipCall
     }
 
     #region
+    public async Task<bool> RequestOwnership(int acterNumber)
+    {
+        var player = (PhotonNetwork.InRoom) ? PhotonNetwork.CurrentRoom.GetPlayer(acterNumber): null;
+        if (player == null)
+            return false;
+
+        return await RequestOwnership(player);
+    }
+
     TaskCompletionSource<bool> tcsRequest;
     public async Task<bool> RequestOwnership(Player newOwner)
     {

@@ -1,10 +1,11 @@
-﻿using ExitGames.Client.Photon;
-using Photon.Pun;
+﻿using Photon.Pun;
 using Photon.Realtime;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ExitGames.Client.Photon;
 
 public class RaiseEventHelper: MonoBehaviour, IOnEventCallback, IRaiseEventHelper
 {
@@ -28,10 +29,11 @@ public class RaiseEventHelper: MonoBehaviour, IOnEventCallback, IRaiseEventHelpe
         instance = this;
     }
 
-    [Header("Helper")]
+    [Header("Debug")]
+    [SerializeField] ReceiverGroup receivers = ReceiverGroup.All;
     [SerializeField] EventCaching cachingOption = EventCaching.AddToRoomCache;
     [SerializeField] string evContnt;
-    ExitGames.Client.Photon.Hashtable ht = new ExitGames.Client.Photon.Hashtable();
+    Hashtable ht = new Hashtable();
     public bool RaiseEvent(object[] evContnet)
     {
         Debug.Log($"[RaiseEventHelper] RaiseEvent {evContnet[0].ToString()} @{Time.time}");
@@ -44,8 +46,9 @@ public class RaiseEventHelper: MonoBehaviour, IOnEventCallback, IRaiseEventHelpe
             Debug.Log($"[RaiseEventHelper] evContnt Modified {ht.ToString()} @{Time.time}");
         }
 
-        RaiseEventOptions evOption = new RaiseEventOptions() {
-            Receivers = ReceiverGroup.All,
+        RaiseEventOptions evOption = new RaiseEventOptions()
+        {
+            Receivers = receivers,
             CachingOption = cachingOption
         };
 
@@ -59,6 +62,7 @@ public class RaiseEventHelper: MonoBehaviour, IOnEventCallback, IRaiseEventHelpe
         return RaiseEvent(evContnet);
     }
 
+    #region IOnEventCallback
     public void OnEvent(EventData photonEvent)
     {
         byte eventCode = photonEvent.Code;
@@ -66,7 +70,7 @@ public class RaiseEventHelper: MonoBehaviour, IOnEventCallback, IRaiseEventHelpe
             return;
 
         Debug.Log($"[RaiseEventHelper] OnEvent {photonEvent.ToStringFull()}");
-        var ht = (ExitGames.Client.Photon.Hashtable)photonEvent.CustomData;
+        var ht = (Hashtable)photonEvent.CustomData;
         var objs = ht.FormObjects();
 
         if (dic.TryGetValue(objs[0].ToString(), out Action<object[]> dealerObj))
@@ -74,6 +78,7 @@ public class RaiseEventHelper: MonoBehaviour, IOnEventCallback, IRaiseEventHelpe
             dealerObj(objs);
         }
     }
+    #endregion
 }
 
 public static class PhotonHashtableExtensions
