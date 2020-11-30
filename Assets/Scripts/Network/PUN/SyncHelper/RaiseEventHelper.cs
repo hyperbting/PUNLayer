@@ -34,17 +34,27 @@ public class RaiseEventHelper: MonoBehaviour, IOnEventCallback, IRaiseEventHelpe
     [SerializeField] EventCaching cachingOption = EventCaching.AddToRoomCache;
     [SerializeField] string evContnt;
     Hashtable ht = new Hashtable();
+
+    public bool RaiseEvent(string key, object[] data)
+    {
+        var extendedByteArray2 = new object[data.Length + 1];
+        extendedByteArray2[0] = key;
+        Array.Copy(data, 0, extendedByteArray2, 1, data.Length);
+
+        return RaiseEvent(extendedByteArray2);
+    }
+
     public bool RaiseEvent(object[] evContnet)
     {
-        Debug.Log($"[RaiseEventHelper] RaiseEvent {evContnet[0].ToString()} @{Time.time}");
+        Debug.Log($"[RaiseEventHelper] RaiseEvent {evContnet[0]} {evContnet[1]} @{Time.time}");
 
         ht.CleanThenInsert(evContnet);
 
-        if (evContnt.Length > 0)
-        {
-            ht.ReplaceFirstElement(evContnt);
-            Debug.Log($"[RaiseEventHelper] evContnt Modified {ht.ToString()} @{Time.time}");
-        }
+        //if (evContnt.Length > 0)
+        //{
+        //    //ht.ReplaceFirstElement(evContnt);
+        //    Debug.Log($"[RaiseEventHelper] evContnt Modified {ht.ToString()} @{Time.time}");
+        //}
 
         RaiseEventOptions evOption = new RaiseEventOptions()
         {
@@ -69,11 +79,16 @@ public class RaiseEventHelper: MonoBehaviour, IOnEventCallback, IRaiseEventHelpe
         if (eventCode != MyOwnRaiseEventCode)
             return;
 
-        Debug.Log($"[RaiseEventHelper] OnEvent {photonEvent.ToStringFull()}");
-        var ht = (Hashtable)photonEvent.CustomData;
-        var objs = ht.FormObjects();
+        //object[] objs = (object[])photonEvent.CustomData; //
+        object[] objs = (photonEvent.CustomData as Hashtable).FormObjects();
 
-        if (dic.TryGetValue(objs[0].ToString(), out Action<object[]> dealerObj))
+        if (objs == null)
+        {
+            Debug.LogWarning($"[RaiseEventHelper] OnEvent NullData");
+            return;
+        }
+
+        if (dic.TryGetValue((string)objs[0], out Action<object[]> dealerObj))
         {
             dealerObj(objs);
         }

@@ -114,7 +114,7 @@ public class Player : MonoBehaviour, ISyncHandlerUser
         if (tokHandler == null || !tokHandler.HavingToken())
             return;
 
-        RaiseEventHelper.instance.RaiseEvent(new object[] { "Emit",Time.time.ToString() });
+        RaiseEventHelper.instance.RaiseEvent(new object[] { "Emit",Time.time });
     }
 
     private void RequestOwner(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
