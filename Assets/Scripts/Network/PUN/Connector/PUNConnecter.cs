@@ -190,20 +190,30 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, INetworkConnect
         return false;
     }
 
+    public bool IsInRoom()
+    {
+        return PhotonNetwork.InRoom;
+    }
+
     public bool IsOnlineRoom()
     {
         if (PhotonNetwork.OfflineMode)
             return false;
 
-        return PhotonNetwork.InRoom;
+        return IsInRoom();
     }
 
     public bool IsOfflineRoom()
     {
-        if (PhotonNetwork.OfflineMode && PhotonNetwork.InRoom)
+        if (PhotonNetwork.OfflineMode && IsInRoom())
             return true;
 
         return false;
+    }
+
+    public bool IsRoomOwner()
+    {
+        return PhotonNetwork.IsMasterClient;
     }
     #endregion
     #region Getter

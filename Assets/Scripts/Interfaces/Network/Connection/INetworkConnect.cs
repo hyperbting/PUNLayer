@@ -7,7 +7,15 @@ public interface INetworkConnect
     void Init(INetworkConnectUser incUser);
 
     #region Checker
-    //bool IsOwner();
+    #endregion
+    #region InRoom Checker
+
+    bool IsInRoom();
+
+    bool IsOnlineRoom();
+    bool IsOfflineRoom();
+
+    bool IsRoomOwner();
     #endregion
 
     // notify when service is connected and ready for Matchmaking
@@ -16,15 +24,10 @@ public interface INetworkConnect
     // notify when Matchmaking success
     Task<bool> JoinGameRoom(string roomName);
 
-    #region InRoom
-    bool IsOnlineRoom();
-    bool IsOfflineRoom();
-
     GameObject RequestSyncToken(InstantiationData dataToSend, Transform refTrasnform);
     GameObject ManualBuildSyncToken(InstantiationData dataToSend);
     //Task<bool> SetRoomProperty(KeyValExpPair kvePair);
     //Task<bool> SetPlayerProperty(Player player, KeyValExpPair kvePair);
-    #endregion
 }
 
 public interface INetworkConnectUser
