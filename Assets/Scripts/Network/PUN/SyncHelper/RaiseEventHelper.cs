@@ -1,18 +1,35 @@
 ﻿using Photon.Pun;
 using Photon.Realtime;
-using Hashtable = ExitGames.Client.Photon.Hashtable;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using ExitGames.Client.Photon;
 
-public class RaiseEventHelper: MonoBehaviour, IOnEventCallback, IRaiseEventHelper
+public class RaiseEventHelper: MonoBehaviour, IOnEventCallback, NetworkLayer.IRaiseEventHelper
 {
+    readonly string scr = "RaiseEventHelper";
     public static RaiseEventHelper instance;
 
     static readonly byte MyOwnRaiseEventCode = 198;
-    public Dictionary<string, Action<object[]>> dic = new Dictionary<string, Action<object[]>>();
+    Dictionary<string, NetworkLayer.RaiseEventRegistration> dic = new Dictionary<string, NetworkLayer.RaiseEventRegistration>();
+
+    #region IRaiseEventHelper
+    public void Register(string key, NetworkLayer.RaiseEventRegistration rer)
+    {
+        dic[key] = rer;
+        Debug.Log($"{scr} {key} registered");
+    }
+
+    public void Unregister(string key)
+    {
+        if (dic.ContainsKey(key))
+        {
+            dic.Remove(key);
+            Debug.Log($"{scr} {key} unregistered");
+        }
+    }
+    #endregion
 
     private void OnEnable()
     {
@@ -33,7 +50,7 @@ public class RaiseEventHelper: MonoBehaviour, IOnEventCallback, IRaiseEventHelpe
     [SerializeField] ReceiverGroup receivers = ReceiverGroup.All;
     [SerializeField] EventCaching cachingOption = EventCaching.AddToRoomCache;
     [SerializeField] string evContnt;
-    Hashtable ht = new Hashtable();
+    //Hashtable ht = new Hashtable();
 
     public bool RaiseEvent(string key, object[] data)
     {
@@ -48,21 +65,24 @@ public class RaiseEventHelper: MonoBehaviour, IOnEventCallback, IRaiseEventHelpe
     {
         Debug.Log($"[RaiseEventHelper] RaiseEvent {evContnet[0]} {evContnet[1]} @{Time.time}");
 
-        ht.CleanThenInsert(evContnet);
-
-        //if (evContnt.Length > 0)
-        //{
-        //    //ht.ReplaceFirstElement(evContnt);
-        //    Debug.Log($"[RaiseEventHelper] evContnt Modified {ht.ToString()} @{Time.time}");
-        //}
-
-        RaiseEventOptions evOption = new RaiseEventOptions()
+        if (dic.TryGetValue((string)evContnet[0], out NetworkLayer.RaiseEventRegistration dealerObj))
         {
-            Receivers = receivers,
-            CachingOption = cachingOption
-        };
+            RaiseEventOptions evOption = new RaiseEventOptions()
+            {
+                Receivers = (Photon.Realtime.ReceiverGroup)dealerObj.Receivers,
+                CachingOption = (Photon.Realtime.EventCaching)dealerObj.CachingOption
+            };
 
-        return PhotonNetwork.RaiseEvent( MyOwnRaiseEventCode, ht, evOption, SendOptions.SendReliable);
+            return PhotonNetwork.RaiseEvent(
+                MyOwnRaiseEventCode, 
+                evContnet, 
+                evOption, 
+                SendOptions.SendReliable
+                );
+        }
+
+        Debug.Log($"[RaiseEventHelper] Cannot found {evContnet[0]}");
+        return false;
     }
 
     public bool RemoveCachedEvent(object[] evContnet)
@@ -79,18 +99,16 @@ public class RaiseEventHelper: MonoBehaviour, IOnEventCallback, IRaiseEventHelpe
         if (eventCode != MyOwnRaiseEventCode)
             return;
 
-        //object[] objs = (object[])photonEvent.CustomData; //
-        object[] objs = (photonEvent.CustomData as Hashtable).FormObjects();
-
+        object[] objs = (object[])photonEvent.CustomData;
         if (objs == null)
         {
             Debug.LogWarning($"[RaiseEventHelper] OnEvent NullData");
             return;
         }
 
-        if (dic.TryGetValue((string)objs[0], out Action<object[]> dealerObj))
+        if (dic.TryGetValue((string)objs[0], out NetworkLayer.RaiseEventRegistration dealerObj))
         {
-            dealerObj(objs);
+            dealerObj.RaiseEventAction?.Invoke(objs);
         }
     }
     #endregion

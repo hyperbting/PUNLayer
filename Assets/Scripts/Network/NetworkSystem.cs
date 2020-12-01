@@ -18,23 +18,11 @@ public class NetworkSystem : MonoBehaviour, INetworkConnectUser, ITokenProvider
     [Space]
     [Header("Debug")]
     public GameObject DebugUI;
-    #region OnEvent
+
+    #region INetworkConnectUser
     public Action OnJoinedOnlineRoomEvent { get; set; }
     public Action OnJoinedOfflineRoomEvent { get; set; }
     #endregion
-
-    private void Awake()
-    {
-        inc = INetworkConnectGO.GetComponent<INetworkConnect>();
-        inc.Init (this);
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        if (Debug.isDebugBuild)
-            DebugUI?.SetActive(true);
-    }
 
     #region ITokenProvider. Network Transmission Token
     public ITokenHandler RequestTokenHandlerAttachment(SyncTokenType tokenType, object refScript)
@@ -73,10 +61,25 @@ public class NetworkSystem : MonoBehaviour, INetworkConnectUser, ITokenProvider
     }
     #endregion
 
-    #region
+    #region checker?
     public bool IsOfflineRoom()
     {
         return inc.IsOfflineRoom();
+    }
+    #endregion
+
+    #region Mono
+    private void Awake()
+    {
+        inc = INetworkConnectGO.GetComponent<INetworkConnect>();
+        inc.Init (this);
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        if (Debug.isDebugBuild)
+            DebugUI?.SetActive(true);
     }
     #endregion
 }

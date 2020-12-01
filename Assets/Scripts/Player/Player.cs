@@ -114,7 +114,10 @@ public class Player : MonoBehaviour, ISyncHandlerUser
         if (tokHandler == null || !tokHandler.HavingToken())
             return;
 
-        RaiseEventHelper.instance.RaiseEvent(new object[] { "Emit",Time.time });
+        if (!RaiseEventHelper.instance.RaiseEvent(new object[] { "Emit", Time.time }))
+        {
+            Debug.LogWarning($"RaiseEvent Report Error!");
+        }
     }
 
     private void RequestOwner(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
@@ -194,7 +197,11 @@ public class Player : MonoBehaviour, ISyncHandlerUser
 
         //tokHandler.OnJoinedOnlineRoomEventAfterTokenCreation += (trans) => { };
 
-        RaiseEventHelper.instance.dic.Add("Emit", EmitPropToLocal);
+        RaiseEventHelper.instance.Register("Emit", new NetworkLayer.RaiseEventRegistration() {
+            RaiseEventAction= EmitPropToLocal,
+            CachingOption = NetworkLayer.EventCaching.DoNotCache,
+            Receivers = NetworkLayer.EventTarget.All
+        });
     }
 
     public void SetupSync(ITransmissionBase itb, InstantiationData data)

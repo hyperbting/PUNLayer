@@ -287,13 +287,16 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, IOnEventCallback
 
     private void NetworkingClientOnOpResponseReceived(OperationResponse opResponse)
     {
-        var keyFromMessage = opResponse.DebugMessage?.Split('\'')[1];
+        Debug.Log($"NetworkingClientOnOpResponseReceived {opResponse.DebugMessage}");
 
-        if (opResponse.OperationCode == OperationCode.SetProperties &&
-            opResponse.ReturnCode == ErrorCode.InvalidOperation &&
-            opResponse.DebugMessage.Contains("CAS update failed") &&
-            rpInProgress.TryGetValue(keyFromMessage, out KeyValResultPair desiredKVRPair)
+        if (opResponse.OperationCode != OperationCode.SetProperties ||
+            opResponse.ReturnCode != ErrorCode.InvalidOperation ||
+            !opResponse.DebugMessage.Contains("CAS update failed")
             )
+            return;
+
+        var keyFromMessage = opResponse.DebugMessage?.Split('\'')[1];
+        if (rpInProgress.TryGetValue(keyFromMessage, out KeyValResultPair desiredKVRPair))
         {
             // CAS failure
             desiredKVRPair.setPropResult?.TrySetResult(false);
