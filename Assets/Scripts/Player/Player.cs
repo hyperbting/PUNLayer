@@ -197,10 +197,11 @@ public class Player : MonoBehaviour, ISyncHandlerUser
 
         //tokHandler.OnJoinedOnlineRoomEventAfterTokenCreation += (trans) => { };
 
-        RaiseEventHelper.instance.Register("Emit", new NetworkLayer.RaiseEventRegistration() {
-            RaiseEventAction= EmitPropToLocal,
-            CachingOption = NetworkLayer.EventCaching.DoNotCache,
-            Receivers = NetworkLayer.EventTarget.All
+        RaiseEventHelper.instance.Register(new NetworkLayer.RoomEventRegistration() {
+            Key = "Emit",
+            onRoomEvent = EmitPropToLocal,
+            cachingOption = NetworkLayer.EventCaching.DoNotCache,
+            receivers = NetworkLayer.EventTarget.All
         });
     }
 

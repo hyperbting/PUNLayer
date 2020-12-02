@@ -1,24 +1,30 @@
 ﻿using System;
+
+/// <summary>
+/// This requires no NetworkID, and can be directly used 
+/// </summary>
 namespace NetworkLayer {
-    public interface IRaiseEventHelper
+    public interface IRoomEventHelper
     {
-        void Register(string key, RaiseEventRegistration act);
+        void Register(string key, RoomEventRegistration act);
         void Unregister(string key);
     }
 
-    public struct RaiseEventRegistration
+    public struct RoomEventRegistration
     {
+        string key;
+
         /// <summary>
         /// How to Keep in room
         /// </summary>
-        public EventCaching CachingOption;
+        public EventCaching cachingOption;
 
         /// <summary>
         /// target
         /// </summary>
-        public EventTarget Receivers;
+        public EventTarget receivers;
 
-        public Action<object[]> RaiseEventAction;
+        public Action<object[]> onRoomEvent;
     }
 
     public enum EventTarget
