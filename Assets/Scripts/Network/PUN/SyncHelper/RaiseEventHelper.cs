@@ -124,7 +124,7 @@ public class RaiseEventHelper: MonoBehaviour, IOnEventCallback, NetworkLayer.IRo
 
         if (dic.TryGetValue((string)objs[0], out NetworkLayer.RoomEventRegistration dealerObj))
         {
-            dealerObj.onRoomEvent?.Invoke(objs);
+            dealerObj.OnRoomEvent?.Invoke(objs);
         }
     }
     #endregion

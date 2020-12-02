@@ -27,7 +27,7 @@ namespace NetworkLayer {
         /// </summary>
         public EventTarget receivers;
 
-        public Action<object[]> onRoomEvent;
+        public Action<object[]> OnRoomEvent;
     }
 
     public enum EventTarget
