@@ -15,10 +15,10 @@ public class RaiseEventHelper: MonoBehaviour, IOnEventCallback, NetworkLayer.IRo
     Dictionary<string, NetworkLayer.RoomEventRegistration> dic = new Dictionary<string, NetworkLayer.RoomEventRegistration>();
 
     #region IRaiseEventHelper
-    public void Register(string key, NetworkLayer.RoomEventRegistration rer)
+    public void Register(NetworkLayer.RoomEventRegistration rer)
     {
-        dic[key] = rer;
-        Debug.Log($"{scr} {key} registered");
+        dic[rer.key] = rer;
+        Debug.Log($"{scr} {rer.key} registered");
     }
 
     public void Unregister(string key)

@@ -6,13 +6,13 @@
 namespace NetworkLayer {
     public interface IRoomEventHelper
     {
-        void Register(string key, RoomEventRegistration act);
+        void Register(RoomEventRegistration act);
         void Unregister(string key);
     }
 
     public struct RoomEventRegistration
     {
-        string key;
+        public string key;
 
         /// <summary>
         /// How to Keep in room
