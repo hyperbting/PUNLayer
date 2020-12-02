@@ -10,6 +10,9 @@ namespace NetworkLayer {
         void Unregister(string key);
     }
 
+    /// <summary>
+    /// Describe how RoomEvent act when key meet
+    /// </summary>
     public struct RoomEventRegistration
     {
         public string key;
