@@ -22,7 +22,7 @@ public class PUNConnectorDebuger : MonoBehaviour
 
     public void FetchRegionList()
     {
-        inc.FetchRegionList();
+        _ = inc.FetchRegionList();
     }
 
     //public void UpdateRegionList()

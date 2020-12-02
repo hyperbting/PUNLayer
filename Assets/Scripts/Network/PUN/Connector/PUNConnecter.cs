@@ -26,7 +26,6 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, INetworkConnect
         }
     }
 
-
     #region
     Action<PhotonRoomState, PhotonRoomState> OnPhotonRoomStateChange;
     [SerializeField]
