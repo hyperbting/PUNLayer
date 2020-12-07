@@ -105,6 +105,14 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""MousePosition"",
+                    ""type"": ""Value"",
+                    ""id"": ""6d08f12e-3923-4cd5-b9c3-dd6a0553ff62"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -580,6 +588,17 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""action"": ""ChangeGroup"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""44203ecd-8268-46d9-9ea4-1fb22e81b78d"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""MousePosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -1166,6 +1185,7 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         m_Player_ReleaseOwnership = m_Player.FindAction("ReleaseOwnership", throwIfNotFound: true);
         m_Player_LoadScene = m_Player.FindAction("LoadScene", throwIfNotFound: true);
         m_Player_ChangeGroup = m_Player.FindAction("ChangeGroup", throwIfNotFound: true);
+        m_Player_MousePosition = m_Player.FindAction("MousePosition", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1238,6 +1258,7 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_ReleaseOwnership;
     private readonly InputAction m_Player_LoadScene;
     private readonly InputAction m_Player_ChangeGroup;
+    private readonly InputAction m_Player_MousePosition;
     public struct PlayerActions
     {
         private @PUN2Tester m_Wrapper;
@@ -1253,6 +1274,7 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         public InputAction @ReleaseOwnership => m_Wrapper.m_Player_ReleaseOwnership;
         public InputAction @LoadScene => m_Wrapper.m_Player_LoadScene;
         public InputAction @ChangeGroup => m_Wrapper.m_Player_ChangeGroup;
+        public InputAction @MousePosition => m_Wrapper.m_Player_MousePosition;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1295,6 +1317,9 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                 @ChangeGroup.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChangeGroup;
                 @ChangeGroup.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChangeGroup;
                 @ChangeGroup.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChangeGroup;
+                @MousePosition.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMousePosition;
+                @MousePosition.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMousePosition;
+                @MousePosition.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMousePosition;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1332,6 +1357,9 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                 @ChangeGroup.started += instance.OnChangeGroup;
                 @ChangeGroup.performed += instance.OnChangeGroup;
                 @ChangeGroup.canceled += instance.OnChangeGroup;
+                @MousePosition.started += instance.OnMousePosition;
+                @MousePosition.performed += instance.OnMousePosition;
+                @MousePosition.canceled += instance.OnMousePosition;
             }
         }
     }
@@ -1499,6 +1527,7 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         void OnReleaseOwnership(InputAction.CallbackContext context);
         void OnLoadScene(InputAction.CallbackContext context);
         void OnChangeGroup(InputAction.CallbackContext context);
+        void OnMousePosition(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

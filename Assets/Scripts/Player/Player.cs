@@ -67,6 +67,29 @@ public class Player : MonoBehaviour, ISyncHandlerUser
     }
 
     #region InputSystem Actions
+//    private void DebugClick(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
+//    {
+//#if ENABLE_INPUT_SYSTEM
+//        Vector3 mousePosition = pInput.Player.MousePosition.ReadValue<Vector2>();
+//#else
+//        Vector3 mousePosition = Input.mousePosition;
+//#endif
+//        mousePosition.z = 20;
+//        mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
+//        mousePosition.z = 0;
+//        //mouseCursor.position = mousePosition;
+
+//        if (Physics.Raycast(Camera.main.ScreenPointToRay(mousePosition), out RaycastHit hit, Mathf.Infinity))
+//        {
+//            var pv = Photon.Pun.PhotonView.Get(hit.transform);
+
+//            if (pv == null)
+//                return;
+
+//            Photon.Pun.UtilityScripts.PointedAtGameObjectInfo.Instance.SetFocus(pv);
+//        }
+//    }
+
     private void Fire(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
     {
         if (ctx.ReadValue<float>() < 0.5)
@@ -172,6 +195,8 @@ public class Player : MonoBehaviour, ISyncHandlerUser
 
         //// isHost()
         pInput.Player.Fire.performed += Fire;
+        //pInput.Player.Fire.performed += DebugClick;
+
         pInput.Player.Echo.performed += Echo;
         pInput.Player.Emit.performed += Emit;
 
