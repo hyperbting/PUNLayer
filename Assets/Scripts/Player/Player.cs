@@ -60,7 +60,7 @@ public class Player : MonoBehaviour, ISyncHandlerUser
 
         if (pInput.Player.LookMouseEnable.ReadValue<float>() >= 1)
         {
-            Look(pInput.Player.LookMouse.ReadValue<Vector2>());
+            Look(pInput.Player.MousePositionDelta.ReadValue<Vector2>());
         }
 
         //UpdateTokenTransform();
@@ -72,18 +72,18 @@ public class Player : MonoBehaviour, ISyncHandlerUser
 #if ENABLE_INPUT_SYSTEM
         Vector3 mousePosition = UnityEngine.InputSystem.Mouse.current.position.ReadValue();//pInput.Player.MousePosition.ReadValue<Vector2>();
 #else
-            Vector3 mousePosition = Input.mousePosition;
+        Vector3 mousePosition = Input.mousePosition;
 #endif
+
         //mouseCursor.position = mousePosition;
-        
+
         var ray = Camera.main.ScreenPointToRay(mousePosition);
-        var targets = Physics.RaycastAll(Camera.main.ScreenPointToRay(mousePosition), Mathf.Infinity, ~LayerMask.NameToLayer("NetworkView"));
-        Debug.Log(targets.Length);
-        foreach(var ta in targets)
+        var targets = Physics.RaycastAll(Camera.main.ScreenPointToRay(mousePosition), Mathf.Infinity, LayerMask.GetMask("NetworkView") );
+        foreach (var ta in targets)
         {
             //Debug.Log($"{ta.transform.name}");
             var pv = Photon.Pun.PhotonView.Get(ta.collider);
-            if (pv != null)
+            if (pv != null && Photon.Pun.UtilityScripts.PointedAtGameObjectInfo.Instance != null)
                 Photon.Pun.UtilityScripts.PointedAtGameObjectInfo.Instance.SetFocus(pv);
         }
     }

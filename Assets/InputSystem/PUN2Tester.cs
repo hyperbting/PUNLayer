@@ -51,7 +51,7 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""LookMouse"",
+                    ""name"": ""MousePositionDelta"",
                     ""type"": ""Value"",
                     ""id"": ""1784d07f-244a-4770-ae88-b56898fa1eae"",
                     ""expectedControlType"": ""Vector2"",
@@ -387,7 +387,7 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": ""InvertVector2"",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""LookMouse"",
+                    ""action"": ""MousePositionDelta"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1178,7 +1178,7 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         m_Player_LookMouseEnable = m_Player.FindAction("LookMouseEnable", throwIfNotFound: true);
-        m_Player_LookMouse = m_Player.FindAction("LookMouse", throwIfNotFound: true);
+        m_Player_MousePositionDelta = m_Player.FindAction("MousePositionDelta", throwIfNotFound: true);
         m_Player_Echo = m_Player.FindAction("Echo", throwIfNotFound: true);
         m_Player_Emit = m_Player.FindAction("Emit", throwIfNotFound: true);
         m_Player_RequestOwnership = m_Player.FindAction("RequestOwnership", throwIfNotFound: true);
@@ -1251,7 +1251,7 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_Fire;
     private readonly InputAction m_Player_LookMouseEnable;
-    private readonly InputAction m_Player_LookMouse;
+    private readonly InputAction m_Player_MousePositionDelta;
     private readonly InputAction m_Player_Echo;
     private readonly InputAction m_Player_Emit;
     private readonly InputAction m_Player_RequestOwnership;
@@ -1267,7 +1267,7 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
         public InputAction @LookMouseEnable => m_Wrapper.m_Player_LookMouseEnable;
-        public InputAction @LookMouse => m_Wrapper.m_Player_LookMouse;
+        public InputAction @MousePositionDelta => m_Wrapper.m_Player_MousePositionDelta;
         public InputAction @Echo => m_Wrapper.m_Player_Echo;
         public InputAction @Emit => m_Wrapper.m_Player_Emit;
         public InputAction @RequestOwnership => m_Wrapper.m_Player_RequestOwnership;
@@ -1296,9 +1296,9 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                 @LookMouseEnable.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLookMouseEnable;
                 @LookMouseEnable.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLookMouseEnable;
                 @LookMouseEnable.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLookMouseEnable;
-                @LookMouse.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLookMouse;
-                @LookMouse.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLookMouse;
-                @LookMouse.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLookMouse;
+                @MousePositionDelta.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMousePositionDelta;
+                @MousePositionDelta.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMousePositionDelta;
+                @MousePositionDelta.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMousePositionDelta;
                 @Echo.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEcho;
                 @Echo.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEcho;
                 @Echo.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEcho;
@@ -1336,9 +1336,9 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                 @LookMouseEnable.started += instance.OnLookMouseEnable;
                 @LookMouseEnable.performed += instance.OnLookMouseEnable;
                 @LookMouseEnable.canceled += instance.OnLookMouseEnable;
-                @LookMouse.started += instance.OnLookMouse;
-                @LookMouse.performed += instance.OnLookMouse;
-                @LookMouse.canceled += instance.OnLookMouse;
+                @MousePositionDelta.started += instance.OnMousePositionDelta;
+                @MousePositionDelta.performed += instance.OnMousePositionDelta;
+                @MousePositionDelta.canceled += instance.OnMousePositionDelta;
                 @Echo.started += instance.OnEcho;
                 @Echo.performed += instance.OnEcho;
                 @Echo.canceled += instance.OnEcho;
@@ -1520,7 +1520,7 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
         void OnLookMouseEnable(InputAction.CallbackContext context);
-        void OnLookMouse(InputAction.CallbackContext context);
+        void OnMousePositionDelta(InputAction.CallbackContext context);
         void OnEcho(InputAction.CallbackContext context);
         void OnEmit(InputAction.CallbackContext context);
         void OnRequestOwnership(InputAction.CallbackContext context);

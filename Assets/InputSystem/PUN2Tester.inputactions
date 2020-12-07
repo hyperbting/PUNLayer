@@ -38,7 +38,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "LookMouse",
+                    "name": "MousePositionDelta",
                     "type": "Value",
                     "id": "1784d07f-244a-4770-ae88-b56898fa1eae",
                     "expectedControlType": "Vector2",
@@ -374,7 +374,7 @@
                     "interactions": "",
                     "processors": "InvertVector2",
                     "groups": "Keyboard&Mouse",
-                    "action": "LookMouse",
+                    "action": "MousePositionDelta",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
