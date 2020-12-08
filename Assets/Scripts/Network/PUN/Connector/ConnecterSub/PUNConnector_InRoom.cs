@@ -44,11 +44,11 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, IOnEventCallback
 
         GameObject go = null;
         if (dataToSend.tokenType == SyncTokenType.Player)
-            go = PhotonNetwork.Instantiate("Token/TransmissionToken", trasn.position, trasn.rotation, 0, dataToSend.ToData());
+            go = PhotonNetwork.Instantiate("TransmissionToken", trasn.position, trasn.rotation, 0, dataToSend.ToData());
         else
         {
             if (PhotonNetwork.IsMasterClient)
-                go = PhotonNetwork.InstantiateRoomObject("Token/TransmissionToken", trasn.position, trasn.rotation, 0, dataToSend.ToData());
+                go = PhotonNetwork.InstantiateRoomObject("TransmissionToken", trasn.position, trasn.rotation, 0, dataToSend.ToData());
             else
             {
                 Debug.LogWarning($"Non MC Cannot InstantiateRoomObject");

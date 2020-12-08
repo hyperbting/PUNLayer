@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(PhotonView))]
-public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase
+public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IPooledObject
 {
     #region Properties
     [SerializeField] SerializableHelper seriHelper;
@@ -135,4 +135,27 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase
     {
         return photonView.Owner;
     }
+
+    #region IPooledObject
+    [SerializeField] string assignedName;
+    [SerializeField] PrefabPool parentPool;
+    public PrefabPool GetParentPool { get {
+            if (parentPool == null)
+                parentPool = transform.parent.GetComponent<PrefabPool>();
+
+            return parentPool;
+        }
+    }
+
+    public void Init(object[] data)
+    {
+        assignedName = (string)data[0];
+        parentPool = (PrefabPool)data[1];
+    }
+
+    public void Reset()
+    {
+        gameObject.name = assignedName;
+    }
+    #endregion
 }
