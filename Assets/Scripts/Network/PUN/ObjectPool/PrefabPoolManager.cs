@@ -39,6 +39,8 @@ public class PrefabPoolManager : MonoBehaviour, IPunPrefabPool
     {
         //get parent PrefabPool
         gameObject.GetComponent<IPooledObject>()?.GetParentPool?.PutBackInPool(gameObject);
+        gameObject.GetComponent<PhotonView>().ViewID = 0;
+
 
         ////fetch the script that implement IPooledObject
         //var scrName = gameObject.GetComponent<IPooledObject>().ToString();
