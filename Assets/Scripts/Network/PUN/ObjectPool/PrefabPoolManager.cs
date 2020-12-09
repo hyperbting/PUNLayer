@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PrefabPoolManager : MonoBehaviour, IPunPrefabPool
+public class PrefabPoolManager : SingletonMonoBehaviour<PrefabPoolManager>, IPunPrefabPool
 {
     public List<GameObject> registeredPrefab;
     #region mono
@@ -18,7 +18,21 @@ public class PrefabPoolManager : MonoBehaviour, IPunPrefabPool
     #endregion
 
     /// <summary>Contains a GameObject per prefabId, to speed up instantiation.</summary>
-    public readonly Dictionary<string, PrefabPool> ResourceCache = new Dictionary<string, PrefabPool>();
+    readonly Dictionary<string, PrefabPool> ResourceCache = new Dictionary<string, PrefabPool>();
+
+    public GameObject Instantiate(GameObject prefabGO, Vector3 position, Quaternion rotation)
+    {
+        PrefabPool res = null;
+        if (!this.ResourceCache.TryGetValue(prefabGO.name, out res))
+        {
+            Debug.LogError($"ObjectPool failed to load \" {prefabGO.name} \".");
+
+            // Construct One ObjectPool
+            res = CreatePrefabPool(prefabGO);
+        }
+
+        return res.GetFromPool(position, rotation);
+    }
 
     public GameObject Instantiate(string prefabId, Vector3 position, Quaternion rotation)
     {
@@ -28,8 +42,15 @@ public class PrefabPoolManager : MonoBehaviour, IPunPrefabPool
             Debug.LogError("ObjectPool failed to load \"" + prefabId + "\".");
 
             // Construct One ObjectPool
+            var prefabGO = Resources.Load<GameObject>(prefabId);
+            if (prefabGO == null)
+            {
+                Debug.LogError("DefaultPool failed to load \"" + prefabId + "\". Make sure it's in a \"Resources\" folder.");
+                return null;
+            }
 
-            this.ResourceCache.Add(prefabId, res);
+            registeredPrefab.Add(prefabGO);
+            res = CreatePrefabPool(prefabGO);
         }
 
         return res.GetFromPool(position, rotation);
@@ -40,32 +61,16 @@ public class PrefabPoolManager : MonoBehaviour, IPunPrefabPool
         //get parent PrefabPool
         gameObject.GetComponent<IPooledObject>()?.GetParentPool?.PutBackInPool(gameObject);
         gameObject.GetComponent<PhotonView>().ViewID = 0;
-
-
-        ////fetch the script that implement IPooledObject
-        //var scrName = gameObject.GetComponent<IPooledObject>().ToString();
-
-        //if (!this.ResourceCache.TryGetValue(scrName, out PrefabPool res))
-        //{
-        //    if (res == null)
-        //    {
-        //        Debug.LogError("ObjectPool failed to load \"" + scrName + "\".");
-        //        return;
-        //    }
-
-        //    res.PutBackInPool(gameObject);
-        //}
     }
 
-    void CreatePrefabPool(GameObject gameObject)
+    PrefabPool CreatePrefabPool(GameObject gameObject)
     {
-        var ipo = gameObject.GetComponent<IPooledObject>();
-
         var go = new GameObject(gameObject.name);
         go.transform.SetParent(this.transform);
         var scr = go.AddComponent<PrefabPool>();
         scr.InitializePool(gameObject);
 
         this.ResourceCache.Add(gameObject.name, scr);
+        return scr;
     }
 }
