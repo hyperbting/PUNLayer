@@ -30,6 +30,8 @@ public interface ITokenHandler
     bool PushStateInto(string key, object data);
 
     object CreateInRoomObject();
+    bool DestroyTargetObject();
+
     void RequestOwnership();
     void ReleaseOwnership();
     #endregion

@@ -66,7 +66,7 @@ public class PrefabPool : MonoBehaviour
     /// <summary>
     /// Used to take Object from Pool.
     /// <para>Should be used on server to get the next Object</para>
-    /// <para>Used on client by ClientScene to spawn objects</para>
+    /// <para>Used on client by ClientScene to spawn InActive objects</para>
     /// </summary>
     /// <param name="position"></param>
     /// <param name="rotation"></param>
@@ -96,6 +96,8 @@ public class PrefabPool : MonoBehaviour
     public void PutBackInPool(GameObject spawned)
     {
         spawned.GetComponent<IPooledObject>()?.Reset();
+
+        spawned.SetActive(false);
 
         // add back to pool
         pool.Enqueue(spawned);

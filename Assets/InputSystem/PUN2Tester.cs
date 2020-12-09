@@ -67,6 +67,14 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
+                    ""name"": ""Devour"",
+                    ""type"": ""Button"",
+                    ""id"": ""c900caef-3d4d-4189-b866-91f008aa562c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
                     ""name"": ""Emit"",
                     ""type"": ""Button"",
                     ""id"": ""6b8fd1b6-048f-44b4-9b6f-386339287ee3"",
@@ -599,6 +607,39 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""action"": ""MousePosition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Ctrl+h"",
+                    ""id"": ""96cd1116-55a7-40ca-a433-f652ccef0b2f"",
+                    ""path"": ""ButtonWithOneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Devour"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""b16695f8-f29b-4674-926b-b0a7ba8fbe29"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Devour"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""button"",
+                    ""id"": ""d405d0f3-61b0-4630-b145-0117a70cb505"",
+                    ""path"": ""<Keyboard>/h"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Devour"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -1180,6 +1221,7 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         m_Player_LookMouseEnable = m_Player.FindAction("LookMouseEnable", throwIfNotFound: true);
         m_Player_MousePositionDelta = m_Player.FindAction("MousePositionDelta", throwIfNotFound: true);
         m_Player_Echo = m_Player.FindAction("Echo", throwIfNotFound: true);
+        m_Player_Devour = m_Player.FindAction("Devour", throwIfNotFound: true);
         m_Player_Emit = m_Player.FindAction("Emit", throwIfNotFound: true);
         m_Player_RequestOwnership = m_Player.FindAction("RequestOwnership", throwIfNotFound: true);
         m_Player_ReleaseOwnership = m_Player.FindAction("ReleaseOwnership", throwIfNotFound: true);
@@ -1253,6 +1295,7 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_LookMouseEnable;
     private readonly InputAction m_Player_MousePositionDelta;
     private readonly InputAction m_Player_Echo;
+    private readonly InputAction m_Player_Devour;
     private readonly InputAction m_Player_Emit;
     private readonly InputAction m_Player_RequestOwnership;
     private readonly InputAction m_Player_ReleaseOwnership;
@@ -1269,6 +1312,7 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         public InputAction @LookMouseEnable => m_Wrapper.m_Player_LookMouseEnable;
         public InputAction @MousePositionDelta => m_Wrapper.m_Player_MousePositionDelta;
         public InputAction @Echo => m_Wrapper.m_Player_Echo;
+        public InputAction @Devour => m_Wrapper.m_Player_Devour;
         public InputAction @Emit => m_Wrapper.m_Player_Emit;
         public InputAction @RequestOwnership => m_Wrapper.m_Player_RequestOwnership;
         public InputAction @ReleaseOwnership => m_Wrapper.m_Player_ReleaseOwnership;
@@ -1302,6 +1346,9 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                 @Echo.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEcho;
                 @Echo.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEcho;
                 @Echo.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEcho;
+                @Devour.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDevour;
+                @Devour.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDevour;
+                @Devour.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDevour;
                 @Emit.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEmit;
                 @Emit.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEmit;
                 @Emit.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEmit;
@@ -1342,6 +1389,9 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                 @Echo.started += instance.OnEcho;
                 @Echo.performed += instance.OnEcho;
                 @Echo.canceled += instance.OnEcho;
+                @Devour.started += instance.OnDevour;
+                @Devour.performed += instance.OnDevour;
+                @Devour.canceled += instance.OnDevour;
                 @Emit.started += instance.OnEmit;
                 @Emit.performed += instance.OnEmit;
                 @Emit.canceled += instance.OnEmit;
@@ -1522,6 +1572,7 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         void OnLookMouseEnable(InputAction.CallbackContext context);
         void OnMousePositionDelta(InputAction.CallbackContext context);
         void OnEcho(InputAction.CallbackContext context);
+        void OnDevour(InputAction.CallbackContext context);
         void OnEmit(InputAction.CallbackContext context);
         void OnRequestOwnership(InputAction.CallbackContext context);
         void OnReleaseOwnership(InputAction.CallbackContext context);

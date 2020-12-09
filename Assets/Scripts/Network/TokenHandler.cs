@@ -123,6 +123,25 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
         return obj;
     }
 
+    public bool DestroyTargetObject()
+    {
+        if (!HavingToken())
+        {
+            Debug.Log($"NotInRoom");
+            return false;
+        }
+
+        if (targetObj == null)
+        {
+            Debug.Log($"NoTarget");
+            return false;
+        }
+
+        PrefabPoolManager.Instance.Destroy(targetObj);
+        targetObj = null;
+        return true;
+    }
+
     public GameObject targetObj;
     public void RequestOwnership()
     {

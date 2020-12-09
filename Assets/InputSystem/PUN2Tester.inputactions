@@ -54,6 +54,14 @@
                     "interactions": ""
                 },
                 {
+                    "name": "Devour",
+                    "type": "Button",
+                    "id": "c900caef-3d4d-4189-b866-91f008aa562c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
                     "name": "Emit",
                     "type": "Button",
                     "id": "6b8fd1b6-048f-44b4-9b6f-386339287ee3",
@@ -586,6 +594,39 @@
                     "action": "MousePosition",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "Ctrl+h",
+                    "id": "96cd1116-55a7-40ca-a433-f652ccef0b2f",
+                    "path": "ButtonWithOneModifier",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Devour",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "modifier",
+                    "id": "b16695f8-f29b-4674-926b-b0a7ba8fbe29",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Devour",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "button",
+                    "id": "d405d0f3-61b0-4630-b145-0117a70cb505",
+                    "path": "<Keyboard>/h",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Devour",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         },

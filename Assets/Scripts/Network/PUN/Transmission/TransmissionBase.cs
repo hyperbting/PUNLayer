@@ -1,9 +1,11 @@
 ﻿using Photon.Pun;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(PhotonView))]
 public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IPooledObject
 {
+    [SerializeField] SyncTokenType tType;
     #region Properties
     [SerializeField] SerializableHelper seriHelper;
     public ISerializableHelper SeriHelper
@@ -27,10 +29,10 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IP
         }
     }
     #endregion
-
-    public bool started = false;
-    protected virtual void Start()
+    public override void OnEnable()
     {
+        base.OnEnable();
+
         InstantiationData data = null;
         if (photonView.InstantiationData != null)
             data = new InstantiationData(photonView.InstantiationData);
@@ -38,7 +40,8 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IP
             return;
 
         Debug.Log($"TransmissionBase Start {data}");
-        switch (data.tokenType)
+        tType = data.tokenType;
+        switch (tType)
         {
             case SyncTokenType.Player:
                 var pta = gameObject.AddComponent<PlayerCoreAdditive>();
@@ -48,10 +51,14 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IP
             case SyncTokenType.General:
                 var rta = gameObject.AddComponent<RoomCoreAdditive>();
                 rta.Init(this, data);
+                lcom.Add(rta);
 
                 var osa = gameObject.AddComponent<OwnershipSubAdditive>();
                 osa.Init(this, data);
+                lcom.Add(osa);
 
+                rta.enabled = true;
+                osa.enabled = true;
                 break;
         }
 
@@ -59,6 +66,23 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IP
         //    ita.Init(this. data);
         started = true;
     }
+
+    public override void OnDisable()
+    {
+        started = false;
+
+        base.OnDisable();
+
+        for (int i =lcom.Count-1;i>=0;i--)
+        {
+            lcom[i].enabled = false;
+        }
+        lcom.Clear();
+    }
+
+    List<MonoBehaviour> lcom = new List<MonoBehaviour>();
+
+    public bool started = false;
 
     //// for Owner
     //List<SerializableReadWrite> srw = new List<SerializableReadWrite>();

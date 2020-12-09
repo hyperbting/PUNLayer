@@ -141,6 +141,18 @@ public class Player : MonoBehaviour, ISyncHandlerUser
         }
     }
 
+    private void Devour(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
+    {
+        if (ctx.ReadValue<float>() < 0.5)
+            return;
+
+        if (tokHandler == null || !tokHandler.HavingToken())
+            return;
+
+        Debug.Log($"tokHandler.DestroyTarget");
+        tokHandler.DestroyTargetObject();
+    }
+
     private void RequestOwner(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
     {
         if (ctx.ReadValue<float>() < 0.5)
@@ -197,6 +209,7 @@ public class Player : MonoBehaviour, ISyncHandlerUser
 
         pInput.Player.Echo.performed += Echo;
         pInput.Player.Emit.performed += Emit;
+        pInput.Player.Devour.performed += Devour;
 
         pInput.Player.RequestOwnership.performed += RequestOwner;
         pInput.Player.ReleaseOwnership.performed += ReleaseOwner;
