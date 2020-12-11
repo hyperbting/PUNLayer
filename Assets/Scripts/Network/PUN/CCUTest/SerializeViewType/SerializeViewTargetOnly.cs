@@ -3,14 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SerializeViewPosRot : MonoBehaviour, IPunObservable
+public class SerializeViewTargetOnly : MonoBehaviour, IPunObservable
 {
     public RandomMove rm;
 
-    public bool SyncWithSerializeViewPosRot = false;
+    public bool SyncWithSerializeViewTarget = false;
     void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        if (!SyncWithSerializeViewPosRot)
+        if (!SyncWithSerializeViewTarget)
             return;
 
         if (stream.IsWriting)

@@ -6,7 +6,7 @@ public class RandomMove : MonoBehaviour
 {
 
     public bool isOwner = false;
-    public bool usingSerializeView = false;
+    public bool lerpToTarget = false;
 
     [Header("Debug")]
     public Vector3 targetPosition;
@@ -32,7 +32,7 @@ public class RandomMove : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (isOwner || usingSerializeView)
+        if (isOwner || lerpToTarget)
         {
             transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime);
             myMesh.rotation = Quaternion.Lerp(myMesh.rotation, targetRotation, Time.deltaTime);

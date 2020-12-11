@@ -8,11 +8,18 @@ using UnityEngine.UI;
 public class RPSettingUserPhoton : MonoBehaviourPunCallbacks
 {
     public Text nameTag;
+
     public RandomMove rm;
     public void Start()
     {
         Setup(PhotonNetwork.CurrentRoom.CustomProperties);
-        nameTag.text = photonView.OwnerActorNr.ToString();
+        nameTag.text = photonView.ViewID.ToString();
+
+        if (photonView.IsMine)
+        {
+            gameObject.name += "(mine)";
+            nameTag.color = Color.red;
+        }
     }
 
     public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
@@ -28,11 +35,15 @@ public class RPSettingUserPhoton : MonoBehaviourPunCallbacks
         {
             if (Enum.TryParse((string)keyobj, out RPKey rpkey))
             {
+                object vall;
                 switch (rpkey)
                 {
                     case RPKey.SyncType:
                         //Debug.Log($"SyncType {rProperties[keyobj]}");
-                        SetTransformSyncType((TransformSyncType)rProperties[keyobj]);
+                        vall = TransformSyncType.SerializeViewCurrent;
+                        rProperties.TryGetValue(keyobj, out vall);
+
+                        SetTransformSyncType((TransformSyncType)vall);
                         break;
                     default:
                         break;
@@ -43,22 +54,24 @@ public class RPSettingUserPhoton : MonoBehaviourPunCallbacks
 
     void SetTransformSyncType(TransformSyncType syncType)
     {
-        var ptv = GetComponent<PhotonTransformView>();
-        var ser = GetComponent<SerializeViewPosRot>();
+        var serPosRot = GetComponent<SerializeViewPosRot>();
+        var serTarget = GetComponent<SerializeViewTargetOnly>();
 
         var move = GetComponent<RandomMove>();
 
-        ptv.enabled = false;
-        ser.SyncWithSerializeViewPosRot = false;
-        rm.usingSerializeView = false;
+        serPosRot.SyncWithSerializeViewPosRot = false;
+        serTarget.SyncWithSerializeViewTarget = false;
+
+        rm.lerpToTarget = false;
+
         switch (syncType)
         {
-            case TransformSyncType.PhotonViewTransform:
-                ptv.enabled = true;
+            case TransformSyncType.SerializeViewTargetOnly:
+                serTarget.SyncWithSerializeViewTarget = true;
+                rm.lerpToTarget = true;
                 break;
-            case TransformSyncType.SerializeView:
-                ser.SyncWithSerializeViewPosRot = true;
-                rm.usingSerializeView = true;
+            case TransformSyncType.SerializeViewCurrent:
+                serPosRot.SyncWithSerializeViewPosRot = true;
                 break;
             default:
             case TransformSyncType.None:

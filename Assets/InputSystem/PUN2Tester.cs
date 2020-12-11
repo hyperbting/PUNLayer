@@ -121,6 +121,22 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Brust"",
+                    ""type"": ""Button"",
+                    ""id"": ""7979cd98-53bc-4a2c-8550-f70e5957260e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""SwitchBrustAmount"",
+                    ""type"": ""Button"",
+                    ""id"": ""5bc798a8-cd22-4087-8fce-63de383f46e2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -638,6 +654,72 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Devour"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Ctrl+k"",
+                    ""id"": ""d0f32247-9049-46d6-a335-91eab742eac2"",
+                    ""path"": ""ButtonWithOneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Brust"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""cd3166a4-c31f-40c7-8d0f-7f34aae17790"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Brust"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""button"",
+                    ""id"": ""adee2cd3-c111-4bed-8058-e374092fc68d"",
+                    ""path"": ""<Keyboard>/k"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Brust"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Ctrl+L"",
+                    ""id"": ""b251fe23-a602-4cee-ac68-a5347bb82dc6"",
+                    ""path"": ""ButtonWithOneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchBrustAmount"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""8e805330-783b-41ec-9d07-2a94b5112631"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""SwitchBrustAmount"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""button"",
+                    ""id"": ""29a7604f-5ec7-4660-8d63-3ae49ccd1744"",
+                    ""path"": ""<Keyboard>/l"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""SwitchBrustAmount"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 }
@@ -1228,6 +1310,8 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         m_Player_LoadScene = m_Player.FindAction("LoadScene", throwIfNotFound: true);
         m_Player_ChangeGroup = m_Player.FindAction("ChangeGroup", throwIfNotFound: true);
         m_Player_MousePosition = m_Player.FindAction("MousePosition", throwIfNotFound: true);
+        m_Player_Brust = m_Player.FindAction("Brust", throwIfNotFound: true);
+        m_Player_SwitchBrustAmount = m_Player.FindAction("SwitchBrustAmount", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1302,6 +1386,8 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_LoadScene;
     private readonly InputAction m_Player_ChangeGroup;
     private readonly InputAction m_Player_MousePosition;
+    private readonly InputAction m_Player_Brust;
+    private readonly InputAction m_Player_SwitchBrustAmount;
     public struct PlayerActions
     {
         private @PUN2Tester m_Wrapper;
@@ -1319,6 +1405,8 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         public InputAction @LoadScene => m_Wrapper.m_Player_LoadScene;
         public InputAction @ChangeGroup => m_Wrapper.m_Player_ChangeGroup;
         public InputAction @MousePosition => m_Wrapper.m_Player_MousePosition;
+        public InputAction @Brust => m_Wrapper.m_Player_Brust;
+        public InputAction @SwitchBrustAmount => m_Wrapper.m_Player_SwitchBrustAmount;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1367,6 +1455,12 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                 @MousePosition.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMousePosition;
                 @MousePosition.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMousePosition;
                 @MousePosition.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMousePosition;
+                @Brust.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBrust;
+                @Brust.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBrust;
+                @Brust.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBrust;
+                @SwitchBrustAmount.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchBrustAmount;
+                @SwitchBrustAmount.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchBrustAmount;
+                @SwitchBrustAmount.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchBrustAmount;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1410,6 +1504,12 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                 @MousePosition.started += instance.OnMousePosition;
                 @MousePosition.performed += instance.OnMousePosition;
                 @MousePosition.canceled += instance.OnMousePosition;
+                @Brust.started += instance.OnBrust;
+                @Brust.performed += instance.OnBrust;
+                @Brust.canceled += instance.OnBrust;
+                @SwitchBrustAmount.started += instance.OnSwitchBrustAmount;
+                @SwitchBrustAmount.performed += instance.OnSwitchBrustAmount;
+                @SwitchBrustAmount.canceled += instance.OnSwitchBrustAmount;
             }
         }
     }
@@ -1579,6 +1679,8 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         void OnLoadScene(InputAction.CallbackContext context);
         void OnChangeGroup(InputAction.CallbackContext context);
         void OnMousePosition(InputAction.CallbackContext context);
+        void OnBrust(InputAction.CallbackContext context);
+        void OnSwitchBrustAmount(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
