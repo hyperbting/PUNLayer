@@ -7,9 +7,6 @@ using System.Text;
 
 public class SerializeViewBrust : MonoBehaviour, IPunObservable
 {
-
-    StringBuilder sb = new StringBuilder();
-
     [SerializeField] Text randomText;
     string newString = "";
     string UIText
@@ -49,6 +46,7 @@ public class SerializeViewBrust : MonoBehaviour, IPunObservable
         Murmur();
     }
 
+    #region IPunObservable
     void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (!RPSetting.burst)
@@ -65,6 +63,7 @@ public class SerializeViewBrust : MonoBehaviour, IPunObservable
             UIText = (string)stream.ReceiveNext();
         }
     }
+    #endregion
 
     #region support
     System.Random rnd = new System.Random();
@@ -73,10 +72,11 @@ public class SerializeViewBrust : MonoBehaviour, IPunObservable
         return (char)rnd.Next('a', 'z');
     }
 
+    StringBuilder sb = new StringBuilder();
     string UpdateSB(int targetAmount)
     {
-        while (sb.Length >= targetAmount)
-            sb.Remove(0, 1);
+        if (sb.Length >= targetAmount)
+            sb.Remove(0, sb.Length - targetAmount +1);
 
         while (sb.Length < targetAmount)
             sb.Append(GenerateRandomCharacter());
