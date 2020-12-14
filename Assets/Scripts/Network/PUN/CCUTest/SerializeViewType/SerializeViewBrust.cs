@@ -7,14 +7,66 @@ using System.Text;
 
 public class SerializeViewBrust : MonoBehaviour, IPunObservable
 {
-    [SerializeField] Text randomText;
 
     StringBuilder sb = new StringBuilder();
+
+    [SerializeField] Text randomText;
+    string newString = "";
+    string UIText
+    {
+        set
+        {
+            if (newString == value)
+                return;
+
+            newString = value;
+            randomText.text = newString;
+        }
+        get
+        {
+            return newString;
+        }
+    }
+
     private void Start()
     {
         UpdateSB(RPSetting.burstAmount);
     }
 
+    void Murmur()
+    {
+        UIText = UpdateSB(RPSetting.burstAmount);
+    }
+
+    public void LateUpdate()
+    {
+        if (!RPSetting.burst)
+        {
+            UIText = "";
+            return;
+        }
+
+        Murmur();
+    }
+
+    void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (!RPSetting.burst)
+        {
+            return;
+        }
+
+        if (stream.IsWriting)
+        {
+            stream.SendNext(UIText);
+        }
+        else
+        {
+            UIText = (string)stream.ReceiveNext();
+        }
+    }
+
+    #region support
     System.Random rnd = new System.Random();
     char GenerateRandomCharacter()
     {
@@ -23,7 +75,7 @@ public class SerializeViewBrust : MonoBehaviour, IPunObservable
 
     string UpdateSB(int targetAmount)
     {
-        while(sb.Length >= targetAmount)
+        while (sb.Length >= targetAmount)
             sb.Remove(0, 1);
 
         while (sb.Length < targetAmount)
@@ -31,30 +83,5 @@ public class SerializeViewBrust : MonoBehaviour, IPunObservable
 
         return sb.ToString();
     }
-
-    string newString = "";
-    void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if (!RPSetting.burst)
-        {
-            if (randomText != null)
-                randomText.text = "";
-            return;
-        }
-
-        if (stream.IsWriting)
-        {
-            newString = UpdateSB(RPSetting.burstAmount);
-            randomText.text = newString;
-            stream.SendNext(newString);
-        }
-        else
-        {
-            newString = (string)stream.ReceiveNext();
-
-            if (randomText != null)
-                randomText.text = newString;
-        }
-    }
-
+    #endregion
 }
