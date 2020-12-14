@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using System.Text;
 
-public class SerializeViewBrust : MonoBehaviour, IPunObservable
+public class SerializeViewBrust : MonoBehaviourPun, IPunObservable
 {
     [SerializeField] Text randomText;
     string newString = "";
@@ -43,7 +43,8 @@ public class SerializeViewBrust : MonoBehaviour, IPunObservable
             return;
         }
 
-        Murmur();
+        if(photonView.IsMine)
+            Murmur();
     }
 
     #region IPunObservable
