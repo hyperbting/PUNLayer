@@ -201,11 +201,15 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
 
         OnJoinedOnlineRoomEventBeforeTokenCreation?.Invoke(datatoSend);
 
+        InRoomCreatetrasnToken(datatoSend);
+    }
+
+    public void InRoomCreatetrasnToken(InstantiationData datatoSend)
+    {
         trasnTokenGO = tokenProvider.RequestSyncToken(datatoSend, refObject) as GameObject;
         if (trasnTokenGO != null)
         {
             transToken = trasnTokenGO.GetComponent<TransmissionBase>();
-            //OnJoinedOnlineRoomEventAfterTokenCreation?.Invoke(transToken);
         }
     }
 }
