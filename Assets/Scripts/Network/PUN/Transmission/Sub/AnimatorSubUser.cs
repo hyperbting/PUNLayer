@@ -12,12 +12,32 @@ public class AnimatorSubUser : MonoBehaviour
     public Animator m_Animator;
     public AnimatorSubAdditive asAssitive;
 
+    private void OnEnable()
+    {
+        m_Animator = GetComponent<Animator>();
+    }
+
+    //These fields are only used in the CustomEditor for this script and would trigger a
+    //"this variable is never used" warning, which I am suppressing here
+#pragma warning disable 0414
+
+    [HideInInspector]
+    [SerializeField]
+    private bool ShowLayerWeightsInspector = true;
+
+    [HideInInspector]
+    [SerializeField]
+    private bool ShowParameterInspector = true;
+
+#pragma warning restore 0414
+
     /// <summary>
     /// Cached raised triggers that are set to be synchronized in discrete mode. since a Trigger only stay up for less than a frame,
     /// We need to cache it until the next discrete serialization call.
     /// </summary>
     public List<string> m_raisedDiscreteTriggersCache = new List<string>();
 
+    [HideInInspector]
     [SerializeField]
     private List<SynchronizedParameter> m_SynchronizeParameters = new List<SynchronizedParameter>();
     public List<SynchronizedParameter> SynchronizeParameters
@@ -33,6 +53,7 @@ public class AnimatorSubUser : MonoBehaviour
         }
     }
 
+    [HideInInspector]
     [SerializeField]
     private List<SynchronizedLayer> m_SynchronizeLayers = new List<SynchronizedLayer>();
     public List<SynchronizedLayer> SynchronizeLayers
@@ -61,7 +82,7 @@ public class AnimatorSubUser : MonoBehaviour
             {
                 if (parameter.Type == ParameterType.Trigger)
                 {
-                    asAssitive.m_raisedDiscreteTriggersCache.Add(parameter.Name);
+                    m_raisedDiscreteTriggersCache.Add(parameter.Name);
                     break;
                 }
             }

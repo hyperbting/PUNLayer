@@ -26,20 +26,6 @@ public class AnimatorSubAdditive : MonoBehaviourPun, IPunObservable
 
     private PhotonStreamQueue m_StreamQueue = new PhotonStreamQueue(120);
 
-    //These fields are only used in the CustomEditor for this script and would trigger a
-    //"this variable is never used" warning, which I am suppressing here
-#pragma warning disable 0414
-
-    [HideInInspector]
-    [SerializeField]
-    private bool ShowLayerWeightsInspector = true;
-
-    [HideInInspector]
-    [SerializeField]
-    private bool ShowParameterInspector = true;
-
-#pragma warning restore 0414
-
     //[SerializeField]
     //private List<SynchronizedParameter> m_SynchronizeParameters = new List<SynchronizedParameter>();
 

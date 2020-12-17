@@ -7,17 +7,18 @@ using UnityEditor.Animations;
 using Photon.Pun;
 
 [CustomEditor(typeof(AnimatorSubUser))]
-public class AnimatorSubUserEditor : MonoBehaviourPunEditor
+public class AnimatorSubUserEditor : Editor
 {
     [SerializeField] private AnimatorController m_Controller;
 
-    [SerializeField] private AnimatorSubUser m_Target;
+    private Animator m_Animator;
+    private AnimatorSubUser m_Target;
 
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
 
-        if (m_Target.m_Animator == null)
+        if (m_Animator == null)
         {
             EditorGUILayout.HelpBox("GameObject doesn't have an Animator component to synchronize", MessageType.Warning);
             return;
@@ -76,12 +77,12 @@ public class AnimatorSubUserEditor : MonoBehaviourPunEditor
 
     private void OnEnable()
     {
-        //this.m_Target = (PhotonAnimatorView)this.target;
-        //this.m_Animator = this.m_Target.GetComponent<Animator>();
+        this.m_Target = (AnimatorSubUser)this.target;
+        this.m_Animator = this.m_Target.GetComponent<Animator>();
 
-        if (m_Target.m_Animator)
+        if (m_Animator)
         {
-            this.m_Controller = this.GetEffectiveController(m_Target.m_Animator) as AnimatorController;
+            this.m_Controller = this.GetEffectiveController(m_Animator) as AnimatorController;
 
             this.CheckIfStoredParametersExist();
         }
@@ -194,9 +195,9 @@ public class AnimatorSubUserEditor : MonoBehaviourPunEditor
 
             if (parameter.type == AnimatorControllerParameterType.Bool)
             {
-                if (Application.isPlaying && m_Target.m_Animator.gameObject.activeInHierarchy)
+                if (Application.isPlaying && m_Animator.gameObject.activeInHierarchy)
                 {
-                    defaultValue += m_Target.m_Animator.GetBool(parameter.name);
+                    defaultValue += m_Animator.GetBool(parameter.name);
                 }
                 else
                 {
@@ -205,9 +206,9 @@ public class AnimatorSubUserEditor : MonoBehaviourPunEditor
             }
             else if (parameter.type == AnimatorControllerParameterType.Float)
             {
-                if (Application.isPlaying && m_Target.m_Animator.gameObject.activeInHierarchy)
+                if (Application.isPlaying && m_Animator.gameObject.activeInHierarchy)
                 {
-                    defaultValue += m_Target.m_Animator.GetFloat(parameter.name).ToString("0.00");
+                    defaultValue += m_Animator.GetFloat(parameter.name).ToString("0.00");
                 }
                 else
                 {
@@ -216,9 +217,9 @@ public class AnimatorSubUserEditor : MonoBehaviourPunEditor
             }
             else if (parameter.type == AnimatorControllerParameterType.Int)
             {
-                if (Application.isPlaying && m_Target.m_Animator.gameObject.activeInHierarchy)
+                if (Application.isPlaying && m_Animator.gameObject.activeInHierarchy)
                 {
-                    defaultValue += m_Target.m_Animator.GetInteger(parameter.name);
+                    defaultValue += m_Animator.GetInteger(parameter.name);
                 }
                 else
                 {
@@ -227,9 +228,9 @@ public class AnimatorSubUserEditor : MonoBehaviourPunEditor
             }
             else if (parameter.type == AnimatorControllerParameterType.Trigger)
             {
-                if (Application.isPlaying && m_Target.m_Animator.gameObject.activeInHierarchy)
+                if (Application.isPlaying && m_Animator.gameObject.activeInHierarchy)
                 {
-                    defaultValue += m_Target.m_Animator.GetBool(parameter.name);
+                    defaultValue += m_Animator.GetBool(parameter.name);
                 }
                 else
                 {
