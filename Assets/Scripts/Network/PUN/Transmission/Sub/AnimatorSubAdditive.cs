@@ -26,12 +26,6 @@ public class AnimatorSubAdditive : MonoBehaviourPun, IPunObservable
 
     private PhotonStreamQueue m_StreamQueue = new PhotonStreamQueue(120);
 
-    //[SerializeField]
-    //private List<SynchronizedParameter> m_SynchronizeParameters = new List<SynchronizedParameter>();
-
-    //[SerializeField]
-    //private List<SynchronizedLayer> m_SynchronizeLayers = new List<SynchronizedLayer>();
-
     private Vector3 m_ReceiverPosition;
     private float m_LastDeserializeTime;
     public bool m_WasSynchronizeTypeChanged = true;
