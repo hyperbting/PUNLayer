@@ -22,7 +22,6 @@ public class AnimatorSubAdditive : MonoBehaviourPun, IPunObservable
 
     private bool TriggerUsageWarningDone;
 
-    public Animator m_Animator;
     public AnimatorSubUser asUser;
 
     private PhotonStreamQueue m_StreamQueue = new PhotonStreamQueue(120);
@@ -49,24 +48,18 @@ public class AnimatorSubAdditive : MonoBehaviourPun, IPunObservable
 
     private Vector3 m_ReceiverPosition;
     private float m_LastDeserializeTime;
-    private bool m_WasSynchronizeTypeChanged = true;
-
-    /// <summary>
-    /// Cached raised triggers that are set to be synchronized in discrete mode. since a Trigger only stay up for less than a frame,
-    /// We need to cache it until the next discrete serialization call.
-    /// </summary>
-    List<string> m_raisedDiscreteTriggersCache = new List<string>();
+    public bool m_WasSynchronizeTypeChanged = true;
     #endregion
 
     #region Unity
     private void Update()
     {
-        if (this.m_Animator == null)
+        if (asUser==null || asUser.m_Animator == null)
             return;
 
-        if (this.m_Animator.applyRootMotion && this.photonView.IsMine == false && PhotonNetwork.IsConnected == true)
+        if (asUser.m_Animator.applyRootMotion && this.photonView.IsMine == false && PhotonNetwork.IsConnected == true)
         {
-            this.m_Animator.applyRootMotion = false;
+            asUser.m_Animator.applyRootMotion = false;
         }
 
         if (PhotonNetwork.InRoom == false || PhotonNetwork.CurrentRoom.PlayerCount <= 1)
@@ -79,7 +72,7 @@ public class AnimatorSubAdditive : MonoBehaviourPun, IPunObservable
         {
             this.SerializeDataContinuously();
 
-            this.CacheDiscreteTriggers();
+            asUser.CacheDiscreteTriggers();
         }
         else
         {
@@ -89,154 +82,11 @@ public class AnimatorSubAdditive : MonoBehaviourPun, IPunObservable
 
     #endregion
     
-    #region Setup Synchronizing Methods
-    /// <summary>
-    /// Caches the discrete triggers values for keeping track of raised triggers, and will be reseted after the sync routine got performed
-    /// </summary>
-    public void CacheDiscreteTriggers()
-    {
-        for (int i = 0; i < asUser.SynchronizeParameters.Count; ++i)
-        {
-            SynchronizedParameter parameter = asUser.SynchronizeParameters[i];
-
-            if (parameter.SynchronizeType == SynchronizeType.Discrete && parameter.Type == ParameterType.Trigger && this.m_Animator.GetBool(parameter.Name))
-            {
-                if (parameter.Type == ParameterType.Trigger)
-                {
-                    this.m_raisedDiscreteTriggersCache.Add(parameter.Name);
-                    break;
-                }
-            }
-        }
-    }
-
-    /// <summary>
-    /// Check if a specific layer is configured to be synchronize
-    /// </summary>
-    /// <param name="layerIndex">Index of the layer.</param>
-    /// <returns>True if the layer is synchronized</returns>
-    public bool DoesLayerSynchronizeTypeExist(int layerIndex)
-    {
-        return asUser.SynchronizeLayers.FindIndex(item => item.LayerIndex == layerIndex) != -1;
-    }
-
-    /// <summary>
-    /// Check if the specified parameter is configured to be synchronized
-    /// </summary>
-    /// <param name="name">The name of the parameter.</param>
-    /// <returns>True if the parameter is synchronized</returns>
-    public bool DoesParameterSynchronizeTypeExist(string name)
-    {
-        return asUser.SynchronizeParameters.FindIndex(item => item.Name == name) != -1;
-    }
-
-    /// <summary>
-    /// Get a list of all synchronized layers
-    /// </summary>
-    /// <returns>List of SynchronizedLayer objects</returns>
-    public List<SynchronizedLayer> GetSynchronizedLayers()
-    {
-        return asUser.SynchronizeLayers;
-    }
-
-    /// <summary>
-    /// Get a list of all synchronized parameters
-    /// </summary>
-    /// <returns>List of SynchronizedParameter objects</returns>
-    public List<SynchronizedParameter> GetSynchronizedParameters()
-    {
-        return asUser.SynchronizeParameters;
-    }
-
-    /// <summary>
-    /// Gets the type how the layer is synchronized
-    /// </summary>
-    /// <param name="layerIndex">Index of the layer.</param>
-    /// <returns>Disabled/Discrete/Continuous</returns>
-    public SynchronizeType GetLayerSynchronizeType(int layerIndex)
-    {
-        int index = asUser.SynchronizeLayers.FindIndex(item => item.LayerIndex == layerIndex);
-
-        if (index == -1)
-        {
-            return SynchronizeType.Disabled;
-        }
-
-        return asUser.SynchronizeLayers[index].SynchronizeType;
-    }
-
-    /// <summary>
-    /// Gets the type how the parameter is synchronized
-    /// </summary>
-    /// <param name="name">The name of the parameter.</param>
-    /// <returns>Disabled/Discrete/Continuous</returns>
-    public SynchronizeType GetParameterSynchronizeType(string name)
-    {
-        int index = asUser.SynchronizeParameters.FindIndex(item => item.Name == name);
-
-        if (index == -1)
-        {
-            return SynchronizeType.Disabled;
-        }
-
-        return asUser.SynchronizeParameters[index].SynchronizeType;
-    }
-
-    /// <summary>
-    /// Sets the how a layer should be synchronized
-    /// </summary>
-    /// <param name="layerIndex">Index of the layer.</param>
-    /// <param name="synchronizeType">Disabled/Discrete/Continuous</param>
-    public void SetLayerSynchronized(int layerIndex, SynchronizeType synchronizeType)
-    {
-        if (Application.isPlaying == true)
-        {
-            this.m_WasSynchronizeTypeChanged = true;
-        }
-
-        int index = asUser.SynchronizeLayers.FindIndex(item => item.LayerIndex == layerIndex);
-
-        if (index == -1)
-        {
-            asUser.SynchronizeLayers.Add(new SynchronizedLayer { LayerIndex = layerIndex, SynchronizeType = synchronizeType });
-        }
-        else
-        {
-            asUser.SynchronizeLayers[index].SynchronizeType = synchronizeType;
-        }
-    }
-
-    /// <summary>
-    /// Sets the how a parameter should be synchronized
-    /// </summary>
-    /// <param name="name">The name of the parameter.</param>
-    /// <param name="type">The type of the parameter.</param>
-    /// <param name="synchronizeType">Disabled/Discrete/Continuous</param>
-    public void SetParameterSynchronized(string name, ParameterType type, SynchronizeType synchronizeType)
-    {
-        if (Application.isPlaying == true)
-        {
-            this.m_WasSynchronizeTypeChanged = true;
-        }
-
-        int index = asUser.SynchronizeParameters.FindIndex(item => item.Name == name);
-
-        if (index == -1)
-        {
-            asUser.SynchronizeParameters.Add(new SynchronizedParameter { Name = name, Type = type, SynchronizeType = synchronizeType });
-        }
-        else
-        {
-            asUser.SynchronizeParameters[index].SynchronizeType = synchronizeType;
-        }
-    }
-
-    #endregion
 
     #region Serialization
     private void SerializeDataContinuously()
     {
-        if (this.m_Animator == null)
+        if (asUser.m_Animator == null)
         {
             return;
         }
@@ -246,7 +96,7 @@ public class AnimatorSubAdditive : MonoBehaviourPun, IPunObservable
         {
             if (layer[i].SynchronizeType == SynchronizeType.Continuous)
             {
-                this.m_StreamQueue.SendNext(this.m_Animator.GetLayerWeight(layer[i].LayerIndex));
+                this.m_StreamQueue.SendNext(asUser.m_Animator.GetLayerWeight(layer[i].LayerIndex));
             }
         }
 
@@ -260,13 +110,13 @@ public class AnimatorSubAdditive : MonoBehaviourPun, IPunObservable
                 switch (parameter.Type)
                 {
                     case ParameterType.Bool:
-                        this.m_StreamQueue.SendNext(this.m_Animator.GetBool(parameter.Name));
+                        this.m_StreamQueue.SendNext(asUser.m_Animator.GetBool(parameter.Name));
                         break;
                     case ParameterType.Float:
-                        this.m_StreamQueue.SendNext(this.m_Animator.GetFloat(parameter.Name));
+                        this.m_StreamQueue.SendNext(asUser.m_Animator.GetFloat(parameter.Name));
                         break;
                     case ParameterType.Int:
-                        this.m_StreamQueue.SendNext(this.m_Animator.GetInteger(parameter.Name));
+                        this.m_StreamQueue.SendNext(asUser.m_Animator.GetInteger(parameter.Name));
                         break;
                     case ParameterType.Trigger:
                         if (!TriggerUsageWarningDone)
@@ -277,7 +127,7 @@ public class AnimatorSubAdditive : MonoBehaviourPun, IPunObservable
                                       "or in custom IPunObservable component instead", this);
 
                         }
-                        this.m_StreamQueue.SendNext(this.m_Animator.GetBool(parameter.Name));
+                        this.m_StreamQueue.SendNext(asUser.m_Animator.GetBool(parameter.Name));
                         break;
                 }
             }
@@ -296,7 +146,7 @@ public class AnimatorSubAdditive : MonoBehaviourPun, IPunObservable
         {
             if (layer[i].SynchronizeType == SynchronizeType.Continuous)
             {
-                this.m_Animator.SetLayerWeight(layer[i].LayerIndex, (float)this.m_StreamQueue.ReceiveNext());
+                asUser.m_Animator.SetLayerWeight(layer[i].LayerIndex, (float)this.m_StreamQueue.ReceiveNext());
             }
         }
 
@@ -310,16 +160,16 @@ public class AnimatorSubAdditive : MonoBehaviourPun, IPunObservable
                 switch (parameter.Type)
                 {
                     case ParameterType.Bool:
-                        this.m_Animator.SetBool(parameter.Name, (bool)this.m_StreamQueue.ReceiveNext());
+                        asUser.m_Animator.SetBool(parameter.Name, (bool)this.m_StreamQueue.ReceiveNext());
                         break;
                     case ParameterType.Float:
-                        this.m_Animator.SetFloat(parameter.Name, (float)this.m_StreamQueue.ReceiveNext());
+                        asUser.m_Animator.SetFloat(parameter.Name, (float)this.m_StreamQueue.ReceiveNext());
                         break;
                     case ParameterType.Int:
-                        this.m_Animator.SetInteger(parameter.Name, (int)this.m_StreamQueue.ReceiveNext());
+                        asUser.m_Animator.SetInteger(parameter.Name, (int)this.m_StreamQueue.ReceiveNext());
                         break;
                     case ParameterType.Trigger:
-                        this.m_Animator.SetBool(parameter.Name, (bool)this.m_StreamQueue.ReceiveNext());
+                        asUser.m_Animator.SetBool(parameter.Name, (bool)this.m_StreamQueue.ReceiveNext());
                         break;
                 }
             }
@@ -333,7 +183,7 @@ public class AnimatorSubAdditive : MonoBehaviourPun, IPunObservable
         {
             if (layer[i].SynchronizeType == SynchronizeType.Discrete)
             {
-                stream.SendNext(this.m_Animator.GetLayerWeight(layer[i].LayerIndex));
+                stream.SendNext(asUser.m_Animator.GetLayerWeight(layer[i].LayerIndex));
             }
         }
 
@@ -348,13 +198,13 @@ public class AnimatorSubAdditive : MonoBehaviourPun, IPunObservable
                 switch (parameter.Type)
                 {
                     case ParameterType.Bool:
-                        stream.SendNext(this.m_Animator.GetBool(parameter.Name));
+                        stream.SendNext(asUser.m_Animator.GetBool(parameter.Name));
                         break;
                     case ParameterType.Float:
-                        stream.SendNext(this.m_Animator.GetFloat(parameter.Name));
+                        stream.SendNext(asUser.m_Animator.GetFloat(parameter.Name));
                         break;
                     case ParameterType.Int:
-                        stream.SendNext(this.m_Animator.GetInteger(parameter.Name));
+                        stream.SendNext(asUser.m_Animator.GetInteger(parameter.Name));
                         break;
                     case ParameterType.Trigger:
                         if (!TriggerUsageWarningDone)
@@ -366,14 +216,14 @@ public class AnimatorSubAdditive : MonoBehaviourPun, IPunObservable
 
                         }
                         // here we can't rely on the current real state of the trigger, we might have missed its raise
-                        stream.SendNext(this.m_raisedDiscreteTriggersCache.Contains(parameter.Name));
+                        stream.SendNext(asUser.m_raisedDiscreteTriggersCache.Contains(parameter.Name));
                         break;
                 }
             }
         }
 
         // reset the cache, we've synchronized.
-        this.m_raisedDiscreteTriggersCache.Clear();
+        asUser.m_raisedDiscreteTriggersCache.Clear();
     }
 
     private void DeserializeDataDiscretly(PhotonStream stream)
@@ -383,7 +233,7 @@ public class AnimatorSubAdditive : MonoBehaviourPun, IPunObservable
         {
             if (layer[i].SynchronizeType == SynchronizeType.Discrete)
             {
-                this.m_Animator.SetLayerWeight(layer[i].LayerIndex, (float)stream.ReceiveNext());
+                asUser.m_Animator.SetLayerWeight(layer[i].LayerIndex, (float)stream.ReceiveNext());
             }
         }
 
@@ -401,7 +251,7 @@ public class AnimatorSubAdditive : MonoBehaviourPun, IPunObservable
                         {
                             return;
                         }
-                        this.m_Animator.SetBool(parameter.Name, (bool)stream.ReceiveNext());
+                        asUser.m_Animator.SetBool(parameter.Name, (bool)stream.ReceiveNext());
                         break;
                     case ParameterType.Float:
                         if (stream.PeekNext() is float == false)
@@ -409,7 +259,7 @@ public class AnimatorSubAdditive : MonoBehaviourPun, IPunObservable
                             return;
                         }
 
-                        this.m_Animator.SetFloat(parameter.Name, (float)stream.ReceiveNext());
+                        asUser.m_Animator.SetFloat(parameter.Name, (float)stream.ReceiveNext());
                         break;
                     case ParameterType.Int:
                         if (stream.PeekNext() is int == false)
@@ -417,7 +267,7 @@ public class AnimatorSubAdditive : MonoBehaviourPun, IPunObservable
                             return;
                         }
 
-                        this.m_Animator.SetInteger(parameter.Name, (int)stream.ReceiveNext());
+                        asUser.m_Animator.SetInteger(parameter.Name, (int)stream.ReceiveNext());
                         break;
                     case ParameterType.Trigger:
                         if (stream.PeekNext() is bool == false)
@@ -427,7 +277,7 @@ public class AnimatorSubAdditive : MonoBehaviourPun, IPunObservable
 
                         if ((bool)stream.ReceiveNext())
                         {
-                            this.m_Animator.SetTrigger(parameter.Name);
+                            asUser.m_Animator.SetTrigger(parameter.Name);
                         }
                         break;
                 }
@@ -474,7 +324,7 @@ public class AnimatorSubAdditive : MonoBehaviourPun, IPunObservable
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        if (this.m_Animator == null)
+        if (asUser.m_Animator == null)
         {
             return;
         }

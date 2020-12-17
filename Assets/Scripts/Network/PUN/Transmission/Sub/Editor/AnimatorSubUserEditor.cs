@@ -9,15 +9,15 @@ using Photon.Pun;
 [CustomEditor(typeof(AnimatorSubUser))]
 public class AnimatorSubUserEditor : MonoBehaviourPunEditor
 {
-    private Animator m_Animator;
-    //private PhotonAnimatorView m_Target;
-    private AnimatorController m_Controller;
+    [SerializeField] private AnimatorController m_Controller;
+
+    [SerializeField] private AnimatorSubUser m_Target;
 
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
 
-        if (this.m_Animator == null)
+        if (m_Target.m_Animator == null)
         {
             EditorGUILayout.HelpBox("GameObject doesn't have an Animator component to synchronize", MessageType.Warning);
             return;
@@ -76,12 +76,12 @@ public class AnimatorSubUserEditor : MonoBehaviourPunEditor
 
     private void OnEnable()
     {
-        this.m_Target = (PhotonAnimatorView)this.target;
-        this.m_Animator = this.m_Target.GetComponent<Animator>();
+        //this.m_Target = (PhotonAnimatorView)this.target;
+        //this.m_Animator = this.m_Target.GetComponent<Animator>();
 
-        if (m_Animator)
+        if (m_Target.m_Animator)
         {
-            this.m_Controller = this.GetEffectiveController(this.m_Animator) as AnimatorController;
+            this.m_Controller = this.GetEffectiveController(m_Target.m_Animator) as AnimatorController;
 
             this.CheckIfStoredParametersExist();
         }
@@ -102,9 +102,9 @@ public class AnimatorSubUserEditor : MonoBehaviourPunEditor
 
         for (int i = 0; i < this.GetLayerCount(); ++i)
         {
-            if (this.m_Target.DoesLayerSynchronizeTypeExist(i) == false)
+            if (m_Target.DoesLayerSynchronizeTypeExist(i) == false)
             {
-                this.m_Target.SetLayerSynchronized(i, PhotonAnimatorView.SynchronizeType.Disabled);
+                m_Target.SetLayerSynchronized(i, PhotonAnimatorView.SynchronizeType.Disabled);
             }
 
             PhotonAnimatorView.SynchronizeType syncType = this.m_Target.GetLayerSynchronizeType(i);
@@ -194,9 +194,9 @@ public class AnimatorSubUserEditor : MonoBehaviourPunEditor
 
             if (parameter.type == AnimatorControllerParameterType.Bool)
             {
-                if (Application.isPlaying && this.m_Animator.gameObject.activeInHierarchy)
+                if (Application.isPlaying && m_Target.m_Animator.gameObject.activeInHierarchy)
                 {
-                    defaultValue += this.m_Animator.GetBool(parameter.name);
+                    defaultValue += m_Target.m_Animator.GetBool(parameter.name);
                 }
                 else
                 {
@@ -205,9 +205,9 @@ public class AnimatorSubUserEditor : MonoBehaviourPunEditor
             }
             else if (parameter.type == AnimatorControllerParameterType.Float)
             {
-                if (Application.isPlaying && this.m_Animator.gameObject.activeInHierarchy)
+                if (Application.isPlaying && m_Target.m_Animator.gameObject.activeInHierarchy)
                 {
-                    defaultValue += this.m_Animator.GetFloat(parameter.name).ToString("0.00");
+                    defaultValue += m_Target.m_Animator.GetFloat(parameter.name).ToString("0.00");
                 }
                 else
                 {
@@ -216,9 +216,9 @@ public class AnimatorSubUserEditor : MonoBehaviourPunEditor
             }
             else if (parameter.type == AnimatorControllerParameterType.Int)
             {
-                if (Application.isPlaying && this.m_Animator.gameObject.activeInHierarchy)
+                if (Application.isPlaying && m_Target.m_Animator.gameObject.activeInHierarchy)
                 {
-                    defaultValue += this.m_Animator.GetInteger(parameter.name);
+                    defaultValue += m_Target.m_Animator.GetInteger(parameter.name);
                 }
                 else
                 {
@@ -227,9 +227,9 @@ public class AnimatorSubUserEditor : MonoBehaviourPunEditor
             }
             else if (parameter.type == AnimatorControllerParameterType.Trigger)
             {
-                if (Application.isPlaying && this.m_Animator.gameObject.activeInHierarchy)
+                if (Application.isPlaying && m_Target.m_Animator.gameObject.activeInHierarchy)
                 {
-                    defaultValue += this.m_Animator.GetBool(parameter.name);
+                    defaultValue += m_Target.m_Animator.GetBool(parameter.name);
                 }
                 else
                 {
