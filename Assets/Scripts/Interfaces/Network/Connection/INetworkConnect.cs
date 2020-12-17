@@ -8,8 +8,19 @@ public interface INetworkConnect
 
     #region Checker
     #endregion
-    #region InRoom Checker
 
+    #region ToLobby
+    // notify when service is connected and ready for Matchmaking
+    Task<bool> ConnectToServer();
+    #endregion
+
+    #region ToRoom
+    // notify when Matchmaking success
+    Task<bool> JoinGameRoom(string roomName);
+    #endregion
+
+    #region InRoom
+    #region Checker
     bool IsInRoom();
 
     bool IsOnlineRoom();
@@ -18,18 +29,16 @@ public interface INetworkConnect
     bool IsRoomOwner();
     #endregion
 
-    // notify when service is connected and ready for Matchmaking
-    Task<bool> ConnectToServer();
-
-    // notify when Matchmaking success
-    Task<bool> JoinGameRoom(string roomName);
-
     GameObject RequestSyncToken(InstantiationData dataToSend, Transform refTrasnform);
     GameObject ManualBuildSyncToken(InstantiationData dataToSend);
     //Task<bool> SetRoomProperty(KeyValExpPair kvePair);
     //Task<bool> SetPlayerProperty(Player player, KeyValExpPair kvePair);
+    #endregion
 }
 
+/// <summary>
+/// INetworkConnectUser have to provide some callbacks for subscription
+/// </summary>
 public interface INetworkConnectUser
 {
     Action OnJoinedOnlineRoomEvent { get; set; }
