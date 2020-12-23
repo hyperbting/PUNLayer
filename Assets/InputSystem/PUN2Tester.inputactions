@@ -1217,6 +1217,33 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "InsideHeadDetection",
+            "id": "f3bc9762-7b12-4254-baeb-b67b9539eba1",
+            "actions": [
+                {
+                    "name": "ShowAvatarDoll",
+                    "type": "Button",
+                    "id": "afd520e8-8e4b-447d-9b07-e763909094f2",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "c1c4c43d-1f7c-44fe-ad09-107dd932b5a3",
+                    "path": "<OpenVROculusTouchController>/triggerPressed",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "XR",
+                    "action": "ShowAvatarDoll",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

@@ -1230,6 +1230,33 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""InsideHeadDetection"",
+            ""id"": ""f3bc9762-7b12-4254-baeb-b67b9539eba1"",
+            ""actions"": [
+                {
+                    ""name"": ""ShowAvatarDoll"",
+                    ""type"": ""Button"",
+                    ""id"": ""afd520e8-8e4b-447d-9b07-e763909094f2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""c1c4c43d-1f7c-44fe-ad09-107dd932b5a3"",
+                    ""path"": ""<OpenVROculusTouchController>/triggerPressed"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""XR"",
+                    ""action"": ""ShowAvatarDoll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -1324,6 +1351,9 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         m_UI_RightClick = m_UI.FindAction("RightClick", throwIfNotFound: true);
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
+        // InsideHeadDetection
+        m_InsideHeadDetection = asset.FindActionMap("InsideHeadDetection", throwIfNotFound: true);
+        m_InsideHeadDetection_ShowAvatarDoll = m_InsideHeadDetection.FindAction("ShowAvatarDoll", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1619,6 +1649,39 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         }
     }
     public UIActions @UI => new UIActions(this);
+
+    // InsideHeadDetection
+    private readonly InputActionMap m_InsideHeadDetection;
+    private IInsideHeadDetectionActions m_InsideHeadDetectionActionsCallbackInterface;
+    private readonly InputAction m_InsideHeadDetection_ShowAvatarDoll;
+    public struct InsideHeadDetectionActions
+    {
+        private @PUN2Tester m_Wrapper;
+        public InsideHeadDetectionActions(@PUN2Tester wrapper) { m_Wrapper = wrapper; }
+        public InputAction @ShowAvatarDoll => m_Wrapper.m_InsideHeadDetection_ShowAvatarDoll;
+        public InputActionMap Get() { return m_Wrapper.m_InsideHeadDetection; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(InsideHeadDetectionActions set) { return set.Get(); }
+        public void SetCallbacks(IInsideHeadDetectionActions instance)
+        {
+            if (m_Wrapper.m_InsideHeadDetectionActionsCallbackInterface != null)
+            {
+                @ShowAvatarDoll.started -= m_Wrapper.m_InsideHeadDetectionActionsCallbackInterface.OnShowAvatarDoll;
+                @ShowAvatarDoll.performed -= m_Wrapper.m_InsideHeadDetectionActionsCallbackInterface.OnShowAvatarDoll;
+                @ShowAvatarDoll.canceled -= m_Wrapper.m_InsideHeadDetectionActionsCallbackInterface.OnShowAvatarDoll;
+            }
+            m_Wrapper.m_InsideHeadDetectionActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @ShowAvatarDoll.started += instance.OnShowAvatarDoll;
+                @ShowAvatarDoll.performed += instance.OnShowAvatarDoll;
+                @ShowAvatarDoll.canceled += instance.OnShowAvatarDoll;
+            }
+        }
+    }
+    public InsideHeadDetectionActions @InsideHeadDetection => new InsideHeadDetectionActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -1694,5 +1757,9 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         void OnRightClick(InputAction.CallbackContext context);
         void OnTrackedDevicePosition(InputAction.CallbackContext context);
         void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
+    }
+    public interface IInsideHeadDetectionActions
+    {
+        void OnShowAvatarDoll(InputAction.CallbackContext context);
     }
 }
