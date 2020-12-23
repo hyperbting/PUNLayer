@@ -4,6 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class HeadDetectable : MonoBehaviour, IHeadDetectable
 {
+    public PUN2Tester pInput;
 
     public Action<bool, Vector3> OnRelativePositionChanged {
         get;
@@ -43,6 +44,7 @@ public class HeadDetectable : MonoBehaviour, IHeadDetectable
         this.hd = null;
     }
 
+    #region Checker
     public bool InsideHeadDetection(out Vector3 posDelta)
     {
         posDelta = Vector3.zero;
@@ -59,6 +61,7 @@ public class HeadDetectable : MonoBehaviour, IHeadDetectable
         posDelta = (Vector3)delta;
         return true;
     }
+    #endregion
 
     void ChangeRelativePosition(bool enabled, Vector3 deltaPos)
     {
@@ -69,6 +72,7 @@ public class HeadDetectable : MonoBehaviour, IHeadDetectable
     {
         if (InsideHeadDetection(out Vector3 posDelta))
         {
+            //was NOT InRange
             if (!inRange || Vector3.Distance(deltaPosition, posDelta)>0.1)
                 OnRelativePositionChanged?.Invoke(true, posDelta);
 
@@ -77,6 +81,7 @@ public class HeadDetectable : MonoBehaviour, IHeadDetectable
         }
         else
         {
+            //Was InRange
             if (inRange)
             {
                 OnRelativePositionChanged?.Invoke(false, Vector3.zero);
@@ -91,11 +96,15 @@ public class HeadDetectable : MonoBehaviour, IHeadDetectable
     private void OnEnable()
     {
         OnRelativePositionChanged += ChangeRelativePosition;
+
+        pInput.InsideHeadDetection.ShowAvatarDoll.performed += OnChangeInputListener;
     }
 
     private void OnDisable()
     {
         OnRelativePositionChanged -= ChangeRelativePosition;
+
+        pInput.InsideHeadDetection.ShowAvatarDoll.performed -= OnChangeInputListener;
     }
 
     private void Update()
@@ -103,6 +112,15 @@ public class HeadDetectable : MonoBehaviour, IHeadDetectable
         UpdateDetection();
     }
     #endregion
+
+    void OnChangeInputListener(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
+    {
+        if (!inRange)
+            return;
+
+        //
+        hd?.AttachAvatarDoll(this.transform);
+    }
 }
 
 public enum ControllerType

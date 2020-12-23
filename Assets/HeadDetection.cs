@@ -62,6 +62,38 @@ public class HeadDetection : MonoBehaviour
         }
     }
     #endregion
+
+    #region Create Avatar Doll
+    //only one is allowed
+    [SerializeField]bool usingAvatarDoll = false;
+    public void AttachAvatarDoll(Transform parent)
+    {
+        if (usingAvatarDoll)
+        {
+            Debug.LogWarning($"Only One AvatarDoll at one time");
+            return;
+        }
+
+        usingAvatarDoll = true;
+
+        // How to Create/ Show Avator Doll?
+
+    }
+
+    public void UnuseAvatarDoll()
+    {
+        if (!usingAvatarDoll)
+        {
+            Debug.LogWarning($"AvatarDoll NotInUse");
+            return;
+        }
+
+        usingAvatarDoll = false;
+
+        // How to Hide/ Destroy Avator Doll?
+
+    }
+    #endregion
 }
 
 public interface IHeadDetectable
