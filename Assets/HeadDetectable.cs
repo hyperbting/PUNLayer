@@ -115,11 +115,16 @@ public class HeadDetectable : MonoBehaviour, IHeadDetectable
 
     void OnChangeInputListener(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
     {
-        if (!inRange)
-            return;
-
-        //
-        hd?.AttachAvatarDoll(this.transform);
+        if (inRange)
+        {
+            //in range: try Attach AvatarDoll to hand
+            hd?.AttachAvatarDoll(this.transform);
+        }
+        else
+        {
+            //not in range: try Unattach AvatarDoll from hand, place on ground
+            hd?.UnuseAvatarDoll();
+        }
     }
 }
 
