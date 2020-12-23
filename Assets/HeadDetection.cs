@@ -5,7 +5,10 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class HeadDetection : MonoBehaviour
 {
+    public bool showDebugUI;
+
     Dictionary<System.Guid, (GameObject,Vector3)> detectedIHeadDetectable = new Dictionary<System.Guid, (GameObject, Vector3)>();
+    [SerializeField] GameObject debugUIGO;
 
     public void UnRegister(IHeadDetectable itf)
     {
@@ -24,6 +27,11 @@ public class HeadDetection : MonoBehaviour
     }
 
     #region mono
+    private void OnEnable()
+    {
+        debugUIGO?.SetActive(showDebugUI);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         var itf = other.gameObject.GetComponent<IHeadDetectable>();

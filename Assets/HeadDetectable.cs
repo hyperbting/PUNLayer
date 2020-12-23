@@ -51,8 +51,7 @@ public class HeadDetectable : MonoBehaviour, IHeadDetectable
             return false;
 
         var delta = hd.TryGetPositionDelta(this);
-        //// not in range; Unregister
-        if (posDelta == null)
+        if (delta == null)
         {
             return false;
         }
