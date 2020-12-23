@@ -7,6 +7,23 @@ public class HeadDetection : MonoBehaviour
 {
     Dictionary<System.Guid, (GameObject,Vector3)> detectedIHeadDetectable = new Dictionary<System.Guid, (GameObject, Vector3)>();
 
+    public void UnRegister(IHeadDetectable itf)
+    {
+        itf.Clean();
+        detectedIHeadDetectable.Remove(itf.GetUUID);
+    }
+
+    public Vector3? TryGetPositionDelta(IHeadDetectable ihd)
+    {
+        if (detectedIHeadDetectable.TryGetValue(ihd.GetUUID, out (GameObject, Vector3) val))
+        {
+            return val.Item2;
+        }
+
+        return null;
+    }
+
+    #region mono
     private void OnTriggerEnter(Collider other)
     {
         var itf = other.gameObject.GetComponent<IHeadDetectable>();
@@ -26,12 +43,6 @@ public class HeadDetection : MonoBehaviour
         UnRegister(itf);
     }
 
-    public void UnRegister(IHeadDetectable itf)
-    {
-        itf.Clean();
-        detectedIHeadDetectable.Remove(itf.GetUUID);
-    }
-
     private void FixedUpdate()
     {
         var keyList = new List<System.Guid>(detectedIHeadDetectable.Keys);
@@ -42,16 +53,7 @@ public class HeadDetection : MonoBehaviour
             detectedIHeadDetectable[key] = (val.Item1, deltaPos);
         }
     }
-
-    public Vector3? TryGetPositionDelta(IHeadDetectable ihd)
-    {
-        if (detectedIHeadDetectable.TryGetValue(ihd.GetUUID, out (GameObject, Vector3) val))
-        {
-            return val.Item2;
-        }
-
-        return null;
-    }
+    #endregion
 }
 
 public interface IHeadDetectable
