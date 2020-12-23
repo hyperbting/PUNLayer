@@ -1,9 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
+[RequireComponent(typeof(Rigidbody))]
 public class HeadDetection : MonoBehaviour
 {
     Dictionary<System.Guid, (GameObject,Vector3)> detectedIHeadDetectable = new Dictionary<System.Guid, (GameObject, Vector3)>();
@@ -33,7 +32,7 @@ public class HeadDetection : MonoBehaviour
         detectedIHeadDetectable.Remove(itf.GetUUID);
     }
 
-    private void LateUpdate()
+    private void FixedUpdate()
     {
         var keyList = new List<System.Guid>(detectedIHeadDetectable.Keys);
         foreach (var key in keyList)

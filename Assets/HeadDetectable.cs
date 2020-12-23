@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
@@ -65,6 +63,7 @@ public class HeadDetectable : MonoBehaviour, IHeadDetectable
 
     void ChangeRelativePosition(bool enabled, Vector3 deltaPos)
     {
+        Debug.Log($"{ConType} {enabled} {deltaPos}");
     }
 
     void UpdateDetection()
@@ -72,7 +71,7 @@ public class HeadDetectable : MonoBehaviour, IHeadDetectable
         if (InsideHeadDetection(out Vector3 posDelta))
         {
             if (!inRange || Vector3.Distance(deltaPosition, posDelta)>0.1)
-                OnRelativePositionChanged(true, posDelta);
+                OnRelativePositionChanged?.Invoke(true, posDelta);
 
             inRange = true;
             deltaPosition = posDelta;
@@ -81,7 +80,7 @@ public class HeadDetectable : MonoBehaviour, IHeadDetectable
         {
             if (inRange)
             {
-                OnRelativePositionChanged(false, Vector3.zero);
+                OnRelativePositionChanged?.Invoke(false, Vector3.zero);
 
                 inRange = false;
                 deltaPosition = posDelta;
