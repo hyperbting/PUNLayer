@@ -47,6 +47,10 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IP
                 var pta = gameObject.AddComponent<PlayerCoreAdditive>();
                 pta.Init(this, data);
                 break;
+            case SyncTokenType.Persistence:
+                var peh = gameObject.AddComponent<PersistExistenceHandler>();
+                peh.Init(this, data);
+                break;
             default:
             case SyncTokenType.General:
                 var rta = gameObject.AddComponent<RoomCoreAdditive>();
