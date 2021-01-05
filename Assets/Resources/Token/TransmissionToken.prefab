@@ -9,12 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3458457266041222475}
+  - component: {fileID: 7780768246513051558}
   - component: {fileID: 9007865024089837313}
   - component: {fileID: 8624510176210393185}
   - component: {fileID: 789010574065468813}
   - component: {fileID: 3129467774125685042}
-  - component: {fileID: 421587919679357198}
-  - component: {fileID: 7780768246513051558}
+  - component: {fileID: -6433585829548866547}
   m_Layer: 11
   m_Name: TransmissionToken
   m_TagString: Untagged
@@ -36,6 +36,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &7780768246513051558
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7690134541824521141}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &9007865024089837313
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101,7 +114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc03d2f5c0695e248825907569df421c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &421587919679357198
+--- !u!114 &-6433585829548866547
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -110,19 +123,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 7690134541824521141}
   m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9dbd1feaa9c56e146ad5c25958e8c09b, type: 3}
+  m_Script: {fileID: 11500000, guid: 2267d76f06f566d4e881c27bca345d12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!65 &7780768246513051558
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7690134541824521141}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}

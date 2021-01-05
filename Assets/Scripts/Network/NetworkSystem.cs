@@ -13,6 +13,8 @@ public class NetworkSystem : MonoBehaviour, INetworkConnectUser, ITokenProvider
     [Tooltip("Automatically create token when OnJoinedRoom/ CreatedAlreadyInRoom")]
     public GameObject NetworkSyncHandler;
 
+    public PersistExistenceHandler persistExistenceHandler;
+
     INetworkConnect inc;
 
     [Space]
@@ -73,6 +75,8 @@ public class NetworkSystem : MonoBehaviour, INetworkConnectUser, ITokenProvider
     {
         inc = INetworkConnectGO.GetComponent<INetworkConnect>();
         inc.Init (this);
+
+        persistExistenceHandler.tokenProvider = this;
     }
 
     // Start is called before the first frame update

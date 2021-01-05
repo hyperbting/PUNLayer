@@ -1,66 +1,122 @@
-﻿using Photon.Pun;
+﻿using ExitGames.Client.Photon;
+using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PersistExistenceHandler : MonoBehaviourPunCallbacks
+/// <summary>
+/// Receive RaiseEvent
+/// Check if Specific PersistExistenceAdditive-id is created
+/// assign created PersistExistenceAdditive to specific owner
+/// if not create one PersistExistenceAdditive and Register
+/// </summary>
+public class PersistExistenceHandler: MonoBehaviourPunCallbacks, IOnEventCallback
 {
-    readonly string PlayerPropUUIDKey = "PpUUID";
+    public readonly byte PlayerPersistExistence = 198;
+    public readonly string PlayerPropUUIDKey = "PpUUID";
 
-    ITransmissionBase parent;
-    public void Init(ITransmissionBase itb, InstantiationData data)
+    Dictionary<string, PersistExistenceAdditive> dic = new Dictionary<string, PersistExistenceAdditive>();
+
+    public ITokenProvider tokenProvider;
+
+    public void Unregister(string uuid)
     {
-        parent = itb;
-
-        //pm = GameObject.Find("PlayerManager").GetComponent<IPlayerMaker>();
-        //if (pm == null)
-        //    Debug.LogWarning("pm NotFound");
-
-        //if (photonView.IsMine)
-        //{
-        //    gameObject.name = "MyPlayerToken";
-        //    RefPlayer = pm.GetHostPlayer();
-        //}
-        //else
-        //{
-        //    gameObject.name = "RemotePlayerToken";
-        //    RefPlayer = pm.InstantiateRemotePlayerObject(photonView.Owner.UserId, gameObject.transform);
-
-        //    var istu = RefPlayer.GetComponent<ISyncHandlerUser>();
-        //    istu.SetupSync(itb, data);
-        //}
-
-        //SetupSync(data);
-
-        this.enabled = true;
-    }
-
-    #region PunCallbacks
-    public override void OnPlayerEnteredRoom(Player newPlayer)
-    {
-        base.OnPlayerEnteredRoom(newPlayer);
-
-        //someone joined, check if I have to give mine to.
-        if (newPlayer.CustomProperties.TryGetValue(PlayerPropUUIDKey, out object id))
+        if (dic.TryGetValue(uuid, out PersistExistenceAdditive target))
         {
-            //Cancel Destroy if any
+            //target.Destroy();
+            //dic.Remove(uuid);
         }
     }
 
+    #region RaiseEvent To MC Create ROOM OBJECT
+    //paired with void IOnEventCallback.OnEvent(EventData photonEvent)
+    public void CreatePersistExistence(InstantiationData data)
+    {
+        //TODO: ceationData
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions {
+            Receivers = ReceiverGroup.MasterClient,
+            CachingOption = EventCaching.DoNotCache
+        };
+
+        PhotonNetwork.RaiseEvent(PlayerPersistExistence, data, raiseEventOptions, SendOptions.SendReliable);
+    }
+    #endregion
+
+    #region PunCallbacks
+    // Destroy ALL? when left room
+    public override void OnLeftRoom()
+    {
+        base.OnLeftRoom();
+
+        foreach (var kvp in dic)
+        {
+            //Clean mine immediately
+            if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(PlayerPropUUIDKey, out object uuid) && 
+                kvp.Key == (string)uuid)
+            {
+                Unregister(kvp.Key);
+                continue;
+            }
+
+            //Start CountdownDestroy OTHERs'
+            kvp.Value.StartCountdown();
+        }
+    }
+    
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         base.OnPlayerLeftRoom(otherPlayer);
 
-        Debug.Log($"[PersistExistenceHandler] OnPlayerLeftRoom owner:{photonView.Owner} actnr:{photonView.OwnerActorNr}");
-        if (otherPlayer.ActorNumber != photonView.ControllerActorNr)
+        Debug.Log($"[PersistExistenceAdditive] OnPlayerLeftRoom owner:{photonView.Owner} actnr:{photonView.OwnerActorNr}");
+        if (otherPlayer.CustomProperties.TryGetValue(PlayerPropUUIDKey, out object uuid) &&
+            dic.TryGetValue((string)uuid, out PersistExistenceAdditive target))
+        {
+            //if owner left, countdown to destroy
+            target.StartCountdown();
+        }            
+    }
+
+    // create or give to sender
+    void IOnEventCallback.OnEvent(EventData photonEvent)
+    {
+        if (!PhotonNetwork.IsMasterClient)
             return;
 
-        //if mine owner left, countdown to destroy
+        if (photonEvent.Code != PlayerPersistExistence)
+            return;
+
+        Debug.Log($"{photonEvent.Sender} raised event");
+        var punPlayer = PhotonNetwork.CurrentRoom.GetPlayer(photonEvent.Sender);
+        if (punPlayer == null /*&& !punPlayer.IsInactive*/)
+        {
+            Debug.Log($"{photonEvent.Sender}: no such InRoomPlayer");
+            return;
+        }
+
+        PersistExistenceAdditive target = null;
+        //TryGive from dic
+        if (punPlayer.CustomProperties.TryGetValue(PlayerPropUUIDKey, out object uuid) &&
+            dic.TryGetValue((string)uuid, out target) &&
+            target.IsSignatureMatch(photonView.InstantiationData)
+            )
+        {
+            //Cancel Countdown
+            target.CancelCountdown();
+            
+            //Update PhotonViewID
+        }
+        else
+        {
+            var insData = new InstantiationData((object[])photonEvent.CustomData);
+            //create one for targetPlayer
+            var trasnTokenGO = tokenProvider.RequestManualSyncToken(insData) as GameObject;
+            target = trasnTokenGO.GetComponent<PersistExistenceAdditive>();
+        }
+
+        //transferwonership
+        if (target != null)
+            target.photonView.TransferOwnership(punPlayer);
     }
-    #endregion
-
-    #region Countdown Destroy
-
     #endregion
 }

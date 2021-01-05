@@ -100,6 +100,19 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
     #endregion
 
     #region
+    public object CreateInRoomObject(InstantiationData data)
+    {
+        var obj = tokenProvider.RequestSyncToken(data, gameObject);
+
+        var ntGO = obj as GameObject;
+        if (ntGO != null)
+        {
+            targetObj = ntGO;
+        }
+
+        return obj;
+    }
+
     public object CreateInRoomObject()
     {
         if (!HavingToken())
@@ -116,8 +129,6 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
         if (ntGO != null)
         {
             targetObj = ntGO;
-            //ntGO.name = "InRoomObject";
-            //transToken = ntGO.GetComponent<TransmissionBase>();
         }
 
         return obj;
@@ -201,15 +212,7 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
 
         OnJoinedOnlineRoomEventBeforeTokenCreation?.Invoke(datatoSend);
 
-        InRoomCreatetrasnToken(datatoSend);
-    }
-
-    public void InRoomCreatetrasnToken(InstantiationData datatoSend)
-    {
-        trasnTokenGO = tokenProvider.RequestSyncToken(datatoSend, refObject) as GameObject;
-        if (trasnTokenGO != null)
-        {
-            transToken = trasnTokenGO.GetComponent<TransmissionBase>();
-        }
+        trasnTokenGO = (GameObject)tokenProvider.RequestManualSyncToken(datatoSend);
+        transToken = trasnTokenGO.GetComponent<TransmissionBase>();
     }
 }

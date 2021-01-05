@@ -40,34 +40,7 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IP
             return;
 
         Debug.Log($"TransmissionBase Start {data}");
-        tType = data.tokenType;
-        switch (tType)
-        {
-            case SyncTokenType.Player:
-                var pta = gameObject.AddComponent<PlayerCoreAdditive>();
-                pta.Init(this, data);
-                break;
-            case SyncTokenType.Persistence:
-                var peh = gameObject.AddComponent<PersistExistenceHandler>();
-                peh.Init(this, data);
-                break;
-            default:
-            case SyncTokenType.General:
-                var rta = gameObject.AddComponent<RoomCoreAdditive>();
-                rta.Init(this, data);
-                lcom.Add(rta);
-
-                var osa = gameObject.AddComponent<OwnershipSubAdditive>();
-                osa.Init(this, data);
-                lcom.Add(osa);
-
-                rta.enabled = true;
-                osa.enabled = true;
-                break;
-        }
-
-        //foreach (var ita in gameObject.GetComponents<ITokenAdditive>())
-        //    ita.Init(this. data);
+        Init(data);
         started = true;
     }
 
@@ -95,6 +68,31 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IP
     //    srw = srws;
     //    Invoke("RegisterSerializableReadWrite", 0);
     //}
+
+    public void Init(InstantiationData data)
+    {
+        tType = data.tokenType;
+        switch (tType)
+        {
+            case SyncTokenType.Player:
+                var pta = gameObject.AddComponent<PlayerCoreAdditive>();
+                pta.Init(this, data);
+                break;
+            default:
+            case SyncTokenType.General:
+                var rta = gameObject.AddComponent<RoomCoreAdditive>();
+                rta.Init(this, data);
+                lcom.Add(rta);
+
+                var osa = gameObject.AddComponent<OwnershipSubAdditive>();
+                osa.Init(this, data);
+                lcom.Add(osa);
+
+                rta.enabled = true;
+                osa.enabled = true;
+                break;
+        }
+    }
 
     #region Setup SerializableHelper/ StateHelper
     public void Setup(bool useSerialize=false)
