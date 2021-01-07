@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NetworkSystem : MonoBehaviour, INetworkConnectUser, ITokenProvider
+public class NetworkSystem : MonoBehaviour, INetworkConnectUser, ITokenProvider, ITokenHandlerProvider
 {
     [Header("NetworkConnect is the network core")]
     [Tooltip("Implement interface of Network Abilities")]

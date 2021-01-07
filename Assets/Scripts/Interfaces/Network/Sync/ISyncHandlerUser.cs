@@ -38,13 +38,17 @@ public interface ITokenHandler
 }
 
 // provide ITokenHandler to ISyncHandlerUser
-public interface ITokenProvider
+public interface ITokenHandlerProvider
 {
     #region giving Network Ability
     ITokenHandler RequestTokenHandlerAttachment(SyncTokenType tokenType, object refScript);
     object RequestTokenHandler(SyncTokenType tokenType, object refObj);
     #endregion
+}
 
+// provide ITransmissionBase/TransmissionToken to ITokenHandler
+public interface ITokenProvider
+{
     #region Used by ITokenHandler
     object RequestSyncToken(InstantiationData datatoSend, object refObj);
     object RequestManualSyncToken(InstantiationData datatoSen);
