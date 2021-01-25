@@ -14,7 +14,8 @@ GameObject:
   - component: {fileID: 8624510176210393185}
   - component: {fileID: 789010574065468813}
   - component: {fileID: 3129467774125685042}
-  - component: {fileID: -6433585829548866547}
+  - component: {fileID: 10715327256596300}
+  - component: {fileID: 6573500134686507783}
   m_Layer: 11
   m_Name: TransmissionToken
   m_TagString: Untagged
@@ -114,7 +115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc03d2f5c0695e248825907569df421c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-6433585829548866547
+--- !u!114 &10715327256596300
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -123,6 +124,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 7690134541824521141}
   m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2267d76f06f566d4e881c27bca345d12, type: 3}
+  m_Script: {fileID: 11500000, guid: 9b3b184c44917f14cbd156af4aee3624, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RefPlayer: {fileID: 0}
+--- !u!114 &6573500134686507783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7690134541824521141}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c45b023b1fd09b04eb87d1f43e473dd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  refObject: {fileID: 0}
