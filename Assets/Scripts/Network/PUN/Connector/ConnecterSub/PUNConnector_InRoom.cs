@@ -9,7 +9,7 @@ using UnityEngine;
 
 public partial class PUNConnecter : MonoBehaviourPunCallbacks, IOnEventCallback
 {
-    public GameObject transmissionTokenPrefab;
+    //public GameObject transmissionTokenPrefab;
 
     #region Progress Record
     Dictionary<string, KeyValResultPair> rpInProgress = new Dictionary<string, KeyValResultPair>();
@@ -78,7 +78,7 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, IOnEventCallback
 
     public GameObject ManualBuildSyncToken(InstantiationData dataToSend)
     {
-        var go = Instantiate(transmissionTokenPrefab);
+        var go = PrefabPoolManager.Instance.Instantiate("TransmissionToken", Vector3.zero, Quaternion.identity);//Instantiate(transmissionTokenPrefab);
         var pView = go.GetComponent<PhotonView>();
 
         if (PhotonNetwork.AllocateViewID(photonView))
@@ -113,7 +113,7 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, IOnEventCallback
         if ((RaiseEvnetCode)eventCode == RaiseEvnetCode.CustomManualInstantiationEventCode)
         {
             var instData = new InstantiationData((object[])photonEvent.CustomData);
-            var tok = Instantiate(transmissionTokenPrefab);
+            var tok = PrefabPoolManager.Instance.Instantiate("TransmissionToken", Vector3.zero, Quaternion.identity);//Instantiate(transmissionTokenPrefab);
 
             //setup based on InstantiationData
 

@@ -4,18 +4,11 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour, IPlayerMaker
 {
-    public ServiceManager serviceManager;
-    public static PlayerManager Instance;
     public GameObject playerCorePref;
 
     [Header("Debug")]
     [SerializeField]
     Player hostPlayer;
-
-    private void Awake()
-    {
-        Instance = this;
-    }
 
     // Start is called before the first frame update
     void Start()
