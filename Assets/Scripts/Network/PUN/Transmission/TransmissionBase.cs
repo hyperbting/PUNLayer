@@ -5,6 +5,10 @@ using UnityEngine;
 [RequireComponent(typeof(PhotonView))]
 public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IPooledObject
 {
+    [SerializeField] OwnershipSubAdditive osa;
+    ICoreAdditive playerCoreAdditive;
+    ICoreAdditive roomCoreAdditive;
+
     [SerializeField] SyncTokenType tType;
     #region Properties
     [SerializeField] SerializableHelper seriHelper;
@@ -33,13 +37,28 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IP
     {
         base.OnEnable();
 
-        InstantiationData data = null;
-        if (photonView.InstantiationData != null)
-            data = new InstantiationData(photonView.InstantiationData);
-        else
+        var targets = GetComponents<ICoreAdditive>();
+        foreach (var tar in targets)
+        {
+            switch (tar.AdditiveType)
+            {
+                case SyncTokenType.Player:
+                    playerCoreAdditive = tar;
+                    break;
+                case SyncTokenType.General:
+                    roomCoreAdditive = tar;
+                    break;
+                default:
+                    Debug.LogWarning($"Unprepared Detected {tar.AdditiveType}");
+                    break;
+            }
+        }
+
+        if (photonView.InstantiationData == null)
             return;
 
-        Debug.Log($"TransmissionBase Start {data}");
+        InstantiationData data = new InstantiationData(photonView.InstantiationData);
+        Debug.Log($"TransmissionBase Start. photonView.IsMine:{photonView.IsMine} {data}");
         Init(data);
         started = true;
     }
@@ -49,15 +68,7 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IP
         started = false;
 
         base.OnDisable();
-
-        for (int i =lcom.Count-1;i>=0;i--)
-        {
-            lcom[i].enabled = false;
-        }
-        lcom.Clear();
     }
-
-    List<MonoBehaviour> lcom = new List<MonoBehaviour>();
 
     public bool started = false;
 
@@ -70,26 +81,21 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IP
     //}
 
     public void Init(InstantiationData data)
-    {
+    {        
         tType = data.tokenType;
         switch (tType)
         {
             case SyncTokenType.Player:
-                var pta = gameObject.AddComponent<PlayerCoreAdditive>();
-                pta.Init(this, data);
+                playerCoreAdditive.Init(data, photonView.IsMine);
+
                 break;
             default:
             case SyncTokenType.General:
-                var rta = gameObject.AddComponent<RoomCoreAdditive>();
-                rta.Init(this, data);
-                lcom.Add(rta);
+                if (photonView.IsMine)
+                    roomCoreAdditive.Init(data, photonView.IsMine);
 
-                var osa = gameObject.AddComponent<OwnershipSubAdditive>();
                 osa.Init(this, data);
-                lcom.Add(osa);
 
-                rta.enabled = true;
-                osa.enabled = true;
                 break;
         }
     }

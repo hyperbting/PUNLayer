@@ -1257,6 +1257,55 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""InRoom"",
+            ""id"": ""d3b8e417-f226-459d-96f7-df712403fa96"",
+            ""actions"": [
+                {
+                    ""name"": ""CreateHostPlayer"",
+                    ""type"": ""Button"",
+                    ""id"": ""9f134a4c-6bb4-4bdb-b013-e73ba2ad78d9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""Button With One Modifier"",
+                    ""id"": ""b1eca128-3142-44cb-baf0-60794d01ec6e"",
+                    ""path"": ""ButtonWithOneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CreateHostPlayer"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""d8fe2aca-d735-4429-9011-154efa442d13"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""CreateHostPlayer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""button"",
+                    ""id"": ""71bb28bb-7bf6-46c7-917b-be6be201bc26"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""CreateHostPlayer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -1354,6 +1403,9 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         // InsideHeadDetection
         m_InsideHeadDetection = asset.FindActionMap("InsideHeadDetection", throwIfNotFound: true);
         m_InsideHeadDetection_ShowAvatarDoll = m_InsideHeadDetection.FindAction("ShowAvatarDoll", throwIfNotFound: true);
+        // InRoom
+        m_InRoom = asset.FindActionMap("InRoom", throwIfNotFound: true);
+        m_InRoom_CreateHostPlayer = m_InRoom.FindAction("CreateHostPlayer", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1682,6 +1734,39 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         }
     }
     public InsideHeadDetectionActions @InsideHeadDetection => new InsideHeadDetectionActions(this);
+
+    // InRoom
+    private readonly InputActionMap m_InRoom;
+    private IInRoomActions m_InRoomActionsCallbackInterface;
+    private readonly InputAction m_InRoom_CreateHostPlayer;
+    public struct InRoomActions
+    {
+        private @PUN2Tester m_Wrapper;
+        public InRoomActions(@PUN2Tester wrapper) { m_Wrapper = wrapper; }
+        public InputAction @CreateHostPlayer => m_Wrapper.m_InRoom_CreateHostPlayer;
+        public InputActionMap Get() { return m_Wrapper.m_InRoom; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(InRoomActions set) { return set.Get(); }
+        public void SetCallbacks(IInRoomActions instance)
+        {
+            if (m_Wrapper.m_InRoomActionsCallbackInterface != null)
+            {
+                @CreateHostPlayer.started -= m_Wrapper.m_InRoomActionsCallbackInterface.OnCreateHostPlayer;
+                @CreateHostPlayer.performed -= m_Wrapper.m_InRoomActionsCallbackInterface.OnCreateHostPlayer;
+                @CreateHostPlayer.canceled -= m_Wrapper.m_InRoomActionsCallbackInterface.OnCreateHostPlayer;
+            }
+            m_Wrapper.m_InRoomActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @CreateHostPlayer.started += instance.OnCreateHostPlayer;
+                @CreateHostPlayer.performed += instance.OnCreateHostPlayer;
+                @CreateHostPlayer.canceled += instance.OnCreateHostPlayer;
+            }
+        }
+    }
+    public InRoomActions @InRoom => new InRoomActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -1761,5 +1846,9 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
     public interface IInsideHeadDetectionActions
     {
         void OnShowAvatarDoll(InputAction.CallbackContext context);
+    }
+    public interface IInRoomActions
+    {
+        void OnCreateHostPlayer(InputAction.CallbackContext context);
     }
 }

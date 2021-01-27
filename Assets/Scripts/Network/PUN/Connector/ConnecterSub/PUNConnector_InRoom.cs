@@ -40,15 +40,22 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, IOnEventCallback
 
     public GameObject RequestSyncToken(InstantiationData dataToSend, Transform trasn)
     {
-        //dataToSend.Add("uuid",PhotonNetwork.LocalPlayer.UserId);
+        if (!PhotonNetwork.InRoom)
+        {
+            Debug.LogWarning($"RequestSyncToken NotInRoom");
+            return null;
+        }
 
         GameObject go = null;
         if (dataToSend.tokenType == SyncTokenType.Player)
-            go = PhotonNetwork.Instantiate("TransmissionToken", trasn.position, trasn.rotation, 0, dataToSend.ToData());
+        {
+            Debug.Log($"PhotonNetwork.Instantiate RequestSyncToken");
+            go = PhotonNetwork.Instantiate("Token/TransmissionToken", trasn.position, trasn.rotation, 0, dataToSend.ToData());
+        }
         else
         {
             if (PhotonNetwork.IsMasterClient)
-                go = PhotonNetwork.InstantiateRoomObject("TransmissionToken", trasn.position, trasn.rotation, 0, dataToSend.ToData());
+                go = PhotonNetwork.InstantiateRoomObject("Token/TransmissionToken", trasn.position, trasn.rotation, 0, dataToSend.ToData());
             else
             {
                 Debug.LogWarning($"Non MC Cannot InstantiateRoomObject");
@@ -59,21 +66,6 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, IOnEventCallback
             Debug.LogWarning($"Issuing Null GameObject");
 
         return go;
-    }
-
-    // create obj first, attach PhotonView?, assign id
-    public bool ManualAttachPhotonView(GameObject go, InstantiationData dataToSend)
-    {
-        var pView = go.AddComponent<PhotonView>();
-
-        if (PhotonNetwork.IsMasterClient && PhotonNetwork.AllocateViewID(pView))
-        {
-            dataToSend.Add("viewID", photonView.ViewID.ToString());
-            return true;
-        }
-
-        Debug.LogError("Failed to allocate a ViewId.");
-        return false;
     }
 
     public GameObject ManualBuildSyncToken(InstantiationData dataToSend)
@@ -118,8 +110,8 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, IOnEventCallback
             //setup based on InstantiationData
 
             PhotonView photonView = tok.GetComponent<PhotonView>();
-            if (instData.TryGetValue("viewID", out string vid))
-                photonView.ViewID = int.Parse(vid);
+            if (instData.TryGetValue("viewID", out object vid))
+                photonView.ViewID = (int)vid;
             else
                 Debug.LogWarning($"ViewID Missing!");
         }

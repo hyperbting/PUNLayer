@@ -5,11 +5,13 @@ using UnityEngine;
 
 public class ObjectManager : SingletonMonoBehaviour<ObjectManager>, IObjectSupplier
 {
-    public Func<string, string, object> ObjectBuilder
+    Func<string, string, object> ObjectBuilder
     {
         get;
         set;
     }
+
+    #region IObjectSupplier
 
     public void RegisterBuilder(Func<string, string, object> builder)
     {
@@ -36,5 +38,5 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>, IObjectSuppl
 
         return obj;
     }
-
+    #endregion
 }

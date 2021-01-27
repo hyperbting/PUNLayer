@@ -29,7 +29,7 @@ public class SerializableHelper : BaseSyncHelper, IPunObservable
             //Debug.Log($"IsReading {keys.Count}");
             for (int i = 0; i < keys.Count; i++)
             {
-                //Debug.Log($"TryGetValue for Key:{keys[i]}");
+                Debug.Log($"TryGetValue for Key:{keys[i]}");
                 if (dataToSync.TryGetValue(keys[i], out SerializableReadWrite  val))
                 {
                     var va = stream.ReceiveNext();

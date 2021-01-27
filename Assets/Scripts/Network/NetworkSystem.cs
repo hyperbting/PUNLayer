@@ -13,8 +13,6 @@ public class NetworkSystem : MonoBehaviour, INetworkConnectUser, ITokenProvider,
     [Tooltip("Automatically create token when OnJoinedRoom/ CreatedAlreadyInRoom")]
     public GameObject NetworkSyncHandler;
 
-    public PersistExistenceHandler persistExistenceHandler;
-
     INetworkConnect inc;
 
     [Space]
@@ -26,35 +24,39 @@ public class NetworkSystem : MonoBehaviour, INetworkConnectUser, ITokenProvider,
     public Action OnJoinedOfflineRoomEvent { get; set; }
     #endregion
 
-    #region ITokenProvider. Network Transmission Token
+    #region ITokenHandlerProvider
     public ITokenHandler RequestTokenHandlerAttachment(SyncTokenType tokenType, object refScript)
     {
+        Debug.LogWarning($"RequestTokenHandler Try AttachToGameObject");
         var go = (refScript as Component).gameObject;
         if (go == null)
         {
-            Debug.LogWarning($"RequestTokenHandler {refScript} is not Attach2GameObject");
+            Debug.LogWarning($"RequestTokenHandler {refScript} is NOT AttachToGameObject");
             return null;
         }
 
+        var handUser = go.GetComponent<ISyncHandlerUser>();
+
         var res = go.AddComponent<TokenHandler>();
-        res.Setup(this, tokenType, go);
+        res.Setup(this, handUser);
         return res;
     }
 
     public object RequestTokenHandler(SyncTokenType tokenType, object refObj)
     {
-        //TODO: ObjectPooling!
         var go = Instantiate(NetworkSyncHandler, (refObj as GameObject).transform);
-        go.GetComponent<ITokenHandler>().Setup(this, tokenType, refObj);
+        var handUser = go.GetComponent<ISyncHandlerUser>();
+
+        go.GetComponent<ITokenHandler>()?.Setup(this, handUser);
+
         return go;
     }
+    #endregion
 
-    public object RequestSyncToken(InstantiationData datatoSend, object refObj)
+    #region ITokenProvider. Network Transmission Token
+    public object RequestSyncToken(InstantiationData datatoSend)
     {
-        Transform refTran = null;
-        if (refObj != null)
-            refTran = (refObj as GameObject).transform;
-        return inc.RequestSyncToken(datatoSend, refTran) as object;
+        return inc.RequestSyncToken(datatoSend, transform.root) as object;
     }
 
     public object RequestManualSyncToken(InstantiationData datatoSend)
@@ -68,6 +70,11 @@ public class NetworkSystem : MonoBehaviour, INetworkConnectUser, ITokenProvider,
     {
         return inc.IsOfflineRoom();
     }
+
+    public bool IsOnlineRoom()
+    {
+        return inc.IsOnlineRoom();
+    }
     #endregion
 
     #region Mono
@@ -75,8 +82,6 @@ public class NetworkSystem : MonoBehaviour, INetworkConnectUser, ITokenProvider,
     {
         inc = INetworkConnectGO.GetComponent<INetworkConnect>();
         inc.Init (this);
-
-        persistExistenceHandler.tokenProvider = this;
     }
 
     // Start is called before the first frame update

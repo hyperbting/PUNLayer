@@ -3,7 +3,18 @@ using System;
 
 public interface ISyncHandlerUser
 {
-    void SetupSync(ITransmissionBase itb, InstantiationData data);
+    // TokenUser must supply data about how/ what to create in remote
+    InstantiationData SupplyInstantiationData { get; }
+
+    // TokenUser MUST support how/ what to sync
+    SerializableReadWrite[] SerializableReadWrite { get; }
+
+    //local: SetupBy ObjectMaker 
+    //remote: SetupBy ITransmissionBase
+    void Init(InstantiationData data, bool isMine);
+
+    // For Local, TokenUser MUST know WHERE to get TokenHandler
+    void SetupTokenHandler();
 }
 
 // Player get one when created, use this to sync when IsHost
@@ -18,9 +29,7 @@ public interface ITokenHandler
     #endregion
 
     #region Init
-    void Setup(ITokenProvider itp, SyncTokenType tType, object refObj);
-    void Register(params SerializableReadWrite[] srws);
-    void Unregister(params SerializableReadWrite[] srws);
+    void Setup(ITokenProvider itp, ISyncHandlerUser handlerUser);
 
     Action<InstantiationData> OnJoinedOnlineRoomEventBeforeTokenCreation { get; set; }
     //Action<ITransmissionBase> OnJoinedOnlineRoomEventAfterTokenCreation { get; set; }
@@ -50,8 +59,8 @@ public interface ITokenHandlerProvider
 public interface ITokenProvider
 {
     #region Used by ITokenHandler
-    object RequestSyncToken(InstantiationData datatoSend, object refObj);
-    object RequestManualSyncToken(InstantiationData datatoSen);
+    object RequestSyncToken(InstantiationData datatoSend);
+    //object RequestManualSyncToken(InstantiationData datatoSen);
     #endregion
 }
 
@@ -64,8 +73,3 @@ public interface ITransmissionBase
     void Register(params SerializableReadWrite[] srws);
     void Unregister(params SerializableReadWrite[] srws);
 }
-
-//public interface ITokenAdditive
-//{
-//    void Init(ITransmissionBase itb, InstantiationData data);
-//}
