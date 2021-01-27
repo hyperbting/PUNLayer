@@ -101,10 +101,10 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IP
     }
 
     #region Setup SerializableHelper/ StateHelper
-    public void Setup(bool useSerialize=false)
-    {
-        (SeriHelper as SerializableHelper).enabled = useSerialize;
-    }
+    //public void Setup(bool useSerialize=false)
+    //{
+    //    (SeriHelper as SerializableHelper).enabled = useSerialize;
+    //}
     #endregion
 
     #region Register

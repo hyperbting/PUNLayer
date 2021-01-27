@@ -2,7 +2,7 @@
 
 public class SerializableReadWrite : SerializableWrite
 {
-    public new SyncHelperType syncType = SyncHelperType.PlayerState;
+    public new SyncHelperType syncType = SyncHelperType.Serializable;
 
     //Read from local
     public Func<object> Read;
@@ -20,7 +20,7 @@ public class SerializableReadWrite : SerializableWrite
 
 public class SerializableWrite
 {
-    public SyncHelperType syncType = SyncHelperType.Serializable;
+    public SyncHelperType syncType = SyncHelperType.RoomState;
 
     public string name;
     //Write to local

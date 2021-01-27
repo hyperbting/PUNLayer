@@ -42,9 +42,9 @@ public class PlayerCoreAdditive : MonoBehaviour, ICoreAdditive
             var istu = RefPlayer.GetComponent<ISyncHandlerUser>();
             istu.Init(data, false);
 
-            var ish = GetComponent<SerializableHelper>();
+            var ish = GetComponent<ITransmissionBase>();
             ish.Register(istu.SerializableReadWrite);
-            ish.enabled = true;
+            //ish.enabled = true;
 
             var pa = RefPlayer.GetComponent<PersistenceHelper>();
             if (pa != null)

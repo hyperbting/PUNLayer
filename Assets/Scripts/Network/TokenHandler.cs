@@ -180,9 +180,9 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
         {
             Debug.LogWarning($"TokenUser Sync: {tokenUser.SerializableReadWrite.Length}");
 
-            var ish = trasnTokenGO.GetComponent<SerializableHelper>();
-            ish.Register(tokenUser.SerializableReadWrite);
-            ish.enabled = true;
+            var itb = trasnTokenGO.GetComponent<ITransmissionBase>();
+            itb.Register(tokenUser.SerializableReadWrite);
+            //itb.enabled = true;
         }
         else
         {
