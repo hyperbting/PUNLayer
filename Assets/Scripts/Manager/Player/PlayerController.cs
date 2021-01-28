@@ -47,6 +47,8 @@ public partial class Player : MonoBehaviour
         if (!isHost)
             return;
 
+        Debug.LogWarning($"SetupInputSystem For Local");
+
         //// isHost()
         pInput.Player.Fire.performed += Fire;
         pInput.Player.Fire.performed += DebugClick;

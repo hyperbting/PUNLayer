@@ -1,6 +1,9 @@
 ﻿using System;
 using UnityEngine;
 
+/// <summary>
+/// Token handler is used By ISyncHandlerUser to Setup Transmission Automatically
+/// </summary>
 public class TokenHandler : MonoBehaviour, ITokenHandler
 {
     //readonly Dictionary<string, SerializableReadWrite> dic = new Dictionary<string, SerializableReadWrite>();
@@ -50,6 +53,39 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
 
         this.enabled = true;
     }
+
+    #region JoinedRoom
+    void TryOnJoinedRoomAct()
+    {
+        if (!ServiceManager.Instance.networkSystem.IsOnlineRoom())
+        {
+            Debug.Log($"[TokenHandler] TryOnJoinedRoomAct NotInOnlineRoom");
+            return;
+        }
+
+        OnJoinedOnlineRoomAct();
+    }
+
+    public virtual void OnJoinedOnlineRoomAct()
+    {
+        Debug.Log($"[TokenHandler] OnJoinedOnlineRoomAct");
+
+        //// Online InRoom Load InstaData from TokenUser
+        InstantiationData datatoSend = tokenUser?.SupplyInstantiationData;
+
+        OnJoinedOnlineRoomEventBeforeTokenCreation?.Invoke(datatoSend);
+
+        //// InRoom RequestSyncToken
+        trasnTokenGO = tokenProvider.RequestSyncToken(datatoSend) as GameObject;
+        if (!HavingToken())
+        {
+            Debug.LogWarning($"Not Yet InRoom for Register");
+            return;
+        }
+
+        trasnTokenGO.GetComponent<ITransmissionBase>()?.Setup(datatoSend, tokenUser);
+    }
+    #endregion
 
     #region PlayerProperties: direct set
     public bool PushStateInto(string key, object data)
@@ -143,51 +179,4 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
         _ = scr.ReleaseOwnership();
     }
     #endregion
-
-    void TryOnJoinedRoomAct()
-    {
-        if (!ServiceManager.Instance.networkSystem.IsOnlineRoom())
-        {
-            Debug.Log($"[TokenHandler] TryOnJoinedRoomAct NotInOnlineRoom");
-            return;
-        }
-
-        OnJoinedOnlineRoomAct();
-    }
-
-    public virtual void OnJoinedOnlineRoomAct()
-    {
-        Debug.Log($"[TokenHandler] OnJoinedOnlineRoomAct");
-
-        // Online InRoom Create a NetworkedSyncToken
-        InstantiationData datatoSend = tokenUser?.SupplyInstantiationData;
-
-        OnJoinedOnlineRoomEventBeforeTokenCreation?.Invoke(datatoSend);
-
-        InRoomCreateTrasnToken(datatoSend);
-    }
-
-    public void InRoomCreateTrasnToken(InstantiationData datatoSend)
-    {
-        trasnTokenGO = tokenProvider.RequestSyncToken(datatoSend) as GameObject;
-        if (!HavingToken())
-        {
-            Debug.LogWarning($"Not Yet InRoom for Register");
-            return;
-        }
-
-        if (tokenUser?.SerializableReadWrite != null)
-        {
-            Debug.LogWarning($"TokenUser Sync: {tokenUser.SerializableReadWrite.Length}");
-
-            var itb = trasnTokenGO.GetComponent<ITransmissionBase>();
-            itb.Register(tokenUser.SerializableReadWrite);
-            //itb.enabled = true;
-        }
-        else
-        {
-            Debug.LogWarning($"No TokenUser for Sync");
-        }
-    }
-
 }

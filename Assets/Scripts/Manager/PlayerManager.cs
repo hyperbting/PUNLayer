@@ -59,7 +59,6 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager>
             insData["ablePlayerEcho"] = true;
 
             playerScript.Init(insData, true);
-            playerScript.SetupTokenHandler();
         }
         Debug.LogWarning($"InstantiatePlayerObject HostPlayer Created");
         return go;

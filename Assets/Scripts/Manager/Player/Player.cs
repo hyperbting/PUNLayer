@@ -76,6 +76,12 @@ public partial class Player : MonoBehaviour, ISyncHandlerUser
         Debug.LogWarning($"ISyncHandlerUser Init isMine?{isMine}");
         insdata = data;
 
+        //// Local HostPlayer Ask for a TokenHandler
+        if (isMine)
+        {
+            SetupTokenHandler();
+        }
+
         //RaiseEventHelper.instance.Register(new NetworkLayer.RoomEventRegistration()
         //{
         //    key = "Emit",
@@ -86,22 +92,14 @@ public partial class Player : MonoBehaviour, ISyncHandlerUser
     }
 
     //// For Local, TokenUser MUST know WHERE to get TokenHandler
-    public void SetupTokenHandler()
+    void SetupTokenHandler()
     {
+        Debug.Log($"ISyncHandlerUser SetupTokenHandler");
         tokHandler = ServiceManager.Instance.networkSystem.RequestTokenHandlerAttachment(insdata.tokenType, this);
 
         //var thGO = ServiceManager.Instance.networkSystem.RequestTokenHandler(insdata.tokenType, this) as GameObject;
         //thGO.transform.SetParent(transform);
     }
-
-    //public void SetupSync(ITransmissionBase itb, InstantiationData data)
-    //{
-    //    //Debug.Log("SetupSync");
-    //    if (data.TryGetValue("ablePlayerEcho", out object val) && (bool)val)
-    //    {
-    //        itb.Register(BuildEchoSerializableReadWrite());
-    //    }
-    //}
 
     SerializableReadWrite BuildEchoSerializableReadWrite()
     {
@@ -151,6 +149,5 @@ public partial class Player : MonoBehaviour, ISyncHandlerUser
     {
         return refTransform.rotation;
     }
-
     #endregion SerilizableReadWrite
 }

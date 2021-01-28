@@ -33,6 +33,8 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IP
         }
     }
     #endregion
+
+    public bool started = false;
     public override void OnEnable()
     {
         base.OnEnable();
@@ -58,8 +60,9 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IP
             return;
 
         InstantiationData data = new InstantiationData(photonView.InstantiationData);
-        Debug.Log($"TransmissionBase Start. photonView.IsMine:{photonView.IsMine} {data}");
-        Init(data);
+        Debug.Log($"TransmissionBase Start Remotely.");
+        Setup(data, null);
+
         started = true;
     }
 
@@ -70,42 +73,36 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IP
         base.OnDisable();
     }
 
-    public bool started = false;
+    public void Setup(InstantiationData insData, ISyncHandlerUser tokenUser = null)
+    {
+        Debug.Log($"TransmissionBase Setup. photonView.IsMine:{photonView.IsMine} {insData}");
 
-    //// for Owner
-    //List<SerializableReadWrite> srw = new List<SerializableReadWrite>();
-    //public void Setup(List<SerializableReadWrite> srws)
-    //{
-    //    srw = srws;
-    //    Invoke("RegisterSerializableReadWrite", 0);
-    //}
-
-    public void Init(InstantiationData data)
-    {        
-        tType = data.tokenType;
+        tType = insData.tokenType;
         switch (tType)
         {
             case SyncTokenType.Player:
-                playerCoreAdditive.Init(data, photonView.IsMine);
+                playerCoreAdditive.Init(insData, photonView.IsMine);
 
                 break;
             default:
             case SyncTokenType.General:
-                if (photonView.IsMine)
-                    roomCoreAdditive.Init(data, photonView.IsMine);
+                roomCoreAdditive.Init(insData, photonView.IsMine);
 
-                osa.Init(this, data);
+                osa.Init(this, insData);
 
                 break;
         }
-    }
 
-    #region Setup SerializableHelper/ StateHelper
-    //public void Setup(bool useSerialize=false)
-    //{
-    //    (SeriHelper as SerializableHelper).enabled = useSerialize;
-    //}
-    #endregion
+        if (tokenUser?.SerializableReadWrite != null)
+        {
+            Debug.LogWarning($"TransmissionBase tokenUser.SerializableReadWrite: {tokenUser.SerializableReadWrite.Length}");
+            Register(tokenUser.SerializableReadWrite);
+        }
+        else
+        {
+            Debug.LogWarning($"No TokenUser/ no SerializableReadWrite for Sync!");
+        }
+    }
 
     #region Register
     public void Register(params SerializableReadWrite[] srws)

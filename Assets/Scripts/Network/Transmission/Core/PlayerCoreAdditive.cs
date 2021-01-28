@@ -36,15 +36,15 @@ public class PlayerCoreAdditive : MonoBehaviour, ICoreAdditive
                 return;
             }
 
-            // this is remote one, pass on InstantiationData
+            // remote one, Create based on ObjectName
             RefPlayer = ObjectManager.Instance.BuildObject((string)objname, (string)objuuid) as GameObject;
 
+            // remote one, pass InstantiationData on
             var istu = RefPlayer.GetComponent<ISyncHandlerUser>();
             istu.Init(data, false);
 
             var ish = GetComponent<ITransmissionBase>();
             ish.Register(istu.SerializableReadWrite);
-            //ish.enabled = true;
 
             var pa = RefPlayer.GetComponent<PersistenceHelper>();
             if (pa != null)
