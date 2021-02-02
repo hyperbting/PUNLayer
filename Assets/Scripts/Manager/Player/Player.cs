@@ -86,6 +86,7 @@ public partial class Player : MonoBehaviour, ISyncHandlerUser
             SetupTokenHandler();
 
             playerAbility.InvokeRepeating("UpdateMurmur", 3, 3);
+            playerAbility.InvokeRepeating("UpdateMurmur2", 2, 1);
         }
 
         //RaiseEventHelper.instance.Register(new NetworkLayer.RoomEventRegistration()
