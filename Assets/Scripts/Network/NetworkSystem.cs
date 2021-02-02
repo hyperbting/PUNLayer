@@ -59,10 +59,10 @@ public class NetworkSystem : MonoBehaviour, INetworkConnectUser, ITokenProvider,
         return inc.RequestSyncToken(datatoSend, transform.root) as object;
     }
 
-    public object RequestManualSyncToken(InstantiationData datatoSend)
-    {
-        return inc.ManualBuildSyncToken(datatoSend);
-    }
+    //public object RequestManualSyncToken(InstantiationData datatoSend)
+    //{
+    //    return inc.ManualBuildSyncToken(datatoSend);
+    //}
     #endregion
 
     #region checker?

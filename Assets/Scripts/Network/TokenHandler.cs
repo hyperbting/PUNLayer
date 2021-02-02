@@ -146,9 +146,9 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
             return;
         }
 
-        if (trasnTokenGO == null)
+        if (!HavingToken())
         {
-            Debug.Log($"trasnTokenGO missing");
+            Debug.Log($"NotInRoom");
             return;
         }
 

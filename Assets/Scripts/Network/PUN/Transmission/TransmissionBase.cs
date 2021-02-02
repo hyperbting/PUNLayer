@@ -88,7 +88,7 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IP
             case SyncTokenType.General:
                 roomCoreAdditive.Init(insData, photonView.IsMine);
 
-                osa.Init(this, insData);
+                osa.Init(insData);
 
                 break;
         }

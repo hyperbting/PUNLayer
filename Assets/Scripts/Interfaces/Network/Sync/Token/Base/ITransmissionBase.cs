@@ -2,10 +2,12 @@
 public interface ITransmissionBase
 {
     /// <summary>
-    /// Setup By TokenHandler locally or ITransmissionBase remotely
+    /// Setup By TokenHandler locally 
+    /// or 
+    /// ITransmissionBase remotely
     /// </summary>
     /// <param name="insData"></param>
-    /// <param name="tokenUser"></param>
+    /// <param name="tokenUser">null when remotely; TokenHandler will always assign one</param>
     void Setup(InstantiationData insData, ISyncHandlerUser tokenUser = null);
 
     ISerializableHelper SeriHelper { get; }
