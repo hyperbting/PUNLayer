@@ -1,16 +1,14 @@
 ﻿using System;
 using UnityEngine;
 
+/// <summary>
+/// Token handler is used By ISyncHandlerUser to Setup Transmission Automatically
+/// </summary>
 public class TokenHandler : MonoBehaviour, ITokenHandler
 {
     //readonly Dictionary<string, SerializableReadWrite> dic = new Dictionary<string, SerializableReadWrite>();
     [Header("Created On Joined Room")]
-    [SerializeField] TransmissionBase transToken;
-
-    [Header("Debug Purpose")]
-    [Tooltip("Determine Interat with either Room/Player Properties")]
-    [SerializeField] SyncTokenType tokenType;
-    [SerializeField] object refObject;
+    [SerializeField] GameObject trasnTokenGO;
 
     ISyncHandlerUser tokenUser;
     ITokenProvider tokenProvider;
@@ -18,22 +16,11 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
     public Action<InstantiationData> OnJoinedOnlineRoomEventBeforeTokenCreation { get; set; }
     //public Action<ITransmissionBase> OnJoinedOnlineRoomEventAfterTokenCreation { get; set; }
 
-    private void OnEnable()
-    {
-        //Register for Token with NetworkSystem
-        ServiceManager.Instance.networkSystem.OnJoinedOnlineRoomEvent += OnJoinedOnlineRoomAct;
-    }
-
-    private void OnDisable()
-    {
-        ServiceManager.Instance.networkSystem.OnJoinedOnlineRoomEvent -= OnJoinedOnlineRoomAct;
-    }
-
     #region Checker
     public bool HavingToken()
     {
-        return transToken != null;
-		}
+        return trasnTokenGO != null;
+	}
     #endregion
 
     #region Getter
@@ -54,35 +41,51 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
     }
     #endregion
 
-    public void Setup(ITokenProvider itp, SyncTokenType tType, object refObj)
+    public void Setup(ITokenProvider itp, ISyncHandlerUser handlerUser)
     {
         tokenProvider = itp;
 
-        tokenType = tType;
-        refObject = refObj;
+        tokenUser = handlerUser;
 
-        tokenUser = (refObject as GameObject).GetComponent<ISyncHandlerUser>();
+        ServiceManager.Instance.networkSystem.OnJoinedOnlineRoomEvent += TryOnJoinedRoomAct;
+
+        TryOnJoinedRoomAct();
+
+        this.enabled = true;
     }
 
-    public void Register(params SerializableReadWrite[] srws)
+    #region JoinedRoom
+    void TryOnJoinedRoomAct()
     {
+        if (!ServiceManager.Instance.networkSystem.IsOnlineRoom())
+        {
+            Debug.Log($"[TokenHandler] TryOnJoinedRoomAct NotInOnlineRoom");
+            return;
+        }
+
+        OnJoinedOnlineRoomAct();
+    }
+
+    public virtual void OnJoinedOnlineRoomAct()
+    {
+        Debug.Log($"[TokenHandler] OnJoinedOnlineRoomAct");
+
+        //// Online InRoom Load InstaData from TokenUser
+        InstantiationData datatoSend = tokenUser?.SupplyInstantiationData;
+
+        OnJoinedOnlineRoomEventBeforeTokenCreation?.Invoke(datatoSend);
+
+        //// InRoom RequestSyncToken
+        trasnTokenGO = tokenProvider.RequestSyncToken(datatoSend) as GameObject;
         if (!HavingToken())
         {
             Debug.LogWarning($"Not Yet InRoom for Register");
             return;
         }
-        transToken.Register(srws);
-    }
 
-    public void Unregister(params SerializableReadWrite[] srws)
-    {
-        if (!HavingToken())
-        {
-            Debug.LogWarning($"Not Yet InRoom for Unregister");
-            return;
-        }
-        transToken.Unregister(srws);
+        trasnTokenGO.GetComponent<ITransmissionBase>()?.Setup(datatoSend, tokenUser);
     }
+    #endregion
 
     #region PlayerProperties: direct set
     public bool PushStateInto(string key, object data)
@@ -92,9 +95,9 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
             Debug.Log($"NotInRoom");
             return false;
         }
-    	
+
         // Bsed on registered tokenType, use corresponding helper, Data will sync through Player/RoomProperties 
-        transToken.UpdateProperties(tokenType, key, data);
+        trasnTokenGO.GetComponent<TransmissionBase>().UpdateProperties(tokenUser.SupplyInstantiationData.tokenType, key, data);
         return true;
 	}
     #endregion
@@ -110,27 +113,13 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
 
         var datatoSend = InstantiationData.Build(SyncTokenType.General);
         datatoSend.Add("RenameGO", "InRoomObject");
-        var obj = tokenProvider.RequestSyncToken(datatoSend, gameObject);
+        targetObj = tokenProvider.RequestSyncToken(datatoSend) as GameObject;
 
-        var ntGO = obj as GameObject;
-        if (ntGO != null)
-        {
-            targetObj = ntGO;
-            //ntGO.name = "InRoomObject";
-            //transToken = ntGO.GetComponent<TransmissionBase>();
-        }
-
-        return obj;
+        return targetObj;
     }
 
     public bool DestroyTargetObject()
     {
-        if (!HavingToken())
-        {
-            Debug.Log($"NotInRoom");
-            return false;
-        }
-
         if (targetObj == null)
         {
             Debug.Log($"NoTarget");
@@ -157,9 +146,9 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
             return;
         }
 
-        if (trasnTokenGO == null)
+        if (!HavingToken())
         {
-            Debug.Log($"trasnTokenGO missing");
+            Debug.Log($"NotInRoom");
             return;
         }
 
@@ -190,26 +179,4 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
         _ = scr.ReleaseOwnership();
     }
     #endregion
-
-    GameObject trasnTokenGO;
-    public virtual void OnJoinedOnlineRoomAct()
-    {
-        Debug.Log($"[TokenHandler] OnJoinedOnlineRoomAct");
-
-        // Online InRoom Create a NetworkedSyncToken
-        var datatoSend = InstantiationData.Build(tokenType);
-
-        OnJoinedOnlineRoomEventBeforeTokenCreation?.Invoke(datatoSend);
-
-        InRoomCreatetrasnToken(datatoSend);
-    }
-
-    public void InRoomCreatetrasnToken(InstantiationData datatoSend)
-    {
-        trasnTokenGO = tokenProvider.RequestSyncToken(datatoSend, refObject) as GameObject;
-        if (trasnTokenGO != null)
-        {
-            transToken = trasnTokenGO.GetComponent<TransmissionBase>();
-        }
-    }
 }

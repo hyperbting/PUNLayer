@@ -1,14 +1,14 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 [Serializable]
-public class InstantiationData: Dictionary<string,string>
+public class InstantiationData : Dictionary<string, object>
 {
     public SyncTokenType tokenType;
-    public List<string> keyValuePairs = new List<string>();
 
     #region
-    public InstantiationData():base()
+    public InstantiationData() : base()
     {
     }
 
@@ -16,10 +16,9 @@ public class InstantiationData: Dictionary<string,string>
     {
         tokenType = (SyncTokenType)data[0];
 
-        for (int i = 1; i < data.Length; i++)
-            keyValuePairs.Add((string)data[i]);
-
-        list2Dic();
+        //(i, i+1), i=1  
+        for (int i = 1; i < data.Length; i += 2)
+            this[(string)data[i]] = data[i + 1];
     }
 
     public object[] ToData()
@@ -46,42 +45,24 @@ public class InstantiationData: Dictionary<string,string>
 
     public static InstantiationData Build(string str)
     {
-        var newone = UnityEngine.JsonUtility.FromJson<InstantiationData>(str);
-        newone.list2Dic();
-        return newone;
+        return JsonConvert.DeserializeObject<InstantiationData>(str); ;
+    }
+
+    public bool TryGetValue(InstantiationKey enumKey, out object value)
+    {
+        return TryGetValue(enumKey.ToString(), out value);
     }
 
     public override string ToString()
     {
-        dic2List();
-        return UnityEngine.JsonUtility.ToJson(this);
+        return JsonConvert.SerializeObject(this);
     }
 
-    #region inner helper
-    void dic2List()
+    public enum InstantiationKey
     {
-        // pull from dictionary
-        keyValuePairs.Clear();
+        none,
 
-        foreach (var kv in this)
-        {
-            keyValuePairs.Add(kv.Key);
-            keyValuePairs.Add(kv.Value);
-        }
+        objectuuid,
+        objectname,
     }
-
-    void list2Dic()
-    {
-        if (keyValuePairs == null  || keyValuePairs.Count <= 0)
-            return;
-
-        // put into dictionary
-        for (int i = 0; i < keyValuePairs.Count; i+=2)
-        {
-            this[keyValuePairs[i]] = keyValuePairs[i+1];
-        }
-
-        keyValuePairs.Clear();
-    }
-    #endregion
 }

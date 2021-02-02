@@ -1,5 +1,4 @@
-﻿
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using UnityEngine;
 using UnityWeld.Binding;
 

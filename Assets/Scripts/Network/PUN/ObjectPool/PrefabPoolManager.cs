@@ -13,7 +13,7 @@ public class PrefabPoolManager : SingletonMonoBehaviour<PrefabPoolManager>, IPun
             CreatePrefabPool(go);
 
         // replace Photon One with myself
-        PhotonNetwork.PrefabPool = this;
+        //PhotonNetwork.PrefabPool = this;
     }
     #endregion
 

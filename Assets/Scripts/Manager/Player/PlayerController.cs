@@ -1,14 +1,10 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-public class Player : MonoBehaviour, ISyncHandlerUser
+public partial class Player : MonoBehaviour
 {
-    ITokenHandler tokHandler;
-
-    [Space]
-
-    [Space]
-    public bool isHost = false;
-
+    [Header("Player Controller")]
     public float moveSpeed;
     public float rotateSpeed;
     public PUN2Tester pInput;
@@ -17,36 +13,14 @@ public class Player : MonoBehaviour, ISyncHandlerUser
     [SerializeField] Vector2 move;
     [SerializeField] Vector2 around;
 
-    public void OnEnable()
-    {
-        pInput.Enable();
-    }
-
-    public void OnDisable()
-    {
-        pInput.Disable();
-    }
-
-    public void Awake()
+    #region mono
+    public void DoAwake()
     {
         pInput = new PUN2Tester();
-
-        //if (itHolder == null)
-        //    itHolder = GetComponent<ItemHolder>();
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        if (!isHost)
-        {
-            return;
-        }
-        SetupSync();
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void DoFixedUpdate()
     {
         if (!isHost || pInput == null)
             return;
@@ -65,8 +39,32 @@ public class Player : MonoBehaviour, ISyncHandlerUser
 
         //UpdateTokenTransform();
     }
+    #endregion
 
     #region InputSystem Actions
+    void SetupInputSystem()
+    {
+        if (!isHost)
+            return;
+
+        Debug.LogWarning($"SetupInputSystem For Local");
+
+        //// isHost()
+        pInput.Player.Fire.performed += Fire;
+        pInput.Player.Fire.performed += DebugClick;
+
+        pInput.Player.Echo.performed += Echo;
+        pInput.Player.Emit.performed += Emit;
+        pInput.Player.Devour.performed += Devour;
+
+        pInput.Player.RequestOwnership.performed += RequestOwner;
+        pInput.Player.ReleaseOwnership.performed += ReleaseOwner;
+
+        pInput.Player.LoadScene.performed += LoadScene;
+
+        pInput.Player.ChangeGroup.performed += SetInterestGroup;
+    }
+
     private void DebugClick(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
     {
 #if ENABLE_INPUT_SYSTEM
@@ -78,7 +76,7 @@ public class Player : MonoBehaviour, ISyncHandlerUser
         //mouseCursor.position = mousePosition;
 
         var ray = Camera.main.ScreenPointToRay(mousePosition);
-        var targets = Physics.RaycastAll(Camera.main.ScreenPointToRay(mousePosition), Mathf.Infinity, LayerMask.GetMask("NetworkView") );
+        var targets = Physics.RaycastAll(Camera.main.ScreenPointToRay(mousePosition), Mathf.Infinity, LayerMask.GetMask("NetworkView"));
         foreach (var ta in targets)
         {
             //Debug.Log($"{ta.transform.name}");
@@ -195,86 +193,4 @@ public class Player : MonoBehaviour, ISyncHandlerUser
     }
     #endregion
 
-    #region ISyncHandlerUser; talk to TokenHandler; Called By SyncToken when OnJoinedOnlineRoom
-    void SetupSync()
-    {
-        if (!isHost)
-        {
-            return;
-        }
-
-        //// isHost()
-        pInput.Player.Fire.performed += Fire;
-        pInput.Player.Fire.performed += DebugClick;
-
-        pInput.Player.Echo.performed += Echo;
-        pInput.Player.Emit.performed += Emit;
-        pInput.Player.Devour.performed += Devour;
-
-        pInput.Player.RequestOwnership.performed += RequestOwner;
-        pInput.Player.ReleaseOwnership.performed += ReleaseOwner;
-
-        pInput.Player.LoadScene.performed += LoadScene;
-
-        pInput.Player.ChangeGroup.performed += SetInterestGroup;
-
-        //Request TokenHandler From NetworkManager
-        ServiceManager.Instance.networkSystem.RequestTokenHandlerAttachment(SyncTokenType.Player, this);
-        tokHandler = GetComponent<ITokenHandler>();
-
-        //tokHandler = (ServiceManager.Instance.networkSystem.RequestTokenHandler(SyncTokenType.Player, gameObject) as GameObject)
-        //    .GetComponent<ITokenHandler>();
-
-        //What Ability this obj will have
-        tokHandler.OnJoinedOnlineRoomEventBeforeTokenCreation += (initdata) => {
-            initdata.Add("syncPUNTrans", "true");
-            initdata.Add("ablePlayerEcho", "true");
-        };
-
-        //tokHandler.OnJoinedOnlineRoomEventAfterTokenCreation += (trans) => { };
-
-        RaiseEventHelper.instance.Register(new NetworkLayer.RoomEventRegistration()
-        {
-            key = "Emit",
-            OnRoomEvent = EmitPropToLocal,
-            cachingOption = NetworkLayer.EventCaching.DoNotCache,
-            receivers = NetworkLayer.EventTarget.All
-        });
-    }
-
-    public void SetupSync(ITransmissionBase itb, InstantiationData data)
-    {
-        //Debug.Log("SetupSync");
-        if (data.TryGetValue("ablePlayerEcho", out string val) && val == "true")
-        {
-            itb.Register(BuildEchoSerializableReadWrite());
-        }
-    }
-
-    SerializableReadWrite BuildEchoSerializableReadWrite()
-    {
-        return new SerializableReadWrite(
-            "k1",
-            null,
-            EchoPropToLocal
-            ){ syncType = SyncHelperType.PlayerState };
-    }
-
-    //object EchoLocalToProp()
-    //{
-    //    return Time.fixedTime;
-    //}
-
-    void EchoPropToLocal(object obj)
-    {
-        Debug.Log($"{gameObject.name} k1 {obj}"); 
-    }
-
-    void EmitPropToLocal(object[] objs)
-    {
-        Debug.Log($"Emit EmitPropToLocal:");
-        foreach(var obj in objs)
-            Debug.Log($"{obj}");
-    }
-    #endregion SerilizableReadWrite
 }

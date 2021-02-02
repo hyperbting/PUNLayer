@@ -37,7 +37,7 @@ public class BaseSyncHelper : MonoBehaviourPunCallbacks, ISerializableHelper
         if (!dataToSync.ContainsKey(srw.name))
         {
             dataToSync.Add(srw.name, srw);
-            Debug.Log($"{srw.name} Registered");
+            Debug.Log($"{srw.name} Registered ({dataToSync.Keys.Count}");
         }
     }
 

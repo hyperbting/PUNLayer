@@ -5,6 +5,10 @@ using UnityEngine;
 [RequireComponent(typeof(PhotonView))]
 public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IPooledObject
 {
+    [SerializeField] OwnershipSubAdditive osa;
+    ICoreAdditive playerCoreAdditive;
+    ICoreAdditive roomCoreAdditive;
+
     [SerializeField] SyncTokenType tType;
     #region Properties
     [SerializeField] SerializableHelper seriHelper;
@@ -29,41 +33,36 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IP
         }
     }
     #endregion
+
+    public bool started = false;
     public override void OnEnable()
     {
         base.OnEnable();
 
-        InstantiationData data = null;
-        if (photonView.InstantiationData != null)
-            data = new InstantiationData(photonView.InstantiationData);
-        else
-            return;
-
-        Debug.Log($"TransmissionBase Start {data}");
-        tType = data.tokenType;
-        switch (tType)
+        var targets = GetComponents<ICoreAdditive>();
+        foreach (var tar in targets)
         {
-            case SyncTokenType.Player:
-                var pta = gameObject.AddComponent<PlayerCoreAdditive>();
-                pta.Init(this, data);
-                break;
-            default:
-            case SyncTokenType.General:
-                var rta = gameObject.AddComponent<RoomCoreAdditive>();
-                rta.Init(this, data);
-                lcom.Add(rta);
-
-                var osa = gameObject.AddComponent<OwnershipSubAdditive>();
-                osa.Init(this, data);
-                lcom.Add(osa);
-
-                rta.enabled = true;
-                osa.enabled = true;
-                break;
+            switch (tar.AdditiveType)
+            {
+                case SyncTokenType.Player:
+                    playerCoreAdditive = tar;
+                    break;
+                case SyncTokenType.General:
+                    roomCoreAdditive = tar;
+                    break;
+                default:
+                    Debug.LogWarning($"Unprepared Detected {tar.AdditiveType}");
+                    break;
+            }
         }
 
-        //foreach (var ita in gameObject.GetComponents<ITokenAdditive>())
-        //    ita.Init(this. data);
+        if (photonView.InstantiationData == null)
+            return;
+
+        InstantiationData data = new InstantiationData(photonView.InstantiationData);
+        Debug.Log($"TransmissionBase Start Remotely.");
+        Setup(data, null);
+
         started = true;
     }
 
@@ -72,32 +71,38 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IP
         started = false;
 
         base.OnDisable();
-
-        for (int i =lcom.Count-1;i>=0;i--)
-        {
-            lcom[i].enabled = false;
-        }
-        lcom.Clear();
     }
 
-    List<MonoBehaviour> lcom = new List<MonoBehaviour>();
-
-    public bool started = false;
-
-    //// for Owner
-    //List<SerializableReadWrite> srw = new List<SerializableReadWrite>();
-    //public void Setup(List<SerializableReadWrite> srws)
-    //{
-    //    srw = srws;
-    //    Invoke("RegisterSerializableReadWrite", 0);
-    //}
-
-    #region Setup SerializableHelper/ StateHelper
-    public void Setup(bool useSerialize=false)
+    public void Setup(InstantiationData insData, ISyncHandlerUser tokenUser = null)
     {
-        (SeriHelper as SerializableHelper).enabled = useSerialize;
+        Debug.Log($"TransmissionBase Setup. photonView.IsMine:{photonView.IsMine} {insData}");
+
+        tType = insData.tokenType;
+        switch (tType)
+        {
+            case SyncTokenType.Player:
+                playerCoreAdditive.Init(insData, photonView.IsMine);
+
+                break;
+            default:
+            case SyncTokenType.General:
+                roomCoreAdditive.Init(insData, photonView.IsMine);
+
+                osa.Init(insData);
+
+                break;
+        }
+
+        if (tokenUser?.SerializableReadWrite != null)
+        {
+            Debug.LogWarning($"TransmissionBase tokenUser.SerializableReadWrite: {tokenUser.SerializableReadWrite.Length}");
+            Register(tokenUser.SerializableReadWrite);
+        }
+        else
+        {
+            Debug.LogWarning($"No TokenUser/ no SerializableReadWrite for Sync!");
+        }
     }
-    #endregion
 
     #region Register
     public void Register(params SerializableReadWrite[] srws)

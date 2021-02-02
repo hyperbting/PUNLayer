@@ -13,7 +13,9 @@ GameObject:
   - component: {fileID: 8624510176210393185}
   - component: {fileID: 789010574065468813}
   - component: {fileID: 3129467774125685042}
-  - component: {fileID: 7780768246513051558}
+  - component: {fileID: 1414722674387622666}
+  - component: {fileID: 6121163032142091507}
+  - component: {fileID: 3198224229752424880}
   m_Layer: 11
   m_Name: TransmissionToken
   m_TagString: Untagged
@@ -52,7 +54,7 @@ MonoBehaviour:
   prefixField: -1
   observableSearch: 0
   Synchronization: 3
-  OwnershipTransfer: 0
+  OwnershipTransfer: 2
   ObservedComponents:
   - {fileID: 789010574065468813}
   viewIdField: 0
@@ -70,9 +72,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dae0382315942114093bb2da32cf4a1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  osa: {fileID: 3198224229752424880}
+  tType: 0
   seriHelper: {fileID: 789010574065468813}
   statHelper: {fileID: 3129467774125685042}
   started: 0
+  assignedName: 
+  parentPool: {fileID: 0}
 --- !u!114 &789010574065468813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -97,16 +103,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc03d2f5c0695e248825907569df421c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!65 &7780768246513051558
-BoxCollider:
+--- !u!114 &1414722674387622666
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7690134541824521141}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c45b023b1fd09b04eb87d1f43e473dd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  refObject: {fileID: 0}
+--- !u!114 &6121163032142091507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7690134541824521141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b3b184c44917f14cbd156af4aee3624, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RefPlayer: {fileID: 0}
+--- !u!114 &3198224229752424880
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7690134541824521141}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 854f704d31d0b314c82a5d88ffe1bf69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownershipOption: 2

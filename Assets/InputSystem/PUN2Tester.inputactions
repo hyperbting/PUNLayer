@@ -1244,6 +1244,55 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "InRoom",
+            "id": "d3b8e417-f226-459d-96f7-df712403fa96",
+            "actions": [
+                {
+                    "name": "CreateHostPlayer",
+                    "type": "Button",
+                    "id": "9f134a4c-6bb4-4bdb-b013-e73ba2ad78d9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "Button With One Modifier",
+                    "id": "b1eca128-3142-44cb-baf0-60794d01ec6e",
+                    "path": "ButtonWithOneModifier",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CreateHostPlayer",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "modifier",
+                    "id": "d8fe2aca-d735-4429-9011-154efa442d13",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "CreateHostPlayer",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "button",
+                    "id": "71bb28bb-7bf6-46c7-917b-be6be201bc26",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "CreateHostPlayer",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                }
+            ]
         }
     ],
     "controlSchemes": [

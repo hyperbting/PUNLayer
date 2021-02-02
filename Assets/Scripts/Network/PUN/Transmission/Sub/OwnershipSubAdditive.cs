@@ -10,8 +10,6 @@ using UnityEngine;
 public class OwnershipSubAdditive : MonoBehaviourPunCallbacks, IPunOwnershipCallbacks, IOwnershipInteractable//, ITokenAdditive
 {
 
-    ITransmissionBase parent;
-
     [SerializeField] OwnershipOption ownershipOption = OwnershipOption.Request;
 
     #region Interface 
@@ -36,10 +34,8 @@ public class OwnershipSubAdditive : MonoBehaviourPunCallbacks, IPunOwnershipCall
         }
     }
 
-    public void Init(ITransmissionBase itb, InstantiationData data)
+    public void Init(InstantiationData data)
     {
-        parent = itb;
-
         if (photonView.Owner == null)
         {
             Debug.Log($"InRoomObject:{photonView.ViewID} OwnedByRoom");

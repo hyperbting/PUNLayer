@@ -10,13 +10,13 @@ public class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBehaviour
             {
                 // Find the active singleton already created and count
                 T[] objectResult = FindObjectsOfType<T>();
-                Debug.Log("DEBUG: GenericMonoSingleton FindObjectsOfType.count=" + objectResult.Length);
+                //Debug.Log("DEBUG: GenericMonoSingleton FindObjectsOfType.count=" + objectResult.Length);
 
                 // Find the ACTIVE singleton already created: https://docs.unity3d.com/ScriptReference/Object.FindObjectOfType.html
                 instance = (T)Object.FindObjectOfType(typeof(T));
                 if (instance == null)
                 {
-                    Debug.LogError("DEBUG: GenericMonoSingleton Cannot Found In Scene");
+                    //Debug.LogError("DEBUG: GenericMonoSingleton Cannot Found In Scene");
 
                     //instance = CreateSingleton();
                     var SGO = new GameObject($"{typeof(T).Name}(Singleton)");
@@ -26,18 +26,8 @@ public class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBehaviour
                 }
             }
 
-            Debug.Log("DEBUG: GenericMonoSingleton [case2]: Found the active object in memory");
+            //Debug.Log("DEBUG: GenericMonoSingleton [case2]: Found the active object in memory");
             return instance;
         }
     }
-
-    //private static T CreateSingleton()
-    //{
-    //    var SGO = new GameObject($"{typeof(T).Name}(Singleton)");
-    //    var instance = SGO.AddComponent<T>();
-
-    //    // Make instance persistent.
-    //    DontDestroyOnLoad(SGO);
-    //    return instance;
-    //}
 }
