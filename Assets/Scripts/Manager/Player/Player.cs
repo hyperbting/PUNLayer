@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 
 public partial class Player : MonoBehaviour, ISyncHandlerUser
@@ -58,15 +59,18 @@ public partial class Player : MonoBehaviour, ISyncHandlerUser
         }
     }
 
+    [SerializeField] PlayerAbility playerAbility;
     public SerializableReadWrite[] SerializableReadWrite
     {
         get
         {
-            return new SerializableReadWrite[] {
+            var local = new SerializableReadWrite[] {
                 //new SerializableReadWrite("UnitName", GetUnitName, SetUnitName),
                 new SerializableReadWrite("Pos", ReadPos, WritePos),
                 new SerializableReadWrite("Rot", ReadRot, WriteRot),
             };
+
+            return local.Union(playerAbility.SerializableReadWrite).ToArray();
         }
     }
 
@@ -80,6 +84,8 @@ public partial class Player : MonoBehaviour, ISyncHandlerUser
         if (isMine)
         {
             SetupTokenHandler();
+
+            playerAbility.InvokeRepeating("UpdateMurmur", 3, 3);
         }
 
         //RaiseEventHelper.instance.Register(new NetworkLayer.RoomEventRegistration()

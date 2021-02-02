@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 2750360869139872929}
   - component: {fileID: 1981023417750316794}
   - component: {fileID: 2050830719531072062}
+  - component: {fileID: 7019232542188292571}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -172,6 +173,7 @@ MonoBehaviour:
   isHost: 0
   insdata:
     tokenType: 0
+  playerAbility: {fileID: 7019232542188292571}
   refTransform: {fileID: 2750360869139872929}
   moveSpeed: 1
   rotateSpeed: 50
@@ -194,3 +196,19 @@ MonoBehaviour:
   tBase: {fileID: 0}
   tokenID: 
   lifetime: 30
+--- !u!114 &7019232542188292571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8133059419245758297}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46fa8aaa4eff6b04d997fe9ba45f926c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  murmur:
+  - 0
+  - 0
+  - 0
