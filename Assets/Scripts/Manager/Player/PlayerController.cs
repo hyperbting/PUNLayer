@@ -139,6 +139,7 @@ public partial class Player : MonoBehaviour
         }
     }
 
+    [SerializeField] GameObject targetObject;
     private void Devour(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
     {
         if (ctx.ReadValue<float>() < 0.5)
@@ -148,7 +149,7 @@ public partial class Player : MonoBehaviour
             return;
 
         Debug.Log($"tokHandler.DestroyTarget");
-        tokHandler.DestroyTargetObject();
+        tokHandler.DestroyTargetObject(targetObject);
     }
 
     private void RequestOwner(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
@@ -159,7 +160,7 @@ public partial class Player : MonoBehaviour
         if (tokHandler == null || !tokHandler.HavingToken())
             return;
         Debug.Log($"tokHandler.RequestOwnership");
-        tokHandler.RequestOwnership();
+        OwnershipHelper.instance.RequestOwnership(targetObject);
     }
 
     private void ReleaseOwner(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
@@ -170,7 +171,7 @@ public partial class Player : MonoBehaviour
         if (tokHandler == null || !tokHandler.HavingToken())
             return;
         Debug.Log($"tokHandler.ReleaseOwner");
-        tokHandler.ReleaseOwnership();
+        OwnershipHelper.instance.ReleaseOwnership(targetObject);
     }
 
     public int sceneID = 0;

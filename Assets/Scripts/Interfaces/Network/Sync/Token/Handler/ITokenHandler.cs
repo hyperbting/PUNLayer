@@ -22,9 +22,9 @@ public interface ITokenHandler
     bool PushStateInto(string key, object data);
 
     object CreateInRoomObject();
-    bool DestroyTargetObject();
+    bool DestroyTargetObject(object targetObject);
 
-    void RequestOwnership();
-    void ReleaseOwnership();
+    //void RequestOwnership();
+    //void ReleaseOwnership();
     #endregion
 }
