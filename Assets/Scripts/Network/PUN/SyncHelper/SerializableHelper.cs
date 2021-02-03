@@ -29,12 +29,16 @@ public class SerializableHelper : BaseSyncHelper, IPunObservable
             //Debug.Log($"TryGetValue for Key:{keys[i]}");
             if (dataToSync.TryGetValue(keys[i], out SerializableReadWrite val))
             {
-                for (int j = 0; j < val.Read.Length; j++)
-                {
-                    var va = val?.Read[j]();
-                    //Debug.Log($" Key:{keys[i]}-{j} {va}");
-                    stream.SendNext(va);
-                }
+                var va = val?.Read();
+                Debug.Log($" Key:{keys[i]} {va}");
+                stream.SendNext(va);
+
+                //for (int j = 0; j < val.Read.Length; j++)
+                //{
+                //    var va = val?.Read[j]();
+                //    //Debug.Log($" Key:{keys[i]}-{j} {va}");
+                //    stream.SendNext(va);
+                //}
             }
         }
     }
@@ -47,12 +51,16 @@ public class SerializableHelper : BaseSyncHelper, IPunObservable
             //Debug.Log($"TryGetValue for Key:{keys[i]}");
             if (dataToSync.TryGetValue(keys[i], out SerializableReadWrite val))
             {
-                for (int j = 0; j < val.Write.Length; j++)
-                {
-                    var va = stream.ReceiveNext();
-                    //Debug.Log($"{va}-{j} Received");
-                    val?.Write[j](va);
-                }
+                var va = stream.ReceiveNext();
+                Debug.Log($"{va} Received");
+                val?.Write(va);
+
+                //for (int j = 0; j < val.Write.Length; j++)
+                //{
+                //    var va = stream.ReceiveNext();
+                //    //Debug.Log($"{va}-{j} Received");
+                //    val?.Write[j](va);
+                //}
             }
         }
     }

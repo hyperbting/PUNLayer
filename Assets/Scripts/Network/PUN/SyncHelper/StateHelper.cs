@@ -18,7 +18,7 @@ public class StateHelper : BaseSyncHelper
 
         if (dataToSync.TryGetValue(key, out SerializableReadWrite srw))
         {
-            UpdatePlayerProperties(key, srw.Read());
+            UpdatePlayerProperties(key, srw.Read());//UpdatePlayerProperties(key, srw.Read[0]());
         }
     }
 
@@ -34,7 +34,7 @@ public class StateHelper : BaseSyncHelper
         {
             if (dataToSync.TryGetValue(key.ToString(), out SerializableReadWrite srw))
             {
-                srw.Write(changedProps[key]);
+                srw.Write(changedProps[key]);//srw.Write[0](changedProps[key]);
             }
         }
     }
@@ -44,7 +44,7 @@ public class StateHelper : BaseSyncHelper
     {
         if (dataToSync.TryGetValue(key, out SerializableReadWrite srw))
         {
-            return await UpdateRoomProperties(key, srw.Read());
+            return await UpdateRoomProperties(key, srw.Read());//return await UpdateRoomProperties(key, srw.Read[0]());
         }
 
         return false;
@@ -61,7 +61,7 @@ public class StateHelper : BaseSyncHelper
         {
             if (dataToSync.TryGetValue(key.ToString(), out SerializableReadWrite srw))
             {
-                srw.Write(changedProps[key]);
+                srw.Write(changedProps[key]);//srw.Write[0](changedProps[key]);
             }
         }
     }
