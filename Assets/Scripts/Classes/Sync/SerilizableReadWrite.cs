@@ -12,6 +12,16 @@ public class SerializableReadWrite : SerializableWrite
         Read = readFromLocal;
     }
 
+    //public SerializableReadWrite(string name, Func<object>[] readFromLocal, Action<object>[] writeWhenPropUpdate) : base(name, writeWhenPropUpdate)
+    //{
+    //    if (readFromLocal.Length != writeWhenPropUpdate.Length)
+    //    {
+    //        //TODO: Warn
+    //    }
+
+    //    Read = readFromLocal;
+    //}
+
     public override string ToString()
     {
         return string.Format($"{base.ToString()},Read");
@@ -31,10 +41,20 @@ public class SerializableWrite
         Write = write;
     }
 
+    //public SerializableWrite(Action<object>[] writes)
+    //{
+    //    Write = writes;
+    //}
+
     public SerializableWrite(string name, Action<object> write): this(write)
     {
         this.name = name;
     }
+
+    //public SerializableWrite(string name, Action<object>[] writes) : this(writes)
+    //{
+    //    this.name = name;
+    //}
 
     public override string ToString()
     {

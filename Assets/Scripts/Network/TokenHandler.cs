@@ -41,8 +41,15 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
     }
     #endregion
 
+    //[SerializeField] bool setuped = false;
     public void Setup(ITokenProvider itp, ISyncHandlerUser handlerUser)
     {
+        //if (setuped)
+        //    return;
+        //setuped = true;
+
+        Debug.Log($"TokenHandler Setup");
+
         tokenProvider = itp;
 
         tokenUser = handlerUser;
@@ -68,6 +75,12 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
 
     public virtual void OnJoinedOnlineRoomAct()
     {
+        if (HavingToken())
+        {
+            Debug.LogWarning($"[TokenHandler] OnJoinedOnlineRoomAct Having Token");
+            return;
+        }
+
         Debug.Log($"[TokenHandler] OnJoinedOnlineRoomAct");
 
         //// Online InRoom Load InstaData from TokenUser
@@ -83,7 +96,7 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
             return;
         }
 
-        trasnTokenGO.GetComponent<ITransmissionBase>()?.Setup(datatoSend, tokenUser);
+        trasnTokenGO.GetComponent<ITransmissionBase>()?.Setup(datatoSend);
     }
     #endregion
 

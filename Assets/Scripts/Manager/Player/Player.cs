@@ -70,7 +70,10 @@ public partial class Player : MonoBehaviour, ISyncHandlerUser
                 new SerializableReadWrite("Rot", ReadRot, WriteRot),
             };
 
-            return local.Union(playerAbility.SerializableReadWrite).ToArray();
+            var result = local.Union(playerAbility.SerializableReadWrite).ToArray();
+            //Debug.LogWarning($"Player SerializableReadWrite {result.Length}");
+
+            return result;
         }
     }
 
@@ -84,9 +87,6 @@ public partial class Player : MonoBehaviour, ISyncHandlerUser
         if (isMine)
         {
             SetupTokenHandler();
-
-            playerAbility.InvokeRepeating("UpdateMurmur", 3, 3);
-            playerAbility.InvokeRepeating("UpdateMurmur2", 2, 1);
         }
 
         //RaiseEventHelper.instance.Register(new NetworkLayer.RoomEventRegistration()
@@ -137,7 +137,7 @@ public partial class Player : MonoBehaviour, ISyncHandlerUser
     public Transform refTransform;
     void WritePos(object pos)
     {
-        Debug.Log($"WritePos {pos}");
+        //Debug.Log($"WritePos {pos}");
         refTransform.position = (Vector3)pos;
     }
 
