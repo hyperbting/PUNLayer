@@ -59,9 +59,12 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IP
         if (photonView.InstantiationData == null)
             return;
 
+        if (photonView.IsMine)
+            return;
+
         InstantiationData data = new InstantiationData(photonView.InstantiationData);
         Debug.Log($"TransmissionBase Start Remotely.");
-        Setup(data, null);
+        Setup(data);
 
         started = true;
     }
@@ -73,40 +76,42 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IP
         base.OnDisable();
     }
 
-    public void Setup(InstantiationData insData, ISyncHandlerUser tokenUser = null)
+    public void Setup(InstantiationData insData)
     {
-        Debug.Log($"TransmissionBase Setup. photonView.IsMine:{photonView.IsMine} {insData}");
-
         tType = insData.tokenType;
+        Debug.Log($"TransmissionBase {gameObject.name} Setup. photonView.IsMine:{photonView.IsMine} {insData}");
+
+        ISyncHandlerUser tokenUser = null;
         switch (tType)
         {
             case SyncTokenType.Player:
-                playerCoreAdditive.Init(insData, photonView.IsMine);
-
+                tokenUser = playerCoreAdditive.Init(insData, photonView.IsMine);
                 break;
             default:
             case SyncTokenType.General:
-                roomCoreAdditive.Init(insData, photonView.IsMine);
+                tokenUser = roomCoreAdditive.Init(insData, photonView.IsMine);
 
                 osa.Init(insData);
 
                 break;
         }
 
+        // Setup SerializableReadWrite
         if (tokenUser?.SerializableReadWrite != null)
         {
-            Debug.LogWarning($"TransmissionBase tokenUser.SerializableReadWrite: {tokenUser.SerializableReadWrite.Length}");
+            //Debug.LogWarning($"TransmissionBase tokenUser.SerializableReadWrite: {tokenUser.SerializableReadWrite.Length}");
             Register(tokenUser.SerializableReadWrite);
         }
         else
         {
-            Debug.LogWarning($"No TokenUser/ no SerializableReadWrite for Sync!");
+            Debug.LogWarning($"TransmissionBase {gameObject.name}: No TokenUser/ no SerializableReadWrite for Sync!");
         }
     }
 
     #region Register
     public void Register(params SerializableReadWrite[] srws)
     {
+        Debug.LogWarning($"TransmissionBase {gameObject.name} Register:{srws.Length} SerializableReadWrite");
         foreach (var srw in srws)
         {
             switch (srw.syncType)

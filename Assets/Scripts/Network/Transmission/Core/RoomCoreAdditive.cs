@@ -8,7 +8,7 @@ public class RoomCoreAdditive: MonoBehaviour, ICoreAdditive
 
     public SyncTokenType AdditiveType { get { return SyncTokenType.General; } }
 
-    public void Init(InstantiationData data, bool isMine)
+    public ISyncHandlerUser Init(InstantiationData data, bool isMine)
     {
         if (isMine)
         {
@@ -17,6 +17,8 @@ public class RoomCoreAdditive: MonoBehaviour, ICoreAdditive
             //Load Prefab with InstantiationData data
             refObject = Load(data);
         }
+
+        return null;
     }
 
     GameObject Load(InstantiationData data)

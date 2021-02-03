@@ -7,8 +7,7 @@ public interface ITransmissionBase
     /// ITransmissionBase remotely
     /// </summary>
     /// <param name="insData"></param>
-    /// <param name="tokenUser">null when remotely; TokenHandler will always assign one</param>
-    void Setup(InstantiationData insData, ISyncHandlerUser tokenUser = null);
+    void Setup(InstantiationData insData);
 
     ISerializableHelper SeriHelper { get; }
     ISerializableHelper StatHelper { get; }
