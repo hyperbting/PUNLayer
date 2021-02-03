@@ -30,7 +30,7 @@ public class SerializableHelper : BaseSyncHelper, IPunObservable
             if (dataToSync.TryGetValue(keys[i], out SerializableReadWrite val))
             {
                 var va = val?.Read();
-                Debug.Log($" Key:{keys[i]} {va}");
+                //Debug.Log($" Key:{keys[i]} {va}");
                 stream.SendNext(va);
 
                 //for (int j = 0; j < val.Read.Length; j++)
@@ -52,7 +52,7 @@ public class SerializableHelper : BaseSyncHelper, IPunObservable
             if (dataToSync.TryGetValue(keys[i], out SerializableReadWrite val))
             {
                 var va = stream.ReceiveNext();
-                Debug.Log($"{va} Received");
+                //Debug.Log($"{va} Received");
                 val?.Write(va);
 
                 //for (int j = 0; j < val.Write.Length; j++)
