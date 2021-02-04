@@ -4,28 +4,27 @@ using UnityEngine;
 
 public class OwnershipHelper : MonoBehaviourPunCallbacks
 {
-    readonly string scr = "OwnershipHelper";
-    public static OwnershipHelper instance;
+    readonly string thisScr = "OwnershipHelper";
 
     public void RequestOwnership(object targetObj)
     {
 
         if (targetObj == null)
         {
-            Debug.Log($"targetObj missing");
+            Debug.Log($"{thisScr} targetObj missing");
             return;
         }
 
         if (!PhotonNetwork.InRoom)
         {
-            Debug.Log($"NotInRoom");
+            Debug.Log($"{thisScr} NotInRoom");
             return;
         }
 
         var scr = (targetObj as GameObject).GetComponent<OwnershipSubAdditive>();
         if (scr == null)
         {
-            Debug.Log($"targetObj OwnershipSubAdditive missing");
+            Debug.Log($"{thisScr} targetObj OwnershipSubAdditive missing");
             return;
         }
 
@@ -36,14 +35,14 @@ public class OwnershipHelper : MonoBehaviourPunCallbacks
     {
         if (targetObj == null)
         {
-            Debug.Log($"targetObj missing");
+            Debug.Log($"{thisScr} targetObj missing");
             return;
         }
 
         var scr = (targetObj as GameObject).GetComponent<OwnershipSubAdditive>();
         if (scr == null)
         {
-            Debug.Log($"targetObj OwnershipSubAdditive missing");
+            Debug.Log($"{thisScr} targetObj OwnershipSubAdditive missing");
             return;
         }
 

@@ -8,5 +8,7 @@
 
     //local: SetupBy ObjectMaker, setup TokenHalnder
     //remote: SetupBy ITransmissionBase
-    void Init(InstantiationData data, bool isMine);
+    void Init(InstantiationData data, bool isMine, ITransmissionBase itb);
+
+    object GameObject();
 }

@@ -41,13 +41,8 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
     }
     #endregion
 
-    //[SerializeField] bool setuped = false;
     public void Setup(ITokenProvider itp, ISyncHandlerUser handlerUser)
     {
-        //if (setuped)
-        //    return;
-        //setuped = true;
-
         Debug.Log($"TokenHandler Setup");
 
         tokenProvider = itp;

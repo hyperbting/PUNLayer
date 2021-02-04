@@ -53,12 +53,14 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager>
             playerScript.isHost = true;
 
             var insData = InstantiationData.Build(SyncTokenType.Player);
-            insData["timestamp"] = Time.time;
             insData[InstantiationData.InstantiationKey.objectname.ToString()] = playerCorePref.name;
             insData[InstantiationData.InstantiationKey.objectuuid.ToString()] = randomID;
+            insData[InstantiationData.InstantiationKey.objectpersist.ToString()] = 30;
             insData["ablePlayerEcho"] = true;
+            insData["timestamp"] = Time.time;
 
-            playerScript.Init(insData, true);
+            playerScript.Init(insData, true, null);
+            playerScript.creator = this;
         }
         Debug.LogWarning($"InstantiatePlayerObject HostPlayer Created");
         return go;
@@ -70,26 +72,21 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager>
         Debug.LogWarning($"BuildLocalPlayerObject Start");
 
         GameObject go = null;
-        PersistenceHelper ph = null;
         switch (objName)
         {
             case "Player":
                 ////LookUp before Create
                 if (UUID != null && dic.TryGetValue(UUID, out go))
                 {
-                    ph = go.GetComponent<PersistenceHelper>();
-                    ph.Init();
                     return go;
                 }
 
+                // Create one
                 go = Instantiate(playerCorePref, transform);
                 dic[UUID] = go;
 
-                ph = go.GetComponent<PersistenceHelper>();
-                ph.Init(UUID, () => {
-                    dic.Remove(UUID);
-                    Debug.Log($"Remove {UUID} from Dic");
-                });
+                var playerScript = go.GetComponent<Player>();
+                playerScript.creator = this;
 
                 break;
         }
@@ -98,4 +95,9 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager>
         return go;
     }
 
+    public void RemoveFromDict(string UUID)
+    {
+        dic.Remove(UUID);
+        Debug.Log($"Remove {UUID} from Dic");
+    }
 }

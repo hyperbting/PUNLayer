@@ -64,5 +64,7 @@ public class InstantiationData : Dictionary<string, object>
 
         objectuuid,
         objectname,
+
+        objectpersist,
     }
 }

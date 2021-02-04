@@ -4,6 +4,8 @@ using UnityEngine;
 
 public partial class Player : MonoBehaviour, ISyncHandlerUser
 {
+    public PlayerManager creator;
+
     ITokenHandler tokHandler;
 
     [Space]
@@ -50,6 +52,11 @@ public partial class Player : MonoBehaviour, ISyncHandlerUser
     }
 
     #region ISyncHandlerUser; talk to TokenHandler; Called By SyncToken when OnJoinedOnlineRoom
+    public object GameObject()
+    {
+        return gameObject;
+    }
+
     [SerializeField] InstantiationData insdata;
     public InstantiationData SupplyInstantiationData
     {
@@ -77,16 +84,36 @@ public partial class Player : MonoBehaviour, ISyncHandlerUser
         }
     }
 
-    //For remote, Setupby ITransmissionBase
-    public void Init(InstantiationData data, bool isMine)
+    public void Init(InstantiationData data, bool isMine, ITransmissionBase tb = null)
     {
         Debug.LogWarning($"ISyncHandlerUser Init isMine?{isMine}");
         insdata = data;
+
+        var pa = GetComponent<PersistenceHelper>();
+        string uuid=null;
+        if (data.TryGetValue(InstantiationData.InstantiationKey.objectuuid, out object val))
+        {
+            uuid = (string)val;
+        }
 
         //// Local HostPlayer Ask for a TokenHandler
         if (isMine)
         {
             SetupTokenHandler();
+            pa.Init(uuid);
+        }
+        else
+        {
+            pa.Init(
+                uuid, 
+                ()=> { creator.RemoveFromDict(uuid); }, 
+                tb as TransmissionBase
+            );
+
+            if (data.TryGetValue(InstantiationData.InstantiationKey.objectpersist, out val))
+            {
+                pa.Setup((int)val);
+            }
         }
 
         //RaiseEventHelper.instance.Register(new NetworkLayer.RoomEventRegistration()

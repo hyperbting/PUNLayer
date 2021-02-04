@@ -4,21 +4,29 @@ using UnityEngine;
 
 public class RoomCoreAdditive: MonoBehaviour, ICoreAdditive
 {
-    public GameObject refObject;
+    [Header("Debug")]
+    [SerializeField] OwnershipSubAdditive osa;
+
+    ITransmissionBase parent;
 
     public SyncTokenType AdditiveType { get { return SyncTokenType.General; } }
 
-    public ISyncHandlerUser Init(InstantiationData data, bool isMine)
+    public void Init(InstantiationData data, bool isMine)
     {
+        this.parent = GetComponent<ITransmissionBase>();
+
+        if (!osa)
+            osa = GetComponent<OwnershipSubAdditive>();
+
+        osa.Init(data);
+
         if (isMine)
         {
             gameObject.tag = "RoomObject";
 
             //Load Prefab with InstantiationData data
-            refObject = Load(data);
+            parent.RefObject = Load(data);
         }
-
-        return null;
     }
 
     GameObject Load(InstantiationData data)

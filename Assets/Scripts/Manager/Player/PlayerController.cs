@@ -160,7 +160,7 @@ public partial class Player : MonoBehaviour
         if (tokHandler == null || !tokHandler.HavingToken())
             return;
         Debug.Log($"tokHandler.RequestOwnership");
-        OwnershipHelper.instance.RequestOwnership(targetObject);
+        ServiceManager.Instance.networkSystem.RequestOwnership(targetObject);
     }
 
     private void ReleaseOwner(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
@@ -171,7 +171,7 @@ public partial class Player : MonoBehaviour
         if (tokHandler == null || !tokHandler.HavingToken())
             return;
         Debug.Log($"tokHandler.ReleaseOwner");
-        OwnershipHelper.instance.ReleaseOwnership(targetObject);
+        ServiceManager.Instance.networkSystem.ReleaseOwnership(targetObject);
     }
 
     public int sceneID = 0;

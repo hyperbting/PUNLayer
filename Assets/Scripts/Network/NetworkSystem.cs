@@ -65,6 +65,19 @@ public class NetworkSystem : MonoBehaviour, INetworkConnectUser, ITokenProvider,
     //}
     #endregion
 
+    #region Ownership
+    [SerializeField] OwnershipHelper oh;
+    public void RequestOwnership(object targetObj)
+    {
+        oh.RequestOwnership(targetObj);
+    }
+
+    public void ReleaseOwnership(object targetObj)
+    {
+        oh.ReleaseOwnership(targetObj);
+    }
+    #endregion
+
     #region checker?
     public bool IsOfflineRoom()
     {

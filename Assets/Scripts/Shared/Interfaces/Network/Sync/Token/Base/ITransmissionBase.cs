@@ -14,4 +14,6 @@ public interface ITransmissionBase
 
     void Register(params SerializableReadWrite[] srws);
     void Unregister(params SerializableReadWrite[] srws);
+
+    object RefObject { get; set; }
 }

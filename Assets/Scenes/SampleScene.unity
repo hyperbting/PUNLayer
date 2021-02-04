@@ -292,24 +292,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5818026722847892546, guid: 11c9bc78efee8e04f913334a0a641c1d,
-        type: 3}
-      propertyPath: serSettings
-      value: 
-      objectReference: {fileID: 11400000, guid: c206c5fd49a62054b931232d0992b0ae,
-        type: 2}
     - target: {fileID: 7582585174374030078, guid: 11c9bc78efee8e04f913334a0a641c1d,
         type: 3}
       propertyPath: m_Name
       value: NetworkManager
       objectReference: {fileID: 0}
-    - target: {fileID: 8337967080421387278, guid: 11c9bc78efee8e04f913334a0a641c1d,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 533286166, guid: 11c9bc78efee8e04f913334a0a641c1d, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 11c9bc78efee8e04f913334a0a641c1d, type: 3}
 --- !u!4 &474518513 stripped
 Transform:

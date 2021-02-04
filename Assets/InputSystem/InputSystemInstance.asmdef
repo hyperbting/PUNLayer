@@ -1,8 +1,7 @@
 {
-    "name": "AInterface",
+    "name": "InputSystemInstance",
     "references": [
-        "GUID:39aa0ddd5da34e14e8e5c942f6a60c63",
-        "GUID:e5dcabe01d9b37349a2e2829c241d6d8"
+        "GUID:75469ad4d38634e559750d17036d5f7c"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
