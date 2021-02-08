@@ -46,6 +46,6 @@ public class OwnershipHelper : MonoBehaviourPunCallbacks
             return;
         }
 
-        _ = scr.ReleaseOwnership();
+        scr.ReleaseOwnership();
     }
 }

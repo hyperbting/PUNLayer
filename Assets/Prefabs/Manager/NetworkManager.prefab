@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5818026722847892546}
   - component: {fileID: 6424484732340965977}
   - component: {fileID: 4871591401705048710}
+  - component: {fileID: 5387519463388333157}
   m_Layer: 0
   m_Name: PUN
   m_TagString: Untagged
@@ -106,6 +107,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1705bd02afb99114491e57bc1139ef0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5387519463388333157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1130031723264045706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 179a619e50d6af04eb8edc2fb62af194, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomObjectRoot: {fileID: 0}
 --- !u!1 &6942584005832316211
 GameObject:
   m_ObjectHideFlags: 0

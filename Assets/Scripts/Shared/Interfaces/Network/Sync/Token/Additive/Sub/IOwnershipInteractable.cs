@@ -2,6 +2,8 @@
 
 public interface IOwnershipInteractable
 {
+    bool IsMine();
+
     Task<bool> RequestOwnership(int acterNumber);
-    Task<bool> ReleaseOwnership();
+    void ReleaseOwnership();
 }
