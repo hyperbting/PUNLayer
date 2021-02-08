@@ -57,6 +57,17 @@ public class OwnershipSubAdditive : MonoBehaviourPunCallbacks, IPunOwnershipCall
         return photonView.IsMine;
     }
 
+    [SerializeField] GameObject targetObject;
+    public object TargetObject
+    {
+        get {
+            return targetObject;
+        }
+        set {
+            targetObject = value as GameObject;
+        }
+    }
+
     public async Task<bool> RequestOwnership(int acterNumber)
     {
         var player = (PhotonNetwork.InRoom) ? PhotonNetwork.CurrentRoom.GetPlayer(acterNumber): null;

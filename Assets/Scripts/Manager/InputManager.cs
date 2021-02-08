@@ -2,29 +2,40 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public partial class Player : MonoBehaviour
+public partial class InputManager : MonoBehaviour
 {
+
     [Header("Player Controller")]
-    public float moveSpeed;
-    public float rotateSpeed;
-    public PUN2Tester pInput;
+    public float moveSpeed = 3;
+    public float rotateSpeed = 30;
+    PUN2Tester pInput;
 
     [Header("Debug")]
     [SerializeField] Vector2 move;
     [SerializeField] Vector2 around;
 
     #region mono
-    public void DoAwake()
+    public void OnEnable()
     {
-        pInput = new PUN2Tester();
+        if (pInput == null)
+            pInput = new PUN2Tester();
+
+        pInput.Enable();
+    }
+
+    public void OnDisable()
+    {
+        pInput.Disable();
+    }
+
+    void Start()
+    {
+        SetupInputSystem();
     }
 
     // Update is called once per frame
-    void DoFixedUpdate()
+    void FixedUpdate()
     {
-        if (!isHost || pInput == null)
-            return;
-
         around = pInput.Player.Look.ReadValue<Vector2>();
         move = pInput.Player.Move.ReadValue<Vector2>();
 
@@ -36,16 +47,12 @@ public partial class Player : MonoBehaviour
         {
             Look(pInput.Player.MousePositionDelta.ReadValue<Vector2>());
         }
-
-        //UpdateTokenTransform();
     }
     #endregion
 
     #region InputSystem Actions
     void SetupInputSystem()
     {
-        if (!isHost)
-            return;
 
         Debug.LogWarning($"SetupInputSystem For Local");
 
@@ -63,6 +70,8 @@ public partial class Player : MonoBehaviour
         pInput.Player.LoadScene.performed += LoadScene;
 
         pInput.Player.ChangeGroup.performed += SetInterestGroup;
+
+        InRoomSetup();
     }
 
     private void DebugClick(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
@@ -96,21 +105,33 @@ public partial class Player : MonoBehaviour
     {
         if (direction.sqrMagnitude < 0.01)
             return;
+
+        var player = playerMaker.GetMine();
+        if (!player)
+            return;
+
         var scaledMoveSpeed = moveSpeed * Time.deltaTime;
         // For simplicity's sake, we just keep movement in a single plane here. Rotate direction according to world Y rotation of player.
-        var move = Quaternion.Euler(0, transform.eulerAngles.y, 0) * new Vector3(direction.x, 0, direction.y);
-        transform.position += move * scaledMoveSpeed;
+        var deltaPos = Quaternion.Euler(0, player.transform.eulerAngles.y, 0) * new Vector3(direction.x, 0, direction.y);
+        Debug.Log(player.transform.position);
+        player.transform.position += deltaPos * scaledMoveSpeed;
+        Debug.Log(player.transform.position);
     }
 
     private void Look(Vector2 rotate)
     {
         if (rotate.sqrMagnitude < 0.01)
             return;
+
+        var player = PlayerMaker.Instance.GetMine();
+        if (!player)
+            return;
+
         var scaledRotateSpeed = rotateSpeed * Time.deltaTime;
-        var m_Rotation = transform.localEulerAngles;
+        var m_Rotation = player.transform.localEulerAngles;
         m_Rotation.y += rotate.x * scaledRotateSpeed;
         //m_Rotation.x = Mathf.Clamp(m_Rotation.x - rotate.y * scaledRotateSpeed, -89, 89);
-        transform.localEulerAngles = m_Rotation;
+        player.transform.localEulerAngles = m_Rotation;
     }
 
     private void Echo(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
@@ -118,11 +139,11 @@ public partial class Player : MonoBehaviour
         if (ctx.ReadValue<float>() < 0.5)
             return;
 
-        if (tokHandler == null || !tokHandler.HavingToken())
-            return;
+        //if (tokHandler == null || !tokHandler.HavingToken())
+        //    return;
 
-        tokHandler.PushStateInto("k1", Time.fixedTime);
-        var obj = tokHandler.CreateInRoomObject();
+        //tokHandler.PushStateInto("k1", Time.fixedTime);
+        //var obj = tokHandler.CreateInRoomObject();
     }
 
     private void Emit(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
@@ -130,13 +151,13 @@ public partial class Player : MonoBehaviour
         if (ctx.ReadValue<float>() < 0.5)
             return;
 
-        if (tokHandler == null || !tokHandler.HavingToken())
-            return;
+        //if (tokHandler == null || !tokHandler.HavingToken())
+        //    return;
 
-        if (!RaiseEventHelper.instance.RaiseEvent(new object[] { "Emit", Time.time }))
-        {
-            Debug.LogWarning($"RaiseEvent Report Error!");
-        }
+        //if (!RaiseEventHelper.instance.RaiseEvent(new object[] { "Emit", Time.time }))
+        //{
+        //    Debug.LogWarning($"RaiseEvent Report Error!");
+        //}
     }
 
     [SerializeField] GameObject targetObject;
@@ -145,11 +166,11 @@ public partial class Player : MonoBehaviour
         if (ctx.ReadValue<float>() < 0.5)
             return;
 
-        if (tokHandler == null || !tokHandler.HavingToken())
-            return;
+        //if (tokHandler == null || !tokHandler.HavingToken())
+        //    return;
 
-        Debug.Log($"tokHandler.DestroyTarget");
-        tokHandler.DestroyTargetObject(targetObject);
+        //Debug.Log($"tokHandler.DestroyTarget");
+        //tokHandler.DestroyTargetObject(targetObject);
     }
 
     private void RequestOwner(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
@@ -157,10 +178,10 @@ public partial class Player : MonoBehaviour
         if (ctx.ReadValue<float>() < 0.5)
             return;
 
-        if (tokHandler == null || !tokHandler.HavingToken())
-            return;
-        Debug.Log($"tokHandler.RequestOwnership");
-        ServiceManager.Instance.networkSystem.RequestOwnership(targetObject);
+        //if (tokHandler == null || !tokHandler.HavingToken())
+        //    return;
+        //Debug.Log($"tokHandler.RequestOwnership");
+        //ServiceManager.Instance.networkSystem.RequestOwnership(targetObject);
     }
 
     private void ReleaseOwner(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
@@ -168,10 +189,10 @@ public partial class Player : MonoBehaviour
         if (ctx.ReadValue<float>() < 0.5)
             return;
 
-        if (tokHandler == null || !tokHandler.HavingToken())
-            return;
-        Debug.Log($"tokHandler.ReleaseOwner");
-        ServiceManager.Instance.networkSystem.ReleaseOwnership(targetObject);
+        //if (tokHandler == null || !tokHandler.HavingToken())
+        //    return;
+        //Debug.Log($"tokHandler.ReleaseOwner");
+        //ServiceManager.Instance.networkSystem.ReleaseOwnership(targetObject);
     }
 
     public int sceneID = 0;
@@ -189,9 +210,8 @@ public partial class Player : MonoBehaviour
         if (ctx.ReadValue<float>() < 0.5)
             return;
 
-        Debug.Log($"Set InterestGroup");
-        (tokHandler as TokenHandler).SetInterestGroup();
+        //Debug.Log($"Set InterestGroup");
+        //(tokHandler as TokenHandler).SetInterestGroup();
     }
     #endregion
-
 }

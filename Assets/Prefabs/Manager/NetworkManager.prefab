@@ -216,6 +216,7 @@ MonoBehaviour:
     type: 3}
   DebugUI: {fileID: 5618832678282898037}
   oh: {fileID: 4871591401705048710}
+  roh: {fileID: 5387519463388333157}
 --- !u!1001 &9155144094352644027
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -223,6 +224,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5439174963353468953}
     m_Modifications:
+    - target: {fileID: 142845369823423605, guid: 4d4d02e2bbc1d924cb6fae3e00fbb40d,
+        type: 3}
+      propertyPath: roHelper
+      value: 
+      objectReference: {fileID: 5387519463388333157}
     - target: {fileID: 1081513866459141389, guid: 4d4d02e2bbc1d924cb6fae3e00fbb40d,
         type: 3}
       propertyPath: m_AnchorMax.y

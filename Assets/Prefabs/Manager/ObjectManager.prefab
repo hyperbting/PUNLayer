@@ -88,8 +88,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76b48b0d13ee4b24891eed8bcfb8a259, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomobject: {fileID: 5817988739764176837, guid: 64046cff2713cf441a9b8023d19e600c,
+  roomobjectPrefab: {fileID: 5817988739764176837, guid: 64046cff2713cf441a9b8023d19e600c,
     type: 3}
+  roh: {fileID: 0}
 --- !u!1 &4363156296193014899
 GameObject:
   m_ObjectHideFlags: 0
@@ -136,5 +137,5 @@ MonoBehaviour:
   playerCorePref: {fileID: 8133059419245758297, guid: 3dc557ad6afdbf64e9ff3425378073cb,
     type: 3}
   hostPlayer: {fileID: 0}
-  createPlayerOnStart: 0
+  createPlayerOnStart: 1
   randomID: 

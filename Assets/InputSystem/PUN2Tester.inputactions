@@ -1256,6 +1256,30 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "RemoveHostPlayer",
+                    "type": "Button",
+                    "id": "12f03da1-1b92-4f12-afa9-21c96c0fdb9e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "CreateRoomObject",
+                    "type": "Button",
+                    "id": "2b492f75-b10e-4aa0-b07e-597026c04d77",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "RemoveRoomObject",
+                    "type": "Button",
+                    "id": "e90b91c9-9663-4328-89c2-5bf897d28316",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -1271,7 +1295,7 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "modifier",
+                    "name": "Modifier",
                     "id": "d8fe2aca-d735-4429-9011-154efa442d13",
                     "path": "<Keyboard>/ctrl",
                     "interactions": "",
@@ -1282,13 +1306,112 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "button",
+                    "name": "Button",
                     "id": "71bb28bb-7bf6-46c7-917b-be6be201bc26",
                     "path": "<Keyboard>/c",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "CreateHostPlayer",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Button With One Modifier",
+                    "id": "640125fd-a097-456e-990b-3a3d0555cd1c",
+                    "path": "ButtonWithOneModifier",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CreateRoomObject",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "Modifier",
+                    "id": "c0f77e8e-3c87-4677-b13f-3884418328eb",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "CreateRoomObject",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Button",
+                    "id": "f32e5592-6534-47af-85e1-2eebed72ace0",
+                    "path": "<Keyboard>/b",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "CreateRoomObject",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Button With One Modifier",
+                    "id": "e8b65e56-d032-4aa7-8ef8-220ab12563de",
+                    "path": "ButtonWithOneModifier",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RemoveHostPlayer",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "modifier",
+                    "id": "4339ff3f-263a-4c43-bf58-12716217431a",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "RemoveHostPlayer",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "button",
+                    "id": "ce61dfe5-28e4-4222-bbf2-f5360a23bbb4",
+                    "path": "<Keyboard>/v",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "RemoveHostPlayer",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Button With One Modifier",
+                    "id": "d80e59da-68c7-484d-b8aa-90572128ef86",
+                    "path": "ButtonWithOneModifier",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RemoveRoomObject",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "modifier",
+                    "id": "48fb6055-e5e7-450a-8e3d-f508a4a26076",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "RemoveRoomObject",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "button",
+                    "id": "166a461f-7edb-449b-90e4-06edc73b1af1",
+                    "path": "<Keyboard>/n",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "RemoveRoomObject",
                     "isComposite": false,
                     "isPartOfComposite": true
                 }

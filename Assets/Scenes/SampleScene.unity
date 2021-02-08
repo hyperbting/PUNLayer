@@ -121,18 +121,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &22571022 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2958930785632366314, guid: fa8a028b1a8d3fd4daf70014198ef962,
-    type: 3}
-  m_PrefabInstance: {fileID: 64744283683163572}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d85d38de969abcd4cb589bfa3a59a2a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &170076733
 GameObject:
   m_ObjectHideFlags: 0
@@ -473,6 +461,83 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1122939820 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5387519463388333157, guid: 11c9bc78efee8e04f913334a0a641c1d,
+    type: 3}
+  m_PrefabInstance: {fileID: 469676196}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 179a619e50d6af04eb8edc2fb62af194, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &1285756305
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1285756306}
+  - component: {fileID: 1285756307}
+  m_Layer: 0
+  m_Name: InputManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1285756306
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1285756305}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2007812511}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1285756307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1285756305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9bd8254b5d4d4741ab844db9ce28132, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 1
+  rotateSpeed: 1
+  move: {x: 0, y: 0}
+  around: {x: 0, y: 0}
+  targetObject: {fileID: 0}
+  sceneID: 0
+  playerMaker: {fileID: 1665941522}
+  roObjectPrefab: {fileID: 5817988739764176837, guid: 64046cff2713cf441a9b8023d19e600c,
+    type: 3}
+  roHelper: {fileID: 1122939820}
+--- !u!114 &1665941522 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2958930785632366314, guid: fa8a028b1a8d3fd4daf70014198ef962,
+    type: 3}
+  m_PrefabInstance: {fileID: 64744283683163572}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d85d38de969abcd4cb589bfa3a59a2a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1750229615 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 270156147242875885, guid: 11c9bc78efee8e04f913334a0a641c1d,
@@ -521,7 +586,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   networkSystem: {fileID: 1750229615}
-  playerManager: {fileID: 22571022}
+  playerMaker: {fileID: 1665941522}
 --- !u!4 &2007812511
 Transform:
   m_ObjectHideFlags: 0
@@ -535,6 +600,7 @@ Transform:
   m_Children:
   - {fileID: 1750229616}
   - {fileID: 474518513}
+  - {fileID: 1285756306}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -553,13 +619,13 @@ PrefabInstance:
     - target: {fileID: 2958930785632366314, guid: fa8a028b1a8d3fd4daf70014198ef962,
         type: 3}
       propertyPath: createPlayerOnStart
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5485584062890703716, guid: fa8a028b1a8d3fd4daf70014198ef962,
+    - target: {fileID: 6974412937746997101, guid: fa8a028b1a8d3fd4daf70014198ef962,
         type: 3}
-      propertyPath: serviceManager
+      propertyPath: roh
       value: 
-      objectReference: {fileID: 2007812510}
+      objectReference: {fileID: 1122939820}
     - target: {fileID: 8933503379366211839, guid: fa8a028b1a8d3fd4daf70014198ef962,
         type: 3}
       propertyPath: m_RootOrder

@@ -13,7 +13,11 @@ public class ObjectMaker : MonoBehaviour
     {
         ObjectManager.Instance.UnregisterBuilder(BuildLocalGameObject);
     }
-    public GameObject roomobject;
+
+    public GameObject roomobjectPrefab;
+
+
+    [SerializeField] RoomObjectHelper roh;
 
     Dictionary<string, GameObject> dic = new Dictionary<string, GameObject>();
     public GameObject BuildLocalGameObject(string objName, string UUID = null)
@@ -32,7 +36,7 @@ public class ObjectMaker : MonoBehaviour
                     return go;
                 }
 
-                go = Instantiate(roomobject, transform);
+                go = Instantiate(roomobjectPrefab, roh.RoomObjectRoot.transform);
                 dic[UUID] = go;
 
                 break;

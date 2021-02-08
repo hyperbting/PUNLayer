@@ -17,6 +17,18 @@ public class RoomObjectBase : MonoBehaviour, ISyncHandlerUser, IOwnershipInterac
         return refToken.GetComponent<IOwnershipInteractable>().IsMine();
     }
 
+    public object TargetObject
+    {
+        get
+        {
+            return refToken;
+        }
+        set
+        {
+            refToken = value as GameObject;
+        }
+    }
+
     public async Task<bool> RequestOwnership(int acterNumber)
     {
         if (!refToken)
@@ -33,7 +45,6 @@ public class RoomObjectBase : MonoBehaviour, ISyncHandlerUser, IOwnershipInterac
         refToken.GetComponent<IOwnershipInteractable>().ReleaseOwnership();
     }
     #endregion
-
 
     #region ISyncHandlerUser
     [SerializeField] InstantiationData instData;

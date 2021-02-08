@@ -31,7 +31,7 @@ public class PlayerMaker : SingletonMonoBehaviour<PlayerMaker>, IObjectMaker
 
     public GameObject GetMine()
     {
-        return hostPlayer.gameObject;
+        return hostPlayer?.gameObject;
     }
 
     public GameObject InstantiateObject()

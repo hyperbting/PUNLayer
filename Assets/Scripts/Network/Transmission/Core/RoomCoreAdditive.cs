@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class RoomCoreAdditive: MonoBehaviour, ICoreAdditive
 {
+    [SerializeField] GameObject refObj;
+
     [Header("Debug")]
     [SerializeField] OwnershipSubAdditive osa;
 
@@ -20,20 +22,39 @@ public class RoomCoreAdditive: MonoBehaviour, ICoreAdditive
 
         osa.Init(data);
 
-        if (isMine)
+        string objUUID = null;
+        if (data.TryGetValue("objectuuid", out object objuuid))
         {
-            gameObject.tag = "RoomObject";
-
-            //Load Prefab with InstantiationData data
-            parent.RefObject = Load(data);
+            objUUID = (string)objuuid;
         }
-    }
 
-    GameObject Load(InstantiationData data)
-    {
-        //if (data.ContainsKey("RenameGO"))
-        //    gameObject.name = data["RenameGO"] + $"<{photonView.ViewID}>";
+        //
+        if (data.TryGetValue("localobject", out object val))
+        {
+            string objName = (string)val;
 
-        return null;
+            var obj = ObjectManager.Instance.BuildObject(objName, objUUID);
+            if (obj == null)
+            {
+                Debug.LogWarning("[Init] Fail to BuildObject");
+                return;
+            }
+
+            refObj = obj as GameObject;
+
+            // link between Token and TokenUser
+            var tu = refObj.GetComponent<ISyncHandlerUser>();
+            tu?.Init(data, false, parent);
+
+            Debug.LogWarning("[Init] IOwnershipInteractable");
+            var oi = refObj.GetComponent<IOwnershipInteractable>();
+            oi.TargetObject = gameObject as object;
+
+            Debug.LogWarning("[Init] SerializableHelper");
+            parent.Register(tu.SerializableReadWrite);
+            var sh = GetComponent<SerializableHelper>();
+            sh.enabled = true;
+
+        }
     }
 }

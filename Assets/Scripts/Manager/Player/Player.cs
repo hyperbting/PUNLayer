@@ -18,36 +18,22 @@ public partial class Player : MonoBehaviour, ISyncHandlerUser
 
     public void OnEnable()
     {
-        pInput.Enable();
         OnEnableEvent?.Invoke();
     }
 
     public void OnDisable()
     {
-        pInput.Disable();
         OnDisableEvent?.Invoke();
     }
 
     public void Awake()
     {
-        DoAwake();
         OnAwakeEvent?.Invoke();
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        if (!isHost)
-        {
-            return;
-        }
-        SetupInputSystem();
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        DoFixedUpdate();
         OnFixedUpdateEvent?.Invoke();
     }
 

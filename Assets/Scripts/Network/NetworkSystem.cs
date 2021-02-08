@@ -78,6 +78,14 @@ public class NetworkSystem : MonoBehaviour, INetworkConnectUser, ITokenProvider,
     }
     #endregion
 
+    #region RoomObject
+    [SerializeField] RoomObjectHelper roh;
+    public void InstantiateRoomObject(InstantiationData insData)
+    {
+        roh.InstantiateroomObject(insData);
+    }
+    #endregion
+
     #region checker?
     public bool IsOfflineRoom()
     {

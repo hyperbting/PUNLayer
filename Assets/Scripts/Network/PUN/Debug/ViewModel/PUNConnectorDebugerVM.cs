@@ -174,10 +174,4 @@ public class PUNConnectorDebugerVM : MonoBehaviour, INotifyPropertyChanged
     {
         _ = PUNConnecter.Instance.FetchRegionList();
     }
-
-    [Binding]
-    public void CreateRoomObject()
-    {
-
-    }
 }
