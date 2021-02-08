@@ -4,7 +4,7 @@ using UnityEngine;
 
 public partial class Player : MonoBehaviour, ISyncHandlerUser
 {
-    public PlayerManager creator;
+    public PlayerMaker creator;
 
     ITokenHandler tokHandler;
 

@@ -53,6 +53,11 @@ public class InstantiationData : Dictionary<string, object>
         return TryGetValue(enumKey.ToString(), out value);
     }
 
+    public bool ContainsKey(InstantiationKey enumKey)
+    {
+        return ContainsKey(enumKey.ToString());
+    }
+
     public override string ToString()
     {
         return JsonConvert.SerializeObject(this);

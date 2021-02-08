@@ -23,7 +23,7 @@ public class PlayerCoreAdditive : MonoBehaviour, ICoreAdditive
     {
         gameObject.name = "MyPlayerToken";
 
-        this.parent.RefObject = PlayerManager.Instance.GetHostPlayer();
+        this.parent.RefObject = PlayerMaker.Instance.GetMine();
         // this is local one, do not have to give InstantiationData
     }
 

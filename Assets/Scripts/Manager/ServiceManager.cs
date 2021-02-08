@@ -5,7 +5,7 @@ using UnityEngine;
 public class ServiceManager : SingletonMonoBehaviour<ServiceManager>
 {
     public NetworkSystem networkSystem;
-    public PlayerManager playerManager;
+    public PlayerMaker playerMaker;
 
     private void Awake()
     {

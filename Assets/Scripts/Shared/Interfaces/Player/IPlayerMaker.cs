@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 
-public interface IPlayerMaker
+public interface IObjectMaker
 {
-    GameObject GetHostPlayer();
+    GameObject GetMine();
 
-    GameObject InstantiatePlayerObject();
-    GameObject InstantiateRemotePlayerObject(string uuid, Transform parent);
+    GameObject InstantiateObject();
+    void DestroyObject();
 
-    //void SyncPersonalItems();
+    //GameObject InstantiateRemoteObject(string uuid, Transform parent);
 }

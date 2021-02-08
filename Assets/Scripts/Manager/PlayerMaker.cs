@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerManager : SingletonMonoBehaviour<PlayerManager>
+public class PlayerMaker : SingletonMonoBehaviour<PlayerMaker>, IObjectMaker
 {
     public GameObject playerCorePref;
 
@@ -21,7 +21,7 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager>
         ObjectManager.Instance.RegisterBuilder(BuildLocalPlayerObject);
 
         if(createPlayerOnStart)
-            InstantiatePlayerObject();
+            InstantiateObject();
     }
 
     private void OnDestroy()
@@ -29,17 +29,17 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager>
         ObjectManager.Instance.UnregisterBuilder(BuildLocalPlayerObject);
     }
 
-    public GameObject GetHostPlayer()
+    public GameObject GetMine()
     {
         return hostPlayer.gameObject;
     }
 
-    public GameObject InstantiatePlayerObject()
+    public GameObject InstantiateObject()
     {
         if (hostPlayer != null)
         { 
             Debug.LogWarning($"Player Exist!");
-            return GetHostPlayer();
+            return GetMine();
         }
 
         Debug.LogWarning($"InstantiatePlayerObject Start");
@@ -64,6 +64,17 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager>
         }
         Debug.LogWarning($"InstantiatePlayerObject HostPlayer Created");
         return go;
+    }
+
+    public void DestroyObject()
+    {
+        if (hostPlayer == null)
+        {
+            Debug.LogWarning($"HostPlayerNotExist!");
+            return;
+        }
+
+        Destroy(GetMine());
     }
 
     Dictionary<string, GameObject> dic = new Dictionary<string, GameObject>();

@@ -38,7 +38,6 @@ public class RoomObjectHelper : MonoBehaviourPunCallbacks
         }
 
         var insData = new InstantiationData(data as object[]);
-        //Debug.LogWarning($"[RequestRoomObjectManipulation] {insData.tokenType} {insData}");
 
         //TODO: MC Verify data
         if (insData.tokenType != SyncTokenType.General)
@@ -49,7 +48,7 @@ public class RoomObjectHelper : MonoBehaviourPunCallbacks
 
         if (insData.TryGetValue(InstantiationData.InstantiationKey.objectname, out object objName))
         {
-            if (!insData.ContainsKey(InstantiationData.InstantiationKey.objectuuid.ToString()))
+            if (!insData.ContainsKey(InstantiationData.InstantiationKey.objectuuid))
             {
                 var tokenID = $"ro_{Random.Range(1000, 9999).ToString()}";
                 insData[InstantiationData.InstantiationKey.objectuuid.ToString()] = tokenID;
