@@ -9,7 +9,7 @@ public partial class InputManager : MonoBehaviour
         Debug.LogWarning($"InRoomSetup");
 
         pInput.InRoom.CreateHostPlayer.performed += CreateHostPlayer;
-        //pInput.InRoom.RemoveHostPlayer.performed +=
+        pInput.InRoom.RemoveHostPlayer.performed += RemoveHostPlayer;
 
         pInput.InRoom.CreateRoomObject.performed += CreateRoomObject;
         //pInput.InRoom.RemoveRoomObject.performed += ;
@@ -23,13 +23,28 @@ public partial class InputManager : MonoBehaviour
         if (ctx.ReadValue<float>() < 0.5)
             return;
 
-        if (playerMaker.GetMine())
+        if (playerMaker.GetMine() != null)
         {
             Debug.Log("HostPlayer Created");
             return;
         }
 
         playerMaker.InstantiateObject();
+    }
+
+    void RemoveHostPlayer(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
+    {
+        Debug.Log("RemoveHostPlayer");
+        if (ctx.ReadValue<float>() < 0.5)
+            return;
+
+        if (!playerMaker.GetMine())
+        {
+            Debug.Log("HostPlayer Null");
+            return;
+        }
+
+        playerMaker.DestroyObject();
     }
 
     [Header("RoomObject")]

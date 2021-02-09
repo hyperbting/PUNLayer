@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public partial class PUNConnecter : MonoBehaviourPunCallbacks, IOnEventCallback
+public partial class PUNConnecter : MonoBehaviourPunCallbacks, IOnEventCallback, ITokenProvider
 {
     //public GameObject transmissionTokenPrefab;
 
@@ -38,7 +38,7 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, IOnEventCallback
         return null;
     }
 
-    public GameObject RequestSyncToken(InstantiationData dataToSend, Transform trasn)
+    public object RequestSyncToken(InstantiationData dataToSend)
     {
         if (!PhotonNetwork.InRoom)
         {
@@ -47,25 +47,31 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, IOnEventCallback
         }
 
         GameObject go = null;
-        if (dataToSend.tokenType == SyncTokenType.Player)
+        switch (dataToSend.tokenType)
         {
-            Debug.Log($"PhotonNetwork.Instantiate RequestSyncToken");
-            go = PhotonNetwork.Instantiate("Token/TransmissionToken", trasn.position, trasn.rotation, 0, dataToSend.ToData());
-        }
-        else
-        {
-            if (PhotonNetwork.IsMasterClient)
-                go = PhotonNetwork.InstantiateRoomObject("Token/TransmissionToken", trasn.position, trasn.rotation, 0, dataToSend.ToData());
-            else
-            {
-                Debug.LogWarning($"Non MC Cannot InstantiateRoomObject");
-            }
+            case SyncTokenType.Player:
+                Debug.Log($"PhotonNetwork.Instantiate RequestSyncToken");
+                go = PhotonNetwork.Instantiate("Token/TransmissionToken", Vector3.zero, Quaternion.identity, 0, dataToSend.ToData());
+                break;
+            default:
+                if (PhotonNetwork.IsMasterClient)
+                    go = PhotonNetwork.InstantiateRoomObject("Token/TransmissionToken", Vector3.zero, Quaternion.identity, 0, dataToSend.ToData());
+                else
+                    Debug.LogWarning($"Non MC Cannot InstantiateRoomObject");
+                break;
         }
 
         if (go == null)
             Debug.LogWarning($"Issuing Null GameObject");
 
         return go;
+    }
+
+    public void RevokeSyncToken(object targetToken)
+    {
+        var pView = (targetToken as GameObject).GetComponent<PhotonView>();
+        if(pView != null && pView.IsMine)
+            PhotonNetwork.Destroy(pView);
     }
 
     public GameObject ManualBuildSyncToken(InstantiationData dataToSend)

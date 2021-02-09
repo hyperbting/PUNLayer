@@ -16,6 +16,17 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
     public Action<InstantiationData> OnJoinedOnlineRoomEventBeforeTokenCreation { get; set; }
     //public Action<ITransmissionBase> OnJoinedOnlineRoomEventAfterTokenCreation { get; set; }
 
+    private void OnDestroy()
+    {
+        ServiceManager.Instance.networkSystem.OnJoinedOnlineRoomEvent -= TryOnJoinedRoomAct;
+
+        if (trasnTokenGO == null)
+            return;
+
+        tokenProvider.RevokeSyncToken(trasnTokenGO);//Destroy(trasnTokenGO);
+    }
+
+
     #region Checker
     public bool HavingToken()
     {

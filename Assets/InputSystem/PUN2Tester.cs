@@ -1297,9 +1297,9 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
             ],
             ""bindings"": [
                 {
-                    ""name"": ""Button With One Modifier"",
+                    ""name"": ""Button With Two Modifiers"",
                     ""id"": ""b1eca128-3142-44cb-baf0-60794d01ec6e"",
-                    ""path"": ""ButtonWithOneModifier"",
+                    ""path"": ""ButtonWithTwoModifiers"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1308,7 +1308,7 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""Modifier"",
+                    ""name"": ""modifier2"",
                     ""id"": ""d8fe2aca-d735-4429-9011-154efa442d13"",
                     ""path"": ""<Keyboard>/ctrl"",
                     ""interactions"": """",
@@ -1319,9 +1319,9 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""Button"",
+                    ""name"": ""modifier1"",
                     ""id"": ""71bb28bb-7bf6-46c7-917b-be6be201bc26"",
-                    ""path"": ""<Keyboard>/c"",
+                    ""path"": ""<Keyboard>/shift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
@@ -1330,9 +1330,20 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""Button With One Modifier"",
+                    ""name"": ""Button"",
+                    ""id"": ""32349d99-a18b-4034-b77e-a99d3e98032c"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CreateHostPlayer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Button With Two Modifiers"",
                     ""id"": ""640125fd-a097-456e-990b-3a3d0555cd1c"",
-                    ""path"": ""ButtonWithOneModifier"",
+                    ""path"": ""ButtonWithTwoModifiers"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1341,7 +1352,7 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""Modifier"",
+                    ""name"": ""modifier2"",
                     ""id"": ""c0f77e8e-3c87-4677-b13f-3884418328eb"",
                     ""path"": ""<Keyboard>/ctrl"",
                     ""interactions"": """",
@@ -1352,9 +1363,9 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""Button"",
+                    ""name"": ""modifier1"",
                     ""id"": ""f32e5592-6534-47af-85e1-2eebed72ace0"",
-                    ""path"": ""<Keyboard>/b"",
+                    ""path"": ""<Keyboard>/shift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
@@ -1363,9 +1374,20 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""Button With One Modifier"",
+                    ""name"": ""Button"",
+                    ""id"": ""3cb65db2-65ef-4bea-8b86-1c19c05de2bf"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CreateRoomObject"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Button With Two Modifiers"",
                     ""id"": ""e8b65e56-d032-4aa7-8ef8-220ab12563de"",
-                    ""path"": ""ButtonWithOneModifier"",
+                    ""path"": ""ButtonWithTwoModifiers"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1374,7 +1396,7 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""modifier"",
+                    ""name"": ""modifier2"",
                     ""id"": ""4339ff3f-263a-4c43-bf58-12716217431a"",
                     ""path"": ""<Keyboard>/ctrl"",
                     ""interactions"": """",
@@ -1385,9 +1407,9 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""button"",
+                    ""name"": ""modifier1"",
                     ""id"": ""ce61dfe5-28e4-4222-bbf2-f5360a23bbb4"",
-                    ""path"": ""<Keyboard>/v"",
+                    ""path"": ""<Keyboard>/shift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
@@ -1396,9 +1418,20 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""Button With One Modifier"",
+                    ""name"": ""Button"",
+                    ""id"": ""6032fe4c-30a7-4e25-8e57-65b9d6a28e5b"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RemoveHostPlayer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Button With Two Modifiers"",
                     ""id"": ""d80e59da-68c7-484d-b8aa-90572128ef86"",
-                    ""path"": ""ButtonWithOneModifier"",
+                    ""path"": ""ButtonWithTwoModifiers"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1407,7 +1440,7 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""modifier"",
+                    ""name"": ""modifier2"",
                     ""id"": ""48fb6055-e5e7-450a-8e3d-f508a4a26076"",
                     ""path"": ""<Keyboard>/ctrl"",
                     ""interactions"": """",
@@ -1418,12 +1451,23 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""button"",
+                    ""name"": ""modifier1"",
                     ""id"": ""166a461f-7edb-449b-90e4-06edc73b1af1"",
-                    ""path"": ""<Keyboard>/n"",
+                    ""path"": ""<Keyboard>/shift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""RemoveRoomObject"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Button"",
+                    ""id"": ""b059d120-ad0c-4158-bbc1-f6e771d9ec44"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
                     ""action"": ""RemoveRoomObject"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true

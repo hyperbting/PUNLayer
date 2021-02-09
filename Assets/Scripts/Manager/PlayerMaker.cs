@@ -75,6 +75,7 @@ public class PlayerMaker : SingletonMonoBehaviour<PlayerMaker>, IObjectMaker
         }
 
         Destroy(GetMine());
+        hostPlayer = null;
     }
 
     Dictionary<string, GameObject> dic = new Dictionary<string, GameObject>();

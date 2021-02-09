@@ -69,7 +69,7 @@ public partial class InputManager : MonoBehaviour
 
         pInput.Player.LoadScene.performed += LoadScene;
 
-        pInput.Player.ChangeGroup.performed += SetInterestGroup;
+        //pInput.Player.ChangeGroup.performed += SetInterestGroup;
 
         InRoomSetup();
     }
@@ -178,10 +178,8 @@ public partial class InputManager : MonoBehaviour
         if (ctx.ReadValue<float>() < 0.5)
             return;
 
-        //if (tokHandler == null || !tokHandler.HavingToken())
-        //    return;
-        //Debug.Log($"tokHandler.RequestOwnership");
-        //ServiceManager.Instance.networkSystem.RequestOwnership(targetObject);
+        Debug.Log($"tokHandler.RequestOwnership");
+        ServiceManager.Instance.networkSystem.RequestOwnership(targetObject);
     }
 
     private void ReleaseOwner(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
@@ -189,10 +187,8 @@ public partial class InputManager : MonoBehaviour
         if (ctx.ReadValue<float>() < 0.5)
             return;
 
-        //if (tokHandler == null || !tokHandler.HavingToken())
-        //    return;
-        //Debug.Log($"tokHandler.ReleaseOwner");
-        //ServiceManager.Instance.networkSystem.ReleaseOwnership(targetObject);
+        Debug.Log($"tokHandler.ReleaseOwner");
+        ServiceManager.Instance.networkSystem.ReleaseOwnership(targetObject);
     }
 
     public int sceneID = 0;
@@ -205,13 +201,13 @@ public partial class InputManager : MonoBehaviour
         UnityEngine.SceneManagement.SceneManager.LoadScene(sceneID, UnityEngine.SceneManagement.LoadSceneMode.Single);
     }
 
-    private void SetInterestGroup(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
-    {
-        if (ctx.ReadValue<float>() < 0.5)
-            return;
+    //private void SetInterestGroup(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
+    //{
+    //    if (ctx.ReadValue<float>() < 0.5)
+    //        return;
 
-        //Debug.Log($"Set InterestGroup");
-        //(tokHandler as TokenHandler).SetInterestGroup();
-    }
+    //    //Debug.Log($"Set InterestGroup");
+    //    //(tokHandler as TokenHandler).SetInterestGroup();
+    //}
     #endregion
 }
