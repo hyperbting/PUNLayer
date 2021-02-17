@@ -22,7 +22,7 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks
     string lastJoinedRoom;
     #endregion
 
-    #region MasterSserver to GameRoom
+    #region MasterServer to/ From GameRoom
     public async Task<bool> JoinGameRoom(string roomName)
     {
         //Already in room?
@@ -79,9 +79,7 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks
 
         return joinRoomResult.Task.Result;
     }
-    #endregion
 
-    #region Room Function
     public async Task<bool> LeaveRoom()
     {
         if (!PhotonNetwork.InRoom)

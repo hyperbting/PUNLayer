@@ -17,6 +17,8 @@ public interface INetworkConnect
     #region ToRoom
     // notify when Matchmaking success
     Task<bool> JoinGameRoom(string roomName);
+
+    Task<bool> LeaveRoom();
     #endregion
 
     #region InRoom
