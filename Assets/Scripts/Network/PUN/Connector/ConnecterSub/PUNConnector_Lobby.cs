@@ -83,6 +83,12 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks
     #region All the way To MasterServer
     public void SetupConnectSetting()
     {
+        if (SerSettings == null)
+        {
+            Debug.LogError("SetupConnectSetting ServerSetting Missing!");
+            return;
+        }
+
         try
         {
             PhotonNetwork.NickName = " ";
