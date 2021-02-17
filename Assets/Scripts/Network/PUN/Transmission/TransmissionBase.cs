@@ -5,9 +5,18 @@ using UnityEngine;
 [RequireComponent(typeof(PhotonView))]
 public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IPooledObject
 {
-    [SerializeField] OwnershipSubAdditive osa;
     ICoreAdditive playerCoreAdditive;
     ICoreAdditive roomCoreAdditive;
+
+    [SerializeField] GameObject refObj;
+    public object RefObject {
+        get {
+            return refObj;
+        }
+        set {
+            refObj = value as GameObject;
+        }
+    }
 
     [SerializeField] SyncTokenType tType;
     #region Properties
@@ -81,26 +90,26 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IP
         tType = insData.tokenType;
         Debug.Log($"TransmissionBase {gameObject.name} Setup. photonView.IsMine:{photonView.IsMine} {insData}");
 
-        ISyncHandlerUser tokenUser = null;
+        // get tokenUser from ObjectSupplier
         switch (tType)
         {
             case SyncTokenType.Player:
-                tokenUser = playerCoreAdditive.Init(insData, photonView.IsMine);
+                playerCoreAdditive.Init(insData, photonView.IsMine);
+
                 break;
             default:
             case SyncTokenType.General:
-                tokenUser = roomCoreAdditive.Init(insData, photonView.IsMine);
-
-                osa.Init(insData);
-
+                roomCoreAdditive.Init(insData, photonView.IsMine);
                 break;
         }
 
         // Setup SerializableReadWrite
-        if (tokenUser?.SerializableReadWrite != null)
+        var tokenUser = refObj?.GetComponent<ISyncHandlerUser>();
+        var sData = tokenUser?.SerializableReadWrite;
+        if (sData != null)
         {
             //Debug.LogWarning($"TransmissionBase tokenUser.SerializableReadWrite: {tokenUser.SerializableReadWrite.Length}");
-            Register(tokenUser.SerializableReadWrite);
+            Register(sData);
         }
         else
         {

@@ -109,6 +109,8 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks
             return true;
         }
 
+        CurrentPhotonRoomState = PhotonRoomState.Connecting;
+
         PhotonNetwork.OfflineMode = false;
 
         Debug.Log($"{scriptName} Connecting Server");

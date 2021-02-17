@@ -56,13 +56,42 @@ public class NetworkSystem : MonoBehaviour, INetworkConnectUser, ITokenProvider,
     #region ITokenProvider. Network Transmission Token
     public object RequestSyncToken(InstantiationData datatoSend)
     {
-        return inc.RequestSyncToken(datatoSend, transform.root) as object;
+        var go = INetworkConnectGO.GetComponent<ITokenProvider>().RequestSyncToken(datatoSend);
+        (go as GameObject).transform.SetParent(transform.root);
+
+        return go;
     }
 
     //public object RequestManualSyncToken(InstantiationData datatoSend)
     //{
     //    return inc.ManualBuildSyncToken(datatoSend);
     //}
+
+    public void RevokeSyncToken(object targetToken)
+    {
+        INetworkConnectGO.GetComponent<ITokenProvider>().RevokeSyncToken(targetToken as GameObject) ;
+    }
+    #endregion
+
+    #region Ownership
+    [SerializeField] OwnershipHelper oh;
+    public void RequestOwnership(object targetObj)
+    {
+        oh.RequestOwnership(targetObj);
+    }
+
+    public void ReleaseOwnership(object targetObj)
+    {
+        oh.ReleaseOwnership(targetObj);
+    }
+    #endregion
+
+    #region RoomObject
+    [SerializeField] RoomObjectHelper roh;
+    public void InstantiateRoomObject(InstantiationData insData)
+    {
+        roh.InstantiateroomObject(insData);
+    }
     #endregion
 
     #region checker?

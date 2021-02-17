@@ -1269,13 +1269,37 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""RemoveHostPlayer"",
+                    ""type"": ""Button"",
+                    ""id"": ""12f03da1-1b92-4f12-afa9-21c96c0fdb9e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""CreateRoomObject"",
+                    ""type"": ""Button"",
+                    ""id"": ""2b492f75-b10e-4aa0-b07e-597026c04d77"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""RemoveRoomObject"",
+                    ""type"": ""Button"",
+                    ""id"": ""e90b91c9-9663-4328-89c2-5bf897d28316"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
                 {
-                    ""name"": ""Button With One Modifier"",
+                    ""name"": ""Button With Two Modifiers"",
                     ""id"": ""b1eca128-3142-44cb-baf0-60794d01ec6e"",
-                    ""path"": ""ButtonWithOneModifier"",
+                    ""path"": ""ButtonWithTwoModifiers"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1284,7 +1308,7 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""modifier"",
+                    ""name"": ""modifier2"",
                     ""id"": ""d8fe2aca-d735-4429-9011-154efa442d13"",
                     ""path"": ""<Keyboard>/ctrl"",
                     ""interactions"": """",
@@ -1295,13 +1319,156 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""button"",
+                    ""name"": ""modifier1"",
                     ""id"": ""71bb28bb-7bf6-46c7-917b-be6be201bc26"",
-                    ""path"": ""<Keyboard>/c"",
+                    ""path"": ""<Keyboard>/shift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""CreateHostPlayer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Button"",
+                    ""id"": ""32349d99-a18b-4034-b77e-a99d3e98032c"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CreateHostPlayer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Button With Two Modifiers"",
+                    ""id"": ""640125fd-a097-456e-990b-3a3d0555cd1c"",
+                    ""path"": ""ButtonWithTwoModifiers"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CreateRoomObject"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""c0f77e8e-3c87-4677-b13f-3884418328eb"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""CreateRoomObject"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""f32e5592-6534-47af-85e1-2eebed72ace0"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""CreateRoomObject"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Button"",
+                    ""id"": ""3cb65db2-65ef-4bea-8b86-1c19c05de2bf"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CreateRoomObject"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Button With Two Modifiers"",
+                    ""id"": ""e8b65e56-d032-4aa7-8ef8-220ab12563de"",
+                    ""path"": ""ButtonWithTwoModifiers"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RemoveHostPlayer"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""4339ff3f-263a-4c43-bf58-12716217431a"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""RemoveHostPlayer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""ce61dfe5-28e4-4222-bbf2-f5360a23bbb4"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""RemoveHostPlayer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Button"",
+                    ""id"": ""6032fe4c-30a7-4e25-8e57-65b9d6a28e5b"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RemoveHostPlayer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Button With Two Modifiers"",
+                    ""id"": ""d80e59da-68c7-484d-b8aa-90572128ef86"",
+                    ""path"": ""ButtonWithTwoModifiers"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RemoveRoomObject"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""48fb6055-e5e7-450a-8e3d-f508a4a26076"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""RemoveRoomObject"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""166a461f-7edb-449b-90e4-06edc73b1af1"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""RemoveRoomObject"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Button"",
+                    ""id"": ""b059d120-ad0c-4158-bbc1-f6e771d9ec44"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RemoveRoomObject"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 }
@@ -1406,6 +1573,9 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         // InRoom
         m_InRoom = asset.FindActionMap("InRoom", throwIfNotFound: true);
         m_InRoom_CreateHostPlayer = m_InRoom.FindAction("CreateHostPlayer", throwIfNotFound: true);
+        m_InRoom_RemoveHostPlayer = m_InRoom.FindAction("RemoveHostPlayer", throwIfNotFound: true);
+        m_InRoom_CreateRoomObject = m_InRoom.FindAction("CreateRoomObject", throwIfNotFound: true);
+        m_InRoom_RemoveRoomObject = m_InRoom.FindAction("RemoveRoomObject", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1739,11 +1909,17 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
     private readonly InputActionMap m_InRoom;
     private IInRoomActions m_InRoomActionsCallbackInterface;
     private readonly InputAction m_InRoom_CreateHostPlayer;
+    private readonly InputAction m_InRoom_RemoveHostPlayer;
+    private readonly InputAction m_InRoom_CreateRoomObject;
+    private readonly InputAction m_InRoom_RemoveRoomObject;
     public struct InRoomActions
     {
         private @PUN2Tester m_Wrapper;
         public InRoomActions(@PUN2Tester wrapper) { m_Wrapper = wrapper; }
         public InputAction @CreateHostPlayer => m_Wrapper.m_InRoom_CreateHostPlayer;
+        public InputAction @RemoveHostPlayer => m_Wrapper.m_InRoom_RemoveHostPlayer;
+        public InputAction @CreateRoomObject => m_Wrapper.m_InRoom_CreateRoomObject;
+        public InputAction @RemoveRoomObject => m_Wrapper.m_InRoom_RemoveRoomObject;
         public InputActionMap Get() { return m_Wrapper.m_InRoom; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1756,6 +1932,15 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                 @CreateHostPlayer.started -= m_Wrapper.m_InRoomActionsCallbackInterface.OnCreateHostPlayer;
                 @CreateHostPlayer.performed -= m_Wrapper.m_InRoomActionsCallbackInterface.OnCreateHostPlayer;
                 @CreateHostPlayer.canceled -= m_Wrapper.m_InRoomActionsCallbackInterface.OnCreateHostPlayer;
+                @RemoveHostPlayer.started -= m_Wrapper.m_InRoomActionsCallbackInterface.OnRemoveHostPlayer;
+                @RemoveHostPlayer.performed -= m_Wrapper.m_InRoomActionsCallbackInterface.OnRemoveHostPlayer;
+                @RemoveHostPlayer.canceled -= m_Wrapper.m_InRoomActionsCallbackInterface.OnRemoveHostPlayer;
+                @CreateRoomObject.started -= m_Wrapper.m_InRoomActionsCallbackInterface.OnCreateRoomObject;
+                @CreateRoomObject.performed -= m_Wrapper.m_InRoomActionsCallbackInterface.OnCreateRoomObject;
+                @CreateRoomObject.canceled -= m_Wrapper.m_InRoomActionsCallbackInterface.OnCreateRoomObject;
+                @RemoveRoomObject.started -= m_Wrapper.m_InRoomActionsCallbackInterface.OnRemoveRoomObject;
+                @RemoveRoomObject.performed -= m_Wrapper.m_InRoomActionsCallbackInterface.OnRemoveRoomObject;
+                @RemoveRoomObject.canceled -= m_Wrapper.m_InRoomActionsCallbackInterface.OnRemoveRoomObject;
             }
             m_Wrapper.m_InRoomActionsCallbackInterface = instance;
             if (instance != null)
@@ -1763,6 +1948,15 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                 @CreateHostPlayer.started += instance.OnCreateHostPlayer;
                 @CreateHostPlayer.performed += instance.OnCreateHostPlayer;
                 @CreateHostPlayer.canceled += instance.OnCreateHostPlayer;
+                @RemoveHostPlayer.started += instance.OnRemoveHostPlayer;
+                @RemoveHostPlayer.performed += instance.OnRemoveHostPlayer;
+                @RemoveHostPlayer.canceled += instance.OnRemoveHostPlayer;
+                @CreateRoomObject.started += instance.OnCreateRoomObject;
+                @CreateRoomObject.performed += instance.OnCreateRoomObject;
+                @CreateRoomObject.canceled += instance.OnCreateRoomObject;
+                @RemoveRoomObject.started += instance.OnRemoveRoomObject;
+                @RemoveRoomObject.performed += instance.OnRemoveRoomObject;
+                @RemoveRoomObject.canceled += instance.OnRemoveRoomObject;
             }
         }
     }
@@ -1850,5 +2044,8 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
     public interface IInRoomActions
     {
         void OnCreateHostPlayer(InputAction.CallbackContext context);
+        void OnRemoveHostPlayer(InputAction.CallbackContext context);
+        void OnCreateRoomObject(InputAction.CallbackContext context);
+        void OnRemoveRoomObject(InputAction.CallbackContext context);
     }
 }

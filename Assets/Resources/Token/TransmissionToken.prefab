@@ -72,7 +72,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dae0382315942114093bb2da32cf4a1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  osa: {fileID: 3198224229752424880}
+  refObj: {fileID: 0}
   tType: 0
   seriHelper: {fileID: 789010574065468813}
   statHelper: {fileID: 3129467774125685042}
@@ -115,7 +115,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45b023b1fd09b04eb87d1f43e473dd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  refObject: {fileID: 0}
+  refObj: {fileID: 0}
+  osa: {fileID: 3198224229752424880}
 --- !u!114 &6121163032142091507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,7 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b3b184c44917f14cbd156af4aee3624, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  refPlayer: {fileID: 0}
+  parent: {fileID: 0}
 --- !u!114 &3198224229752424880
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -142,3 +143,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ownershipOption: 2
+  targetObject: {fileID: 0}

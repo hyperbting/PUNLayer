@@ -16,6 +16,17 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
     public Action<InstantiationData> OnJoinedOnlineRoomEventBeforeTokenCreation { get; set; }
     //public Action<ITransmissionBase> OnJoinedOnlineRoomEventAfterTokenCreation { get; set; }
 
+    private void OnDestroy()
+    {
+        ServiceManager.Instance.networkSystem.OnJoinedOnlineRoomEvent -= TryOnJoinedRoomAct;
+
+        if (trasnTokenGO == null)
+            return;
+
+        tokenProvider.RevokeSyncToken(trasnTokenGO);//Destroy(trasnTokenGO);
+    }
+
+
     #region Checker
     public bool HavingToken()
     {
@@ -41,13 +52,8 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
     }
     #endregion
 
-    //[SerializeField] bool setuped = false;
     public void Setup(ITokenProvider itp, ISyncHandlerUser handlerUser)
     {
-        //if (setuped)
-        //    return;
-        //setuped = true;
-
         Debug.Log($"TokenHandler Setup");
 
         tokenProvider = itp;
@@ -126,12 +132,11 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
 
         var datatoSend = InstantiationData.Build(SyncTokenType.General);
         datatoSend.Add("RenameGO", "InRoomObject");
-        targetObj = tokenProvider.RequestSyncToken(datatoSend) as GameObject;
 
-        return targetObj;
+        return tokenProvider.RequestSyncToken(datatoSend);
     }
 
-    public bool DestroyTargetObject()
+    public bool DestroyTargetObject(object targetObj)
     {
         if (targetObj == null)
         {
@@ -139,57 +144,8 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
             return false;
         }
 
-        PrefabPoolManager.Instance.Destroy(targetObj);
-        targetObj = null;
+        //PrefabPoolManager.Instance.Destroy(targetObj);
         return true;
-    }
-
-    public GameObject targetObj;
-    public void RequestOwnership()
-    {
-        if (targetObj == null)
-        {
-            Debug.Log($"targetObj missing");
-            return;
-        }
-        var scr = targetObj.GetComponent<OwnershipSubAdditive>();
-        if (scr == null)
-        {
-            Debug.Log($"targetObj OwnershipSubAdditive missing");
-            return;
-        }
-
-        if (!HavingToken())
-        {
-            Debug.Log($"NotInRoom");
-            return;
-        }
-
-        var tb = trasnTokenGO.GetComponent<TransmissionBase>();
-        if (tb == null)
-        {
-            Debug.Log($"TransmissionBase missing");
-            return;
-        }
-
-        _ = scr.RequestOwnership(tb.GetOwner());
-    }
-
-    public void ReleaseOwnership()
-    {
-        if (targetObj == null)
-        {
-            Debug.Log($"targetObj missing");
-            return;
-        }
-        var scr = targetObj.GetComponent<OwnershipSubAdditive>();
-        if (scr == null)
-        {
-            Debug.Log($"targetObj OwnershipSubAdditive missing");
-            return;
-        }
-
-        _ = scr.ReleaseOwnership();
     }
     #endregion
 }

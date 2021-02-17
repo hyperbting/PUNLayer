@@ -3,36 +3,45 @@ using UnityEngine;
 
 public class PersistenceHelper : MonoBehaviour
 {
-    public bool shouldCountdown = false;
-    public TransmissionBase tBase;
+    [SerializeField] bool shouldCountdown = false;
     [SerializeField] string tokenID;
 
     Action OnDestroyEvent;
 
+    [SerializeField] TransmissionBase refToken;
     private void OnDestroy()
     {
         OnDestroyEvent?.Invoke();
-        if (tBase != null)
-            Destroy(tBase.gameObject);
+        if (refToken)
+            Destroy(refToken.gameObject);
     }
 
     [SerializeField] float lifetime = 30;
-    public void Init(float delayDestroy = 30)
+    public void Init(string uuid, Action onDestroyAct=null, TransmissionBase refToken=null)
     {
-        lifetime = delayDestroy;
+        Debug.Log($"PersistenceHelper Init");
+        tokenID = uuid;
+
+        if (onDestroyAct != null)
+            OnDestroyEvent += onDestroyAct;
+
+        if (refToken)
+            this.refToken = refToken;
     }
 
-    public void Init(string uuid, Action onDestroyAct, float delayDestroy = 30)
+    public void Setup(float delayDestroy = 30)
     {
-        Init(delayDestroy);
-
-        tokenID = uuid;
-        OnDestroyEvent += onDestroyAct;
+        lifetime = delayDestroy;
+        if (delayDestroy >= 0)
+        {
+            this.shouldCountdown = true;
+            this.enabled = true;
+        }
     }
 
     private void FixedUpdate()
     {
-        if (!shouldCountdown || tBase != null)
+        if (!shouldCountdown || refToken)
             return;
 
         if (lifetime <= 0)

@@ -10,11 +10,6 @@ using UnityEngine;
 public partial class PUNConnecter : MonoBehaviourPunCallbacks
 {
     #region Progress Record
-    [SerializeField]
-    private bool joiningRoom = false;
-    [SerializeField]
-    private bool leavingRoom = false;
-
     TaskCompletionSource<bool> joinRoomResult;
     TaskCompletionSource<bool> leaveRoomResult;
 
@@ -22,7 +17,7 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks
     string lastJoinedRoom;
     #endregion
 
-    #region MasterSserver to GameRoom
+    #region MasterServer to/ From GameRoom
     public async Task<bool> JoinGameRoom(string roomName)
     {
         //Already in room?
@@ -33,28 +28,24 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks
                 Debug.Log($"{scriptName} JoinGameRoom AlreadyInNamedRoom");
                 return true;
             }
-            else
+
+            if (await LeaveRoom() && await IsConnectedAndReady(5000))
             {
-                if (await LeaveRoom() && await IsConnectedAndReady(5000))
-                {
-                    Debug.Log($"{scriptName} JoinGameRoom LeftRoom And ReadyForJoinRoom");
-                }
+                Debug.Log($"{scriptName} JoinGameRoom LeftRoom And ReadyForJoinRoom");
             }
         }
 
-        if (joiningRoom)
+        if (CurrentPhotonRoomState == PhotonRoomState.JoiningRoom)
         {
             Debug.LogWarning($"{scriptName} JoinGameRoom WasJoiningRoom");
             return await joinRoomResult.Task;
         }
 
-        CurrentPhotonRoomState = PhotonRoomState.Connecting;
+        CurrentPhotonRoomState = PhotonRoomState.JoiningRoom;
 
         // if for what reason NOT at state can JoinRoom, go offline
         if (!PhotonNetwork.IsConnectedAndReady)
             PhotonNetwork.OfflineMode = true;
-
-        joiningRoom = true;
 
         var rooOpt = new RoomOptions() {
             //PlayerTtl = 60000,
@@ -75,13 +66,9 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks
         if(!joinRoomResult.Task.IsCompleted)
             joinRoomResult.TrySetResult(false);
 
-        joiningRoom = false;
-
         return joinRoomResult.Task.Result;
     }
-    #endregion
 
-    #region Room Function
     public async Task<bool> LeaveRoom()
     {
         if (!PhotonNetwork.InRoom)
@@ -90,13 +77,12 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks
             return true;
         }
 
-        if (leavingRoom)
+        if (CurrentPhotonRoomState == PhotonRoomState.LeavingRoom)
         {
             Debug.LogWarning($"{scriptName} LeaveRoom:WasLeavingRoom");
             return await leaveRoomResult.Task;
         }
 
-        leavingRoom = true;
         leaveRoomResult = new TaskCompletionSource<bool>();
         PhotonNetwork.LeaveRoom();
 
@@ -104,7 +90,6 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks
         if (!leaveRoomResult.Task.IsCompleted)
             leaveRoomResult.TrySetResult(false);
 
-        leavingRoom = false;
         return leaveRoomResult.Task.Result;
     }
     #endregion
@@ -176,7 +161,7 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks
 
         leaveRoomResult?.TrySetResult(true);
 
-        CurrentPhotonRoomState = PhotonRoomState.LeftRoom;
+        CurrentPhotonRoomState = PhotonRoomState.CanJoinRoom;
     }
 
     //public override void OnFriendListUpdate(List<FriendInfo> friendList)
@@ -190,7 +175,8 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks
         Unknown,
         Connecting,
         CanJoinRoom,
-        LeftRoom,
+        JoiningRoom,
+        LeavingRoom,
         OnlineRoom,
         OfflineRoom
     }
