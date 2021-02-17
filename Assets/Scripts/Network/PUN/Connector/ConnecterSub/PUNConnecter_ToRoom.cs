@@ -23,14 +23,16 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks
         //Already in room?
         if (PhotonNetwork.InRoom)
         {
+            //Already in desired room?
             if (PhotonNetwork.CurrentRoom.Name == roomName)
             {
                 Debug.Log($"{scriptName} JoinGameRoom AlreadyInNamedRoom");
                 return true;
             }
-
-            if (await LeaveRoom() && await IsConnectedAndReady(5000))
+            else
             {
+                // leave current room
+                await LeaveRoom();
                 Debug.Log($"{scriptName} JoinGameRoom LeftRoom And ReadyForJoinRoom");
             }
         }
@@ -87,7 +89,12 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks
         PhotonNetwork.LeaveRoom();
 
         await Task.WhenAny(leaveRoomResult.Task, Task.Delay(60000));
-        if (!leaveRoomResult.Task.IsCompleted)
+        if (leaveRoomResult.Task.IsCompleted)
+        {
+            // Wait At most 5sec till PhotonNetwork.IsConnectedAndReady==true
+            await IsConnectedAndReady(5000);
+        }
+        else
             leaveRoomResult.TrySetResult(false);
 
         return leaveRoomResult.Task.Result;
