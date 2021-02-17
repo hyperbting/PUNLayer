@@ -10,14 +10,25 @@ public interface INetworkConnect
     #endregion
 
     #region ToLobby
-    // notify when service is connected and ready for Matchmaking
+    /// <summary>
+    /// ConnectToServer when service is connected and ready for Matchmaking
+    /// </summary>
+    /// <returns></returns>
     Task<bool> ConnectToServer();
     #endregion
 
     #region ToRoom
-    // notify when Matchmaking success
+    /// <summary>
+    /// JoinGameRoom
+    /// </summary>
+    /// <param name="roomName"></param>
+    /// <returns></returns>
     Task<bool> JoinGameRoom(string roomName);
 
+    /// <summary>
+    /// LeaveRoom
+    /// </summary>
+    /// <returns></returns>
     Task<bool> LeaveRoom();
     #endregion
 
@@ -42,17 +53,17 @@ public interface INetworkConnectUser
     Action OnJoinedOfflineRoomEvent { get; set; }
 }
 
-public enum NetworkState
-{
-    Unknown,
-    Offline,    // In Offline Room  
-    Connecting, // from Offline to Online
-    Online,     // In Online Room
-}
+//public enum NetworkState
+//{
+//    Unknown,
+//    Offline,    // In Offline Room  
+//    Connecting, // from Offline to Online
+//    Online,     // In Online Room
+//}
 
-public enum InternetState
-{
-    Unknown,
-    NoInternet, // User Disable all Internet Adaptors
-    Reachable,
-}
+//public enum InternetState
+//{
+//    Unknown,
+//    NoInternet, // User Disable all Internet Adaptors
+//    Reachable,
+//}
