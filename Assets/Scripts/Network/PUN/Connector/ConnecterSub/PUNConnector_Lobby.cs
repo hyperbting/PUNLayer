@@ -178,12 +178,16 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks
             return await disconnectResult.Task;
         }
 
+        CurrentPhotonRoomState = PhotonRoomState.Disconnecting;
+
         disconnecting = true;
         disconnectResult = new TaskCompletionSource<bool>();
         PhotonNetwork.Disconnect();
 
         await Task.WhenAny( disconnectResult.Task, Task.Delay(60000));
-        if (!disconnectResult.Task.IsCompleted)
+        if (disconnectResult.Task.IsCompleted)
+            CurrentPhotonRoomState = PhotonRoomState.Disconnected;
+        else
             disconnectResult.TrySetResult(false);
 
         disconnecting = false;
@@ -265,7 +269,7 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks
     {
         Debug.LogWarning($"{scriptName} OnDisconnected {cause}");
         base.OnDisconnected(cause);
-        CurrentPhotonRoomState = PhotonRoomState.Unknown;
+        CurrentPhotonRoomState = PhotonRoomState.Disconnected;
 
         connectMSResult?.TrySetResult(false);
 

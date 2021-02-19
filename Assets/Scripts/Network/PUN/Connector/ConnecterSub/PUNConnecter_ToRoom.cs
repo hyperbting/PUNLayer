@@ -182,7 +182,8 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks
 
     public enum PhotonRoomState
     {
-        Unknown,
+        Disconnecting,
+        Disconnected,
         Connecting,
         CanJoinRoom,
         JoiningRoom,

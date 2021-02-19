@@ -29,7 +29,7 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, INetworkConnect
     #region
     Action<PhotonRoomState, PhotonRoomState> OnPhotonRoomStateChange;
     [SerializeField]
-    PhotonRoomState currentPhotonRoomState = PhotonRoomState.Unknown;
+    PhotonRoomState currentPhotonRoomState = PhotonRoomState.Disconnected;
     public PhotonRoomState CurrentPhotonRoomState {
         get {
             return currentPhotonRoomState;
