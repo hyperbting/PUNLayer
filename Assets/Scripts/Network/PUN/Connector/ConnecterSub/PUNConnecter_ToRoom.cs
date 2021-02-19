@@ -92,7 +92,10 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks
         if (leaveRoomResult.Task.IsCompleted)
         {
             // Wait At most 5sec till PhotonNetwork.IsConnectedAndReady==true
-            await IsConnectedAndReady(5000);
+            if (await IsConnectedAndReady(5000))
+            {
+                CurrentPhotonRoomState = PhotonRoomState.CanJoinRoom;
+            }
         }
         else
             leaveRoomResult.TrySetResult(false);
@@ -168,7 +171,7 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks
 
         leaveRoomResult?.TrySetResult(true);
 
-        CurrentPhotonRoomState = PhotonRoomState.CanJoinRoom;
+        CurrentPhotonRoomState = PhotonRoomState.LeftRoom;
     }
 
     //public override void OnFriendListUpdate(List<FriendInfo> friendList)
@@ -184,6 +187,7 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks
         CanJoinRoom,
         JoiningRoom,
         LeavingRoom,
+        LeftRoom,
         OnlineRoom,
         OfflineRoom
     }

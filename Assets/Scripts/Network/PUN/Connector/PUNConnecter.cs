@@ -183,7 +183,7 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, INetworkConnect
             await Task.Delay(100);
             if (PhotonNetwork.IsConnectedAndReady)
             {
-                Debug.LogWarning($"{scriptName} IsConnectedAndReady in less than {i*100}ms");
+                Debug.LogWarning($"{scriptName} IsConnectedAndReady {PhotonNetwork.NetworkClientState} in less than {i*100}ms");
                 return true;
             }
         }
