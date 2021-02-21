@@ -21,8 +21,10 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, INetworkConnect
             if (serSettings != null)
                 return serSettings;
 
-            Debug.LogError("ServerSettings Missing!");
-            return null;
+            serSettings = Resources.Load<ServerSettings>("PhotonServerSettings");
+                
+            Debug.LogWarning("ServerSettings Missing! TryLoad From Resources");
+            return serSettings;
         }
     }
 
@@ -44,8 +46,8 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, INetworkConnect
         }
     }
 
-    public ServerTarget serMasterTarget;
-    #endregion
+    [SerializeField] ServerTarget serMasterTarget;
+    #endregion Init
     public void Init(INetworkConnectUser incUser)
     {
         incu = incUser;
