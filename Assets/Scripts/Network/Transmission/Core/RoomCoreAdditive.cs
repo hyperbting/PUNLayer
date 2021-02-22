@@ -22,10 +22,10 @@ public class RoomCoreAdditive: MonoBehaviour, ICoreAdditive
         osa.Init(data);
 
         //
-        if (data.TryGetValue(InstantiationData.InstantiationKey.objectuuid, out object objuuid) &&
-            data.TryGetValue(InstantiationData.InstantiationKey.objectname, out object val))
+        if (data.TryGetValue(InstantiationData.InstantiationKey.objectuuid, out object objUUID) &&
+            data.TryGetValue(InstantiationData.InstantiationKey.objectname, out object objName))
         {
-            var obj = ObjectSupplyManager.Instance.BuildObject((string)val, (string)objuuid);
+            var obj = ObjectSupplyManager.Instance.BuildObject((string)objName, (string)objUUID);
             if (obj == null)
             {
                 Debug.LogError("[Init] Fail to BuildObject");

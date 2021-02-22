@@ -115,7 +115,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45b023b1fd09b04eb87d1f43e473dd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  refObj: {fileID: 0}
   osa: {fileID: 3198224229752424880}
 --- !u!114 &6121163032142091507
 MonoBehaviour:

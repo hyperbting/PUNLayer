@@ -49,8 +49,7 @@ public partial class InputManager : MonoBehaviour
         playerMaker.DestroyObject();
     }
 
-    [Header("RoomObject")]
-    [SerializeField] GameObject roObjectPrefab;
+    //[Header("RoomObject")]
     void CreateRoomObject(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
     {
         if (ctx.ReadValue<float>() < 0.5)
@@ -58,7 +57,7 @@ public partial class InputManager : MonoBehaviour
 
         Debug.Log("TryCreateRoomObject");
         var data = new InstantiationData() { tokenType = SyncTokenType.General };
-        data[InstantiationData.InstantiationKey.objectname.ToString()] = roObjectPrefab.name;
+        data[InstantiationData.InstantiationKey.objectname.ToString()] = "RoomObject";
         data[InstantiationData.InstantiationKey.sceneobject.ToString()] = "create";
 
         ServiceManager.Instance.networkSystem.InstantiateRoomObject(data);
