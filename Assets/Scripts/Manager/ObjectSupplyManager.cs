@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectManager : SingletonMonoBehaviour<ObjectManager>, IObjectSupplyManager
+public class ObjectSupplyManager : SingletonMonoBehaviour<ObjectSupplyManager>, IObjectSupplyManager
 {
     Func<string, string, object> ObjectBuilder;
     Action<string, string> ObjectDestroyer;

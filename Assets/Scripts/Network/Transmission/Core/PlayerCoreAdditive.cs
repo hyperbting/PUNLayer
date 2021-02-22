@@ -37,7 +37,7 @@ public class PlayerCoreAdditive : MonoBehaviour, ICoreAdditive
             data.TryGetValue(InstantiationData.InstantiationKey.objectname, out object objname))
         {
             // remote one, Create based on ObjectName
-            var go = ObjectManager.Instance.BuildObject((string)objname, (string)objuuid) as GameObject;
+            var go = ObjectSupplyManager.Instance.BuildObject((string)objname, (string)objuuid) as GameObject;
             this.parent.RefObject = go;
 
             go.GetComponent<Player>().Init(data, false, parent);

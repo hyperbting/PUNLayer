@@ -25,7 +25,7 @@ public class RoomCoreAdditive: MonoBehaviour, ICoreAdditive
         if (data.TryGetValue(InstantiationData.InstantiationKey.objectuuid, out object objuuid) &&
             data.TryGetValue(InstantiationData.InstantiationKey.objectname, out object val))
         {
-            var obj = ObjectManager.Instance.BuildObject((string)val, (string)objuuid);
+            var obj = ObjectSupplyManager.Instance.BuildObject((string)val, (string)objuuid);
             if (obj == null)
             {
                 Debug.LogError("[Init] Fail to BuildObject");

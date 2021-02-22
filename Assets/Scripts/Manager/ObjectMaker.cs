@@ -6,12 +6,12 @@ public class ObjectMaker : MonoBehaviour, IObjectSupplier
 {
     private void OnEnable()
     {
-        ObjectManager.Instance.RegisterObjectSupplier(this);
+        ObjectSupplyManager.Instance.RegisterObjectSupplier(this);
     }
 
     private void OnDisable()
     {
-        ObjectManager.Instance.UnregisterObjectSupplier(this);
+        ObjectSupplyManager.Instance.UnregisterObjectSupplier(this);
     }
 
     public GameObject roomobjectPrefab;

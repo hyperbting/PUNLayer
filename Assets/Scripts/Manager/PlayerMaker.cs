@@ -18,7 +18,7 @@ public class PlayerMaker : SingletonMonoBehaviour<PlayerMaker>, IObjectSupplier
     void Start()
     {
         randomID = Random.Range(1000, 9999).ToString();
-        ObjectManager.Instance.RegisterObjectSupplier(this);
+        ObjectSupplyManager.Instance.RegisterObjectSupplier(this);
 
         if(createPlayerOnStart)
             InstantiateObject();
@@ -26,7 +26,7 @@ public class PlayerMaker : SingletonMonoBehaviour<PlayerMaker>, IObjectSupplier
 
     private void OnDestroy()
     {
-        ObjectManager.Instance.UnregisterObjectSupplier(this);
+        ObjectSupplyManager.Instance.UnregisterObjectSupplier(this);
     }
 
     public GameObject GetMine()
