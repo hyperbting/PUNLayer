@@ -9,11 +9,14 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IP
     ICoreAdditive roomCoreAdditive;
 
     [SerializeField] GameObject refObj;
-    public object RefObject {
-        get {
+    public object RefObject
+    {
+        get
+        {
             return refObj;
         }
-        set {
+        set
+        {
             refObj = value as GameObject;
         }
     }
@@ -68,14 +71,9 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IP
         if (photonView.InstantiationData == null)
             return;
 
-        if (photonView.IsMine)
-            return;
-
         InstantiationData data = new InstantiationData(photonView.InstantiationData);
         Debug.Log($"TransmissionBase Start Remotely.");
         Setup(data);
-
-        started = true;
     }
 
     public override void OnDisable()
@@ -99,22 +97,25 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IP
                 break;
             default:
             case SyncTokenType.General:
+                Debug.LogWarning("TransmissionBase Setup General");
                 roomCoreAdditive.Init(insData, photonView.IsMine);
                 break;
         }
 
-        // Setup SerializableReadWrite
-        var tokenUser = refObj?.GetComponent<ISyncHandlerUser>();
-        var sData = tokenUser?.SerializableReadWrite;
-        if (sData != null)
-        {
-            //Debug.LogWarning($"TransmissionBase tokenUser.SerializableReadWrite: {tokenUser.SerializableReadWrite.Length}");
-            Register(sData);
-        }
-        else
-        {
-            Debug.LogWarning($"TransmissionBase {gameObject.name}: No TokenUser/ no SerializableReadWrite for Sync!");
-        }
+        //// Setup SerializableReadWrite
+        //var tokenUser = refObj?.GetComponent<ISyncHandlerUser>();
+        //var sData = tokenUser?.SerializableReadWrite;
+        //if (sData != null)
+        //{
+        //    //Debug.LogWarning($"TransmissionBase tokenUser.SerializableReadWrite: {tokenUser.SerializableReadWrite.Length}");
+        //    Register(sData);
+        //}
+        //else
+        //{
+        //    Debug.LogWarning($"TransmissionBase {gameObject.name}: No TokenUser/ no SerializableReadWrite for Sync!");
+        //}
+
+        started = true;
     }
 
     #region Register

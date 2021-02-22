@@ -1280,6 +1280,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "TryInteract",
+                    "type": "Button",
+                    "id": "697c1ee6-f3da-4cef-88ee-b7dac7a6bf83",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -1458,6 +1466,17 @@
                     "action": "RemoveRoomObject",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "2b167dc2-c707-4524-8483-e9fb28272729",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "TryInteract",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

@@ -2,7 +2,6 @@
 
 public class PlayerCoreAdditive : MonoBehaviour, ICoreAdditive
 {
-    //[SerializeField] GameObject refPlayer;
     [SerializeField] TransmissionBase parent;
     public SyncTokenType AdditiveType { get { return SyncTokenType.Player; } }
 

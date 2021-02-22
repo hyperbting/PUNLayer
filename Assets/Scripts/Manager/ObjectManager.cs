@@ -3,25 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectManager : SingletonMonoBehaviour<ObjectManager>, IObjectSupplier
+public class ObjectManager : SingletonMonoBehaviour<ObjectManager>, IObjectSupplyManager
 {
-    Func<string, string, object> ObjectBuilder
-    {
-        get;
-        set;
-    }
+    Func<string, string, object> ObjectBuilder;
+    Action<string, string> ObjectDestroyer;
 
     #region IObjectSupplier
-
-    public void RegisterBuilder(Func<string, string, object> builder)
+    public void RegisterObjectSupplier(IObjectSupplier objSupplier)
     {
-        ObjectBuilder += builder;
+        ObjectBuilder += objSupplier.BuildLocalObject;
+        ObjectDestroyer += objSupplier.DestroyLocalObject;
     }
 
-    public void UnregisterBuilder(Func<string, string, object> builder)
+    public void UnregisterObjectSupplier(IObjectSupplier objSupplier)
     {
-        ObjectBuilder -= builder;
+        ObjectBuilder -= objSupplier.BuildLocalObject;
+        ObjectDestroyer -= objSupplier.DestroyLocalObject;
     }
+
 
     public object BuildObject(string objectName, string uuid)
     {
@@ -38,5 +37,14 @@ public class ObjectManager : SingletonMonoBehaviour<ObjectManager>, IObjectSuppl
 
         return obj;
     }
+
+    public void DestroyObject(string objName, string UUID)
+    {
+        if (ObjectDestroyer == null)
+            return;
+
+        ObjectDestroyer.Invoke(objName, UUID);
+    }
+
     #endregion
 }

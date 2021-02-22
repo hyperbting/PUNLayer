@@ -23,9 +23,10 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
         if (trasnTokenGO == null)
             return;
 
-        tokenProvider.RevokeSyncToken(trasnTokenGO);//Destroy(trasnTokenGO);
+        var networkID = trasnTokenGO.GetComponent<IOwnershipInteractable>().GetNetworkID();
+        if(networkID >0)
+            tokenProvider.RevokeSyncToken(networkID);
     }
-
 
     #region Checker
     public bool HavingToken()
@@ -106,46 +107,46 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
     }
     #endregion
 
-    #region PlayerProperties: direct set
-    public bool PushStateInto(string key, object data)
-    {
-        if (!HavingToken())
-        {
-            Debug.Log($"NotInRoom");
-            return false;
-        }
+ //   #region PlayerProperties: direct set
+ //   public bool PushStateInto(string key, object data)
+ //   {
+ //       if (!HavingToken())
+ //       {
+ //           Debug.Log($"NotInRoom");
+ //           return false;
+ //       }
 
-        // Bsed on registered tokenType, use corresponding helper, Data will sync through Player/RoomProperties 
-        trasnTokenGO.GetComponent<TransmissionBase>().UpdateProperties(tokenUser.SupplyInstantiationData.tokenType, key, data);
-        return true;
-	}
-    #endregion
+ //       // Bsed on registered tokenType, use corresponding helper, Data will sync through Player/RoomProperties 
+ //       trasnTokenGO.GetComponent<TransmissionBase>().UpdateProperties(tokenUser.SupplyInstantiationData.tokenType, key, data);
+ //       return true;
+	//}
+ //   #endregion
 
-    #region
-    public object CreateInRoomObject()
-    {
-        if (!HavingToken())
-        {
-            Debug.Log($"NotInRoom");
-            return null;
-        }
+ //   #region
+ //   public object CreateInRoomObject()
+ //   {
+ //       if (!HavingToken())
+ //       {
+ //           Debug.Log($"NotInRoom");
+ //           return null;
+ //       }
 
-        var datatoSend = InstantiationData.Build(SyncTokenType.General);
-        datatoSend.Add("RenameGO", "InRoomObject");
+ //       var datatoSend = InstantiationData.Build(SyncTokenType.General);
+ //       datatoSend.Add("RenameGO", "InRoomObject");
 
-        return tokenProvider.RequestSyncToken(datatoSend);
-    }
+ //       return tokenProvider.RequestSyncToken(datatoSend);
+ //   }
 
-    public bool DestroyTargetObject(object targetObj)
-    {
-        if (targetObj == null)
-        {
-            Debug.Log($"NoTarget");
-            return false;
-        }
+ //   public bool DestroyTargetObject(object targetObj)
+ //   {
+ //       if (targetObj == null)
+ //       {
+ //           Debug.Log($"NoTarget");
+ //           return false;
+ //       }
 
-        //PrefabPoolManager.Instance.Destroy(targetObj);
-        return true;
-    }
-    #endregion
+ //       //PrefabPoolManager.Instance.Destroy(targetObj);
+ //       return true;
+ //   }
+ //   #endregion
 }

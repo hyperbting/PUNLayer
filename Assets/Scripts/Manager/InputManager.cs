@@ -58,7 +58,6 @@ public partial class InputManager : MonoBehaviour
 
         //// isHost()
         pInput.Player.Fire.performed += Fire;
-        pInput.Player.Fire.performed += DebugClick;
 
         pInput.Player.Echo.performed += Echo;
         pInput.Player.Emit.performed += Emit;
@@ -72,33 +71,6 @@ public partial class InputManager : MonoBehaviour
         //pInput.Player.ChangeGroup.performed += SetInterestGroup;
 
         InRoomSetup();
-    }
-
-    private void DebugClick(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
-    {
-#if ENABLE_INPUT_SYSTEM
-        Vector3 mousePosition = UnityEngine.InputSystem.Mouse.current.position.ReadValue();//pInput.Player.MousePosition.ReadValue<Vector2>();
-#else
-        Vector3 mousePosition = Input.mousePosition;
-#endif
-
-        //mouseCursor.position = mousePosition;
-
-        var ray = Camera.main.ScreenPointToRay(mousePosition);
-        var targets = Physics.RaycastAll(Camera.main.ScreenPointToRay(mousePosition), Mathf.Infinity, LayerMask.GetMask("NetworkView"));
-        foreach (var ta in targets)
-        {
-            //Debug.Log($"{ta.transform.name}");
-            var pv = Photon.Pun.PhotonView.Get(ta.collider);
-            if (pv != null && Photon.Pun.UtilityScripts.PointedAtGameObjectInfo.Instance != null)
-                Photon.Pun.UtilityScripts.PointedAtGameObjectInfo.Instance.SetFocus(pv);
-        }
-    }
-
-    private void Fire(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
-    {
-        if (ctx.ReadValue<float>() < 0.5)
-            return;
     }
 
     private void Move(Vector2 direction)
@@ -160,7 +132,6 @@ public partial class InputManager : MonoBehaviour
         //}
     }
 
-    [SerializeField] GameObject targetObject;
     private void Devour(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
     {
         if (ctx.ReadValue<float>() < 0.5)
@@ -173,13 +144,17 @@ public partial class InputManager : MonoBehaviour
         //tokHandler.DestroyTargetObject(targetObject);
     }
 
+    private void Fire(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
+    {
+        if (ctx.ReadValue<float>() < 0.5)
+            return;
+    }
     private void RequestOwner(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
     {
         if (ctx.ReadValue<float>() < 0.5)
             return;
 
-        Debug.Log($"tokHandler.RequestOwnership");
-        ServiceManager.Instance.networkSystem.RequestOwnership(targetObject);
+        ServiceManager.Instance.interactionManager.TryRequestOwnership();
     }
 
     private void ReleaseOwner(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
@@ -187,8 +162,7 @@ public partial class InputManager : MonoBehaviour
         if (ctx.ReadValue<float>() < 0.5)
             return;
 
-        Debug.Log($"tokHandler.ReleaseOwner");
-        ServiceManager.Instance.networkSystem.ReleaseOwnership(targetObject);
+        ServiceManager.Instance.interactionManager.ReleaseOwnership();
     }
 
     public int sceneID = 0;

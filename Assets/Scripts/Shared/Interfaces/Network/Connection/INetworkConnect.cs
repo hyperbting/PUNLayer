@@ -41,6 +41,9 @@ public interface INetworkConnect
 
     bool IsRoomOwner();
     #endregion
+    #region Getter
+    int GetNetworkID();
+    #endregion
     #endregion
 }
 
@@ -52,18 +55,3 @@ public interface INetworkConnectUser
     Action OnJoinedOnlineRoomEvent { get; set; }
     Action OnJoinedOfflineRoomEvent { get; set; }
 }
-
-//public enum NetworkState
-//{
-//    Unknown,
-//    Offline,    // In Offline Room  
-//    Connecting, // from Offline to Online
-//    Online,     // In Online Room
-//}
-
-//public enum InternetState
-//{
-//    Unknown,
-//    NoInternet, // User Disable all Internet Adaptors
-//    Reachable,
-//}

@@ -3,7 +3,6 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "SharedDataStructures",
         "Shared"
     ],
     "includePlatforms": [],

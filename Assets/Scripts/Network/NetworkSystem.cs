@@ -67,9 +67,21 @@ public class NetworkSystem : MonoBehaviour, INetworkConnectUser, ITokenProvider,
     //    return inc.ManualBuildSyncToken(datatoSend);
     //}
 
-    public void RevokeSyncToken(object targetToken)
+    public void RevokeSyncToken(InstantiationData instData)
     {
-        INetworkConnectGO.GetComponent<ITokenProvider>().RevokeSyncToken(targetToken as GameObject) ;
+        INetworkConnectGO.GetComponent<ITokenProvider>().RevokeSyncToken(instData) ;
+    }
+
+    public void RevokeSyncToken(int networkID)
+    {
+        INetworkConnectGO.GetComponent<ITokenProvider>().RevokeSyncToken(networkID);
+    }
+    #endregion
+
+    #region InRoom
+    public int GetNetworkID()
+    {
+        return inc.GetNetworkID();
     }
     #endregion
 
@@ -88,9 +100,33 @@ public class NetworkSystem : MonoBehaviour, INetworkConnectUser, ITokenProvider,
 
     #region RoomObject
     [SerializeField] RoomObjectHelper roh;
+    public Transform RoomObjectParent
+    {
+        get {
+            return roh.RoomObjectRoot.transform;
+        }
+    }
+
     public void InstantiateRoomObject(InstantiationData insData)
     {
-        roh.InstantiateroomObject(insData);
+        if (!inc.IsInRoom())
+        {
+            Debug.LogWarning("[InstantiateRoomObject] Only InRoom can Instantiate RoomObject!");
+            return;
+        }
+
+        roh.InstantiateRoomObject(insData);
+    }
+
+    public void DestroyRoomObject(InstantiationData insData)
+    {
+        if (!inc.IsInRoom())
+        {
+            Debug.LogWarning("[InstantiateRoomObject] Only InRoom can Destroy RoomObject!");
+            return;
+        }
+
+        roh.DestroyRoomObject(insData);
     }
     #endregion
 

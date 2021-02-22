@@ -2,33 +2,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectMaker : MonoBehaviour
+public class ObjectMaker : MonoBehaviour, IObjectSupplier
 {
     private void OnEnable()
     {
-        ObjectManager.Instance.RegisterBuilder(BuildLocalGameObject);
+        ObjectManager.Instance.RegisterObjectSupplier(this);
     }
 
     private void OnDisable()
     {
-        ObjectManager.Instance.UnregisterBuilder(BuildLocalGameObject);
+        ObjectManager.Instance.UnregisterObjectSupplier(this);
     }
 
     public GameObject roomobjectPrefab;
 
-
-    [SerializeField] RoomObjectHelper roh;
-
     Dictionary<string, GameObject> dic = new Dictionary<string, GameObject>();
-    public GameObject BuildLocalGameObject(string objName, string UUID = null)
+    public object BuildLocalObject(string objName, string UUID)
     {
-        Debug.LogWarning("[ObjectMaker] BuildLocalGameObject");
+        Debug.LogWarning("[ObjectMaker] BuildLocalObject");
 
         GameObject go = null;
         switch (objName)
         {
-            case "RoomBaseObject":
-                Debug.Log("RoomBaseObject");
+            case "RoomObject":
+                Debug.Log("Create RoomObject");
 
                 //LookUp before Create
                 if (UUID != null && dic.TryGetValue(UUID, out go))
@@ -36,12 +33,33 @@ public class ObjectMaker : MonoBehaviour
                     return go;
                 }
 
-                go = Instantiate(roomobjectPrefab, roh.RoomObjectRoot.transform);
+                go = Instantiate(roomobjectPrefab);
                 dic[UUID] = go;
 
                 break;
         }
 
         return go;
+    }
+
+    public void DestroyLocalObject(string objName, string UUID)
+    {
+        Debug.LogWarning("[ObjectMaker] DestroyLocalObject");
+
+        GameObject go = null;
+        switch (objName)
+        {
+            case "RoomBaseObject":
+                Debug.Log("TryDestroy RoomBaseObject");
+
+                //LookUp
+                if (dic.TryGetValue(UUID, out go))
+                {
+                    GameObject.Destroy(go);
+                    dic.Remove(UUID);
+                    return;
+                }
+                break;
+        }
     }
 }

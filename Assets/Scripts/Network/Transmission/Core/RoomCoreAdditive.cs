@@ -4,50 +4,44 @@ using UnityEngine;
 
 public class RoomCoreAdditive: MonoBehaviour, ICoreAdditive
 {
-    [SerializeField] GameObject refObj;
-
     [Header("Debug")]
     [SerializeField] OwnershipSubAdditive osa;
 
-    ITransmissionBase parent;
+    TransmissionBase parent;
 
     public SyncTokenType AdditiveType { get { return SyncTokenType.General; } }
 
     public void Init(InstantiationData data, bool isMine)
     {
-        this.parent = GetComponent<ITransmissionBase>();
+        Debug.LogWarning("[RoomCoreAdditive] Init");
+        this.parent = GetComponent<TransmissionBase>();
 
         if (!osa)
             osa = GetComponent<OwnershipSubAdditive>();
 
         osa.Init(data);
 
-        string objUUID = null;
-        if (data.TryGetValue("objectuuid", out object objuuid))
-        {
-            objUUID = (string)objuuid;
-        }
-
         //
-        if (data.TryGetValue("localobject", out object val))
+        if (data.TryGetValue(InstantiationData.InstantiationKey.objectuuid, out object objuuid) &&
+            data.TryGetValue(InstantiationData.InstantiationKey.objectname, out object val))
         {
-            string objName = (string)val;
-
-            var obj = ObjectManager.Instance.BuildObject(objName, objUUID);
+            var obj = ObjectManager.Instance.BuildObject((string)val, (string)objuuid);
             if (obj == null)
             {
-                Debug.LogWarning("[Init] Fail to BuildObject");
+                Debug.LogError("[Init] Fail to BuildObject");
                 return;
             }
 
-            refObj = obj as GameObject;
+            var go = obj as GameObject;
+            parent.RefObject = go;
+            go.transform.SetParent(ServiceManager.Instance.networkSystem.RoomObjectParent);
 
             // link between Token and TokenUser
-            var tu = refObj.GetComponent<ISyncHandlerUser>();
+            var tu = go.GetComponent<ISyncHandlerUser>();
             tu?.Init(data, false, parent);
 
             Debug.LogWarning("[Init] IOwnershipInteractable");
-            var oi = refObj.GetComponent<IOwnershipInteractable>();
+            var oi = go.GetComponent<IOwnershipInteractable>();
             oi.TargetObject = gameObject as object;
 
             Debug.LogWarning("[Init] SerializableHelper");

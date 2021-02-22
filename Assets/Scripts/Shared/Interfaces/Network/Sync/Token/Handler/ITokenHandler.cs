@@ -17,14 +17,4 @@ public interface ITokenHandler
     Action<InstantiationData> OnJoinedOnlineRoomEventBeforeTokenCreation { get; set; }
     //Action<ITransmissionBase> OnJoinedOnlineRoomEventAfterTokenCreation { get; set; }
     #endregion
-
-    #region Usage
-    bool PushStateInto(string key, object data);
-
-    object CreateInRoomObject();
-    bool DestroyTargetObject(object targetObject);
-
-    //void RequestOwnership();
-    //void ReleaseOwnership();
-    #endregion
 }

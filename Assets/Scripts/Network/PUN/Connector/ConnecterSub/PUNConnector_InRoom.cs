@@ -67,11 +67,24 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, IOnEventCallback,
         return go;
     }
 
-    public void RevokeSyncToken(object targetToken)
+    public void RevokeSyncToken(int networkID)
     {
-        var pView = (targetToken as GameObject).GetComponent<PhotonView>();
-        if(pView != null && pView.IsMine)
-            PhotonNetwork.Destroy(pView);
+        var pv = PhotonView.Find(networkID);
+        if (pv != null)
+        {
+            if(!pv.IsMine)
+                pv.TransferOwnership(PhotonNetwork.LocalPlayer);
+
+            PhotonNetwork.Destroy(pv);
+        }
+    }
+
+    public void RevokeSyncToken(InstantiationData insData)
+    {
+        if(insData.TryGetValue(InstantiationData.InstantiationKey.sceneid, out object sceneid))
+        {
+            RevokeSyncToken((int)sceneid);
+        }
     }
 
     public GameObject ManualBuildSyncToken(InstantiationData dataToSend)

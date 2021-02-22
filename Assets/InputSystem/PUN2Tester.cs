@@ -1293,6 +1293,14 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""TryInteract"",
+                    ""type"": ""Button"",
+                    ""id"": ""697c1ee6-f3da-4cef-88ee-b7dac7a6bf83"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -1471,6 +1479,17 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                     ""action"": ""RemoveRoomObject"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2b167dc2-c707-4524-8483-e9fb28272729"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""TryInteract"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -1576,6 +1595,7 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         m_InRoom_RemoveHostPlayer = m_InRoom.FindAction("RemoveHostPlayer", throwIfNotFound: true);
         m_InRoom_CreateRoomObject = m_InRoom.FindAction("CreateRoomObject", throwIfNotFound: true);
         m_InRoom_RemoveRoomObject = m_InRoom.FindAction("RemoveRoomObject", throwIfNotFound: true);
+        m_InRoom_TryInteract = m_InRoom.FindAction("TryInteract", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1912,6 +1932,7 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
     private readonly InputAction m_InRoom_RemoveHostPlayer;
     private readonly InputAction m_InRoom_CreateRoomObject;
     private readonly InputAction m_InRoom_RemoveRoomObject;
+    private readonly InputAction m_InRoom_TryInteract;
     public struct InRoomActions
     {
         private @PUN2Tester m_Wrapper;
@@ -1920,6 +1941,7 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         public InputAction @RemoveHostPlayer => m_Wrapper.m_InRoom_RemoveHostPlayer;
         public InputAction @CreateRoomObject => m_Wrapper.m_InRoom_CreateRoomObject;
         public InputAction @RemoveRoomObject => m_Wrapper.m_InRoom_RemoveRoomObject;
+        public InputAction @TryInteract => m_Wrapper.m_InRoom_TryInteract;
         public InputActionMap Get() { return m_Wrapper.m_InRoom; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1941,6 +1963,9 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                 @RemoveRoomObject.started -= m_Wrapper.m_InRoomActionsCallbackInterface.OnRemoveRoomObject;
                 @RemoveRoomObject.performed -= m_Wrapper.m_InRoomActionsCallbackInterface.OnRemoveRoomObject;
                 @RemoveRoomObject.canceled -= m_Wrapper.m_InRoomActionsCallbackInterface.OnRemoveRoomObject;
+                @TryInteract.started -= m_Wrapper.m_InRoomActionsCallbackInterface.OnTryInteract;
+                @TryInteract.performed -= m_Wrapper.m_InRoomActionsCallbackInterface.OnTryInteract;
+                @TryInteract.canceled -= m_Wrapper.m_InRoomActionsCallbackInterface.OnTryInteract;
             }
             m_Wrapper.m_InRoomActionsCallbackInterface = instance;
             if (instance != null)
@@ -1957,6 +1982,9 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
                 @RemoveRoomObject.started += instance.OnRemoveRoomObject;
                 @RemoveRoomObject.performed += instance.OnRemoveRoomObject;
                 @RemoveRoomObject.canceled += instance.OnRemoveRoomObject;
+                @TryInteract.started += instance.OnTryInteract;
+                @TryInteract.performed += instance.OnTryInteract;
+                @TryInteract.canceled += instance.OnTryInteract;
             }
         }
     }
@@ -2047,5 +2075,6 @@ public class @PUN2Tester : IInputActionCollection, IDisposable
         void OnRemoveHostPlayer(InputAction.CallbackContext context);
         void OnCreateRoomObject(InputAction.CallbackContext context);
         void OnRemoveRoomObject(InputAction.CallbackContext context);
+        void OnTryInteract(InputAction.CallbackContext context);
     }
 }

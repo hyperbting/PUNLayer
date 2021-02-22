@@ -4,7 +4,7 @@ public interface ITokenProvider
     #region Used by ITokenHandler
     object RequestSyncToken(InstantiationData datatoSend);
 
-    void RevokeSyncToken(object targetToken);
-    //object RequestManualSyncToken(InstantiationData datatoSen);
+    void RevokeSyncToken(InstantiationData insData);
+    void RevokeSyncToken(int networkID);
     #endregion
 }

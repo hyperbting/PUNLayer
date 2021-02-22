@@ -12,8 +12,8 @@ public interface ITransmissionBase
     ISerializableHelper SeriHelper { get; }
     ISerializableHelper StatHelper { get; }
 
-    void Register(params SerializableReadWrite[] srws);
-    void Unregister(params SerializableReadWrite[] srws);
+    //void Register(params SerializableReadWrite[] srws);
+    //void Unregister(params SerializableReadWrite[] srws);
 
     object RefObject { get; set; }
 }

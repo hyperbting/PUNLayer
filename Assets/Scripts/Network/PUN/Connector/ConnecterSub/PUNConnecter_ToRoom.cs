@@ -57,6 +57,7 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks
 
         if (string.IsNullOrEmpty(roomName))
             roomName = "Default";
+
         if (!PhotonNetwork.JoinOrCreateRoom(roomName, rooOpt, TypedLobby.Default)) // Will callback: OnJoinedRoom or OnJoinRoomFailed.
         {
             Debug.LogWarning($"{scriptName} JoinGameRoom JoinOrCreateRoom Immediately FAIL");

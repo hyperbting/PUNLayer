@@ -6,7 +6,7 @@ using UnityEngine;
 public class RoomObjectBase : MonoBehaviour, ISyncHandlerUser, IOwnershipInteractable
 {
     [SerializeField] GameObject refToken;
-
+    [SerializeField] string objectUUID;
     #region IOwnershipInteractable
     public bool IsMine()
     {
@@ -27,6 +27,18 @@ public class RoomObjectBase : MonoBehaviour, ISyncHandlerUser, IOwnershipInterac
         {
             refToken = value as GameObject;
         }
+    }
+
+    public int GetNetworkID()
+    {
+        if (TargetObject == null)
+            return -1;
+
+        var ioi = refToken.GetComponent<IOwnershipInteractable>();
+        if (ioi == null)
+            return -1;
+
+        return ioi.GetNetworkID();
     }
 
     public async Task<bool> RequestOwnership(int acterNumber)
@@ -67,18 +79,22 @@ public class RoomObjectBase : MonoBehaviour, ISyncHandlerUser, IOwnershipInterac
         }
     }
 
-public object GameObject()
+    public object GameObject()
     {
-        throw new System.NotImplementedException();
+        return gameObject;
     }
 
     public void Init(InstantiationData data, bool isMine, ITransmissionBase itb)
     {
-        throw new System.NotImplementedException();
+        instData = data;
+        if (data.TryGetValue(InstantiationData.InstantiationKey.objectuuid, out object uuid))
+        {
+            objectUUID = (string)uuid;
+        }
     }
     #endregion
 
-#region SerilizableReadWrite
+    #region SerilizableReadWrite
     void WritePos(object pos)
     {
         //Debug.Log($"WritePos {pos}");
@@ -100,5 +116,5 @@ public object GameObject()
     {
         return refToken.transform.rotation;
     }
-#endregion SerilizableReadWrite
+    #endregion SerilizableReadWrite
 }

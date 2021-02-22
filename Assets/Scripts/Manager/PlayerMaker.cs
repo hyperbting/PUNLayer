@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMaker : SingletonMonoBehaviour<PlayerMaker>, IObjectMaker
+public class PlayerMaker : SingletonMonoBehaviour<PlayerMaker>, IObjectSupplier
 {
     public GameObject playerCorePref;
 
@@ -18,7 +18,7 @@ public class PlayerMaker : SingletonMonoBehaviour<PlayerMaker>, IObjectMaker
     void Start()
     {
         randomID = Random.Range(1000, 9999).ToString();
-        ObjectManager.Instance.RegisterBuilder(BuildLocalPlayerObject);
+        ObjectManager.Instance.RegisterObjectSupplier(this);
 
         if(createPlayerOnStart)
             InstantiateObject();
@@ -26,7 +26,7 @@ public class PlayerMaker : SingletonMonoBehaviour<PlayerMaker>, IObjectMaker
 
     private void OnDestroy()
     {
-        ObjectManager.Instance.UnregisterBuilder(BuildLocalPlayerObject);
+        ObjectManager.Instance.UnregisterObjectSupplier(this);
     }
 
     public GameObject GetMine()
@@ -79,7 +79,7 @@ public class PlayerMaker : SingletonMonoBehaviour<PlayerMaker>, IObjectMaker
     }
 
     Dictionary<string, GameObject> dic = new Dictionary<string, GameObject>();
-    public GameObject BuildLocalPlayerObject(string objName, string UUID = null)
+    public object BuildLocalObject(string objName, string UUID)
     {
         Debug.LogWarning($"BuildLocalPlayerObject Start");
 
@@ -105,6 +105,11 @@ public class PlayerMaker : SingletonMonoBehaviour<PlayerMaker>, IObjectMaker
 
         Debug.LogWarning($"BuildLocalPlayerObject RemotePlayer Created");
         return go;
+    }
+
+    void IObjectSupplier.DestroyLocalObject(string objName, string UUID)
+    {
+        throw new System.NotImplementedException();
     }
 
     public void RemoveFromDict(string UUID)

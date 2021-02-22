@@ -1,9 +1,5 @@
-﻿using System;
-
-public interface IObjectSupplier
+﻿public interface IObjectSupplier
 {
-    void RegisterBuilder(Func<string, string, object> builder);
-    void UnregisterBuilder(Func<string, string, object> builder);
-
-    object BuildObject(string objectName, string uuid);
+    object BuildLocalObject(string objName, string UUID);
+    void DestroyLocalObject(string objName, string UUID);
 }

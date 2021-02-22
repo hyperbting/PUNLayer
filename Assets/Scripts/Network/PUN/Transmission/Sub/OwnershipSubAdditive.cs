@@ -68,6 +68,11 @@ public class OwnershipSubAdditive : MonoBehaviourPunCallbacks, IPunOwnershipCall
         }
     }
 
+    public int GetNetworkID()
+    {
+        return photonView.ViewID;
+    }
+
     public async Task<bool> RequestOwnership(int acterNumber)
     {
         var player = (PhotonNetwork.InRoom) ? PhotonNetwork.CurrentRoom.GetPlayer(acterNumber): null;

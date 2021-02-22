@@ -28,7 +28,7 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, INetworkConnect
         }
     }
 
-    #region
+    #region CurrentPhotonRoomState, OnPhotonRoomStateChange
     Action<PhotonRoomState, PhotonRoomState> OnPhotonRoomStateChange;
     [SerializeField]
     PhotonRoomState currentPhotonRoomState = PhotonRoomState.Disconnected;
@@ -47,6 +47,7 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, INetworkConnect
     }
 
     [SerializeField] ServerTarget serMasterTarget;
+
     #endregion Init
     public void Init(INetworkConnectUser incUser)
     {
@@ -220,10 +221,20 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, INetworkConnect
         return PhotonNetwork.IsMasterClient;
     }
     #endregion
+
     #region Getter
+    public int GetNetworkID()
+    {
+        if (IsInRoom())
+            return PhotonNetwork.LocalPlayer.ActorNumber;
+
+        Debug.LogWarning($"GetNetworkID: NotInRoom");
+        return -1;
+    }
+
     public bool TryGetCurrentRoomeName(out string rooName)
     {
-        if (!PhotonNetwork.InRoom)
+        if (!IsInRoom())
         {
             rooName = "UnKnOwN";
             return false;
@@ -233,7 +244,9 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, INetworkConnect
         return true;
     }
     #endregion
+
     #region Setter
     #endregion
+
     #endregion
 }
