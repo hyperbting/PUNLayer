@@ -72,7 +72,8 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IP
             return;
 
         InstantiationData data = new InstantiationData(photonView.InstantiationData);
-        Debug.Log($"TransmissionBase Start Remotely.");
+
+        Debug.Log($"TransmissionBase Start REMOTEly.");
         Setup(data);
     }
 
@@ -83,6 +84,13 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IP
         base.OnDisable();
     }
 
+    /// <summary>
+    /// Setup by 
+    /// TokenHandler LOCALly 
+    /// or 
+    /// using data received from TransmissionBase.OnEnable
+    /// </summary>
+    /// <param name="insData"></param>
     public void Setup(InstantiationData insData)
     {
         tType = insData.tokenType;
@@ -102,18 +110,16 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IP
                 break;
         }
 
-        //// Setup SerializableReadWrite
-        //var tokenUser = refObj?.GetComponent<ISyncHandlerUser>();
-        //var sData = tokenUser?.SerializableReadWrite;
-        //if (sData != null)
-        //{
-        //    //Debug.LogWarning($"TransmissionBase tokenUser.SerializableReadWrite: {tokenUser.SerializableReadWrite.Length}");
-        //    Register(sData);
-        //}
-        //else
-        //{
-        //    Debug.LogWarning($"TransmissionBase {gameObject.name}: No TokenUser/ no SerializableReadWrite for Sync!");
-        //}
+        // Setup SerializableReadWrite
+        var sData = refObj?.GetComponent<ISyncHandlerUser>()?.SerializableReadWrite;
+        if (sData != null)
+        {
+            Register(sData);
+        }
+        else
+        {
+            Debug.LogWarning($"TransmissionBase {gameObject.name}: No TokenUser/ no SerializableReadWrite for Sync!");
+        }
 
         started = true;
     }
@@ -122,6 +128,9 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IP
     public void Register(params SerializableReadWrite[] srws)
     {
         Debug.LogWarning($"TransmissionBase {gameObject.name} Register:{srws.Length} SerializableReadWrite");
+
+        bool stateOn = false;
+        bool serialOn = false;
         foreach (var srw in srws)
         {
             switch (srw.syncType)
@@ -129,14 +138,19 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IP
                 case SyncHelperType.RoomState:
                 case SyncHelperType.PlayerState:
                     statHelper.Register(srw);
+                    stateOn = true;
                     break;
                 case SyncHelperType.Serializable:
                     seriHelper.Register(srw);
+                    serialOn = true;
                     break;
                 default:
                     break;
             }
         }
+
+        statHelper.enabled = stateOn;
+        seriHelper.enabled = serialOn;
     }
 
     public void Unregister(params SerializableReadWrite[] srws)

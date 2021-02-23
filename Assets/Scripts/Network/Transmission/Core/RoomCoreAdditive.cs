@@ -7,7 +7,7 @@ public class RoomCoreAdditive: MonoBehaviour, ICoreAdditive
     [Header("Debug")]
     [SerializeField] OwnershipSubAdditive osa;
 
-    TransmissionBase parent;
+    [SerializeField] TransmissionBase parent;
 
     public SyncTokenType AdditiveType { get { return SyncTokenType.General; } }
 
@@ -43,12 +43,6 @@ public class RoomCoreAdditive: MonoBehaviour, ICoreAdditive
             Debug.LogWarning("[Init] IOwnershipInteractable");
             var oi = go.GetComponent<IOwnershipInteractable>();
             oi.TargetObject = gameObject as object;
-
-            Debug.LogWarning("[Init] SerializableHelper");
-            parent.Register(tu.SerializableReadWrite);
-            var sh = GetComponent<SerializableHelper>();
-            sh.enabled = true;
-
         }
     }
 }

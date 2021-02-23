@@ -116,6 +116,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   osa: {fileID: 3198224229752424880}
+  parent: {fileID: 0}
 --- !u!114 &6121163032142091507
 MonoBehaviour:
   m_ObjectHideFlags: 0
