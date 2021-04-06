@@ -34,10 +34,7 @@ public interface INetworkConnect
 
     #region InRoom
     #region Checker
-    bool IsInRoom();
-
-    bool IsOnlineRoom();
-    bool IsOfflineRoom();
+    bool IsInRoom(OnOffline ooline=OnOffline.Any, string requestedRoomName="");
 
     bool IsRoomOwner();
     #endregion
@@ -45,6 +42,13 @@ public interface INetworkConnect
     int GetNetworkID();
     #endregion
     #endregion
+    }
+
+public enum OnOffline
+{
+    Any,
+    Online,
+    Offline,
 }
 
 /// <summary>

@@ -195,25 +195,42 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, INetworkConnect
         return false;
     }
 
-    public bool IsInRoom()
+    public bool IsInRoom(OnOffline ooline=OnOffline.Any, string requestedRoomName="")
     {
-        return PhotonNetwork.InRoom;
-    }
-
-    public bool IsOnlineRoom()
-    {
-        if (PhotonNetwork.OfflineMode)
+        if (!PhotonNetwork.InRoom)
+        {
+            Debug.LogWarning($"{scriptName} IsInRoom NotInRoom");
             return false;
+        }
 
-        return IsInRoom();
-    }
+        if (!string.IsNullOrWhiteSpace(requestedRoomName) && PhotonNetwork.CurrentRoom.Name != requestedRoomName)
+        {
+            Debug.LogWarning($"{scriptName} IsInRoom NotInSpecificSoom:{requestedRoomName}");
+            return false;
+        }
 
-    public bool IsOfflineRoom()
-    {
-        if (PhotonNetwork.OfflineMode && IsInRoom())
-            return true;
+        switch (ooline)
+        {
+            case OnOffline.Offline:
+                if (!PhotonNetwork.OfflineMode)
+                {
+                    Debug.LogWarning($"{scriptName} IsInRoom NotOffline");
+                    return false;
+                }
+                break;
+            case OnOffline.Online:
+                if (PhotonNetwork.OfflineMode)
+                {
+                    Debug.LogWarning($"{scriptName} IsInRoom NotOnline");
+                    return false;
+                }
+                break;
+            case OnOffline.Any:
+            default:
+                break;
+        }
 
-        return false;
+        return true;
     }
 
     public bool IsRoomOwner()
@@ -225,7 +242,7 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, INetworkConnect
     #region Getter
     public int GetNetworkID()
     {
-        if (IsInRoom())
+        if (IsInRoom(OnOffline.Any))
             return PhotonNetwork.LocalPlayer.ActorNumber;
 
         Debug.LogWarning($"GetNetworkID: NotInRoom");
@@ -234,7 +251,7 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, INetworkConnect
 
     public bool TryGetCurrentRoomeName(out string rooName)
     {
-        if (!IsInRoom())
+        if (!IsInRoom(OnOffline.Any))
         {
             rooName = "UnKnOwN";
             return false;

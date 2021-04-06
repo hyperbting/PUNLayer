@@ -131,14 +131,9 @@ public class NetworkSystem : MonoBehaviour, INetworkConnectUser, ITokenProvider,
     #endregion
 
     #region checker?
-    public bool IsOfflineRoom()
-    {
-        return inc.IsOfflineRoom();
-    }
-
     public bool IsOnlineRoom()
     {
-        return inc.IsOnlineRoom();
+        return inc.IsInRoom(OnOffline.Online);
     }
     #endregion
 
