@@ -154,5 +154,10 @@ public class OwnershipSubAdditive : MonoBehaviourPunCallbacks, IPunOwnershipCall
         ownershipTransferedEvent?.Invoke(previousOwner, targetView.Owner);
         Debug.Log($"OnOwnershipTransfered: {targetView.ToString()} {(previousOwner==null ? "<Scene>" : previousOwner.ToString())} to {(targetView.Owner == null ? "<Scene>" : targetView.Owner.ToString())}");
     }
+
+    void IPunOwnershipCallbacks.OnOwnershipTransferFailed(PhotonView targetView, Player senderOfFailedRequest)
+    {
+        Debug.LogWarning($"OnOwnershipTransferFailed: {targetView.ToString()}, RequestBy {senderOfFailedRequest.ToString()}");
+    }
     #endregion
 }
