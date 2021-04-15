@@ -56,6 +56,5 @@ public enum OnOffline
 /// </summary>
 public interface INetworkConnectUser
 {
-    Action OnJoinedOnlineRoomEvent { get; set; }
-    Action OnJoinedOfflineRoomEvent { get; set; }
+    Action<OnOffline> OnJoinedRoomEvent { get; set; }
 }

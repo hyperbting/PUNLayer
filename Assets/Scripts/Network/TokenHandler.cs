@@ -18,7 +18,7 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
 
     private void OnDestroy()
     {
-        ServiceManager.Instance.networkSystem.OnJoinedOnlineRoomEvent -= TryOnJoinedRoomAct;
+        ServiceManager.Instance.networkSystem.OnJoinedRoomEvent -= TryOnJoinedRoomAct;
 
         if (trasnTokenGO == null)
             return;
@@ -58,20 +58,19 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
         Debug.Log($"TokenHandler Setup");
 
         tokenProvider = itp;
-
         tokenUser = handlerUser;
-
-        ServiceManager.Instance.networkSystem.OnJoinedOnlineRoomEvent += TryOnJoinedRoomAct;
-
-        TryOnJoinedRoomAct();
+        ServiceManager.Instance.networkSystem.OnJoinedRoomEvent += TryOnJoinedRoomAct;
+        
+        if(ServiceManager.Instance.networkSystem.IsOnlineRoom())
+            TryOnJoinedRoomAct(OnOffline.Online);
 
         this.enabled = true;
     }
 
     #region JoinedRoom
-    void TryOnJoinedRoomAct()
+    void TryOnJoinedRoomAct(OnOffline ooline)
     {
-        if (!ServiceManager.Instance.networkSystem.IsOnlineRoom())
+        if (ooline != OnOffline.Online)
         {
             Debug.Log($"[TokenHandler] TryOnJoinedRoomAct NotInOnlineRoom");
             return;

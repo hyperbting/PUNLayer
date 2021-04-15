@@ -20,8 +20,7 @@ public class NetworkSystem : MonoBehaviour, INetworkConnectUser, ITokenProvider,
     public GameObject DebugUI;
 
     #region INetworkConnectUser
-    public Action OnJoinedOnlineRoomEvent { get; set; }
-    public Action OnJoinedOfflineRoomEvent { get; set; }
+    public Action<OnOffline> OnJoinedRoomEvent { get; set; }
     #endregion
 
     #region ITokenHandlerProvider
