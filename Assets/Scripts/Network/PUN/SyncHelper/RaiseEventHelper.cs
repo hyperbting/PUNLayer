@@ -132,13 +132,13 @@ public class RaiseEventHelper: MonoBehaviour, IOnEventCallback, NetworkLayer.IRo
 
 public static class PhotonHashtableExtensions
 {
-    public static void CleanThenInsert(this ExitGames.Client.Photon.Hashtable ht, object[] objs)
-    {
-        ht.Clear();
-
-        for (byte i = 0; i < objs.Length; i++)
-            ht[i] = objs[i];
-    }
+    // public static void CleanThenInsert(this ExitGames.Client.Photon.Hashtable ht, object[] objs)
+    // {
+    //     ht.Clear();
+    //
+    //     for (byte i = 0; i < objs.Length; i++)
+    //         ht[i] = objs[i];
+    // }
 
     public static object[] FormObjects(this ExitGames.Client.Photon.Hashtable ht)
     {

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -11,22 +12,21 @@ namespace Tests
         [Test]
         public void TestInstantiationDataSerialzation()
         {
-            var data = new InstantiationData(
-                new object[2] {
-                    SyncTokenType.Player,
-                    new List<string> {
-                        "syncPos","True","syncRot","False"
-                    }
-                });
-
+            var objs = new List<object>
+            {
+                SyncTokenType.Player,
+                "syncPos", true, "syncRot", false
+            };
+            
+            var data = new InstantiationData(objs.ToArray());
             Debug.Log($"data:{data.ToString()} {data.Count} {data.ToData().Length}");
 
             var ty = (SyncTokenType)data.ToData()[0];
             Debug.Log($"data SyncTokenType:{ty}");
-            var li = (List<string>)data.ToData()[1];
-            Debug.Log($"data List<string>:{li}");
-            foreach( var ll in li)
-                Debug.Log($"<string>:{ll}");
+            //var li = (List<string>)data.ToData()[1];
+            //Debug.Log($"data List<string>:{li}");
+            //foreach( var ll in li)
+            //    Debug.Log($"<string>:{ll}");
 
             var data2 = new InstantiationData(data.ToData());
             Debug.Log($"data2 Objectify:{data2.ToString()} {data2.Count} {data2.ToData().Length}");

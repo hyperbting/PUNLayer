@@ -13,7 +13,7 @@ public class NetworkSystem : MonoBehaviour, INetworkConnectUser, ITokenProvider,
     [Tooltip("Automatically create token when OnJoinedRoom/ CreatedAlreadyInRoom")]
     public GameObject NetworkSyncHandler;
 
-    INetworkConnect inc;
+    public INetworkConnect inc;
 
     [Space]
     [Header("Debug")]

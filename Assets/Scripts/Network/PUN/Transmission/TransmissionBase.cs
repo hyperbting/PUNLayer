@@ -34,14 +34,15 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IP
         }
     }
 
-    [SerializeField] StateHelper statHelper;
+    // [SerializeField] RoomStateHelper statHelper;
     public ISerializableHelper StatHelper
     {
         get
         {
-            if (statHelper == null)
-                statHelper = GetComponent<StateHelper>();
-            return statHelper as ISerializableHelper;
+            // if (statHelper == null)
+            //     statHelper = GetComponent<StateHelper>();
+            // return statHelper as ISerializableHelper;
+            return null;
         }
     }
     #endregion
@@ -135,11 +136,11 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IP
         {
             switch (srw.syncType)
             {
-                case SyncHelperType.RoomState:
-                case SyncHelperType.PlayerState:
-                    statHelper.Register(srw);
-                    stateOn = true;
-                    break;
+                // case SyncHelperType.RoomState:
+                // case SyncHelperType.PlayerState:
+                //     statHelper.Register(srw);
+                //     stateOn = true;
+                //     break;
                 case SyncHelperType.Serializable:
                     seriHelper.Register(srw);
                     serialOn = true;
@@ -149,7 +150,7 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IP
             }
         }
 
-        statHelper.enabled = stateOn;
+        // statHelper.enabled = stateOn;
         seriHelper.enabled = serialOn;
     }
 
@@ -159,10 +160,10 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IP
         {
             switch (srw.syncType)
             {
-                case SyncHelperType.RoomState:
-                case SyncHelperType.PlayerState:
-                    statHelper.Unregister(srw.name);
-                    break;
+                // case SyncHelperType.RoomState:
+                // case SyncHelperType.PlayerState:
+                //     statHelper.Unregister(srw.name);
+                //     break;
                 case SyncHelperType.Serializable:
                     seriHelper.Unregister(srw.name);
                     break;
@@ -173,21 +174,21 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IP
     }
     #endregion
 
-    #region Use SerializableHelper/ StateHelper
-    public void UpdateProperties(SyncTokenType stType, string key, object data)
-    {
-        switch (stType)
-        {
-            case SyncTokenType.Player:
-                statHelper.UpdatePlayerProperties(key, data);
-                break;
-            default:
-            case SyncTokenType.General:
-                _ = statHelper.UpdateRoomProperties(key, data);
-                break;
-        }
-    }
-    #endregion
+    // #region Use SerializableHelper/ StateHelper
+    // public void UpdateProperties(SyncTokenType stType, string key, object data)
+    // {
+    //     switch (stType)
+    //     {
+    //         case SyncTokenType.Player:
+    //             statHelper.UpdatePlayerProperties(key, data);
+    //             break;
+    //         default:
+    //         case SyncTokenType.General:
+    //             _ = statHelper.UpdateRoomProperties(key, data);
+    //             break;
+    //     }
+    // }
+    // #endregion
 
     public Photon.Realtime.Player GetOwner()
     {

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public class InstantiationData : Dictionary<string, object>
 {
     public SyncTokenType tokenType;
-
+    
     #region
     public InstantiationData() : base()
     {

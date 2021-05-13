@@ -1,12 +1,14 @@
-﻿using ExitGames.Client.Photon;
+﻿using System;
+using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-[RequireComponent(typeof(PhotonView))]
 public class BaseSyncHelper : MonoBehaviourPunCallbacks, ISerializableHelper
 {
     public override void OnEnable()
@@ -32,7 +34,7 @@ public class BaseSyncHelper : MonoBehaviourPunCallbacks, ISerializableHelper
     /// </summary>
     protected Dictionary<string, SerializableReadWrite> dataToSync = new Dictionary<string, SerializableReadWrite>();
     #region Registration
-    public void Register(SerializableReadWrite srw)
+    public virtual void Register(SerializableReadWrite srw)
     {
         if (!dataToSync.ContainsKey(srw.name))
         {
@@ -47,7 +49,7 @@ public class BaseSyncHelper : MonoBehaviourPunCallbacks, ISerializableHelper
             Register(srw);
     }
 
-    public void Unregister(SerializableReadWrite srw)
+    public virtual void Unregister(SerializableReadWrite srw)
     {
         Unregister(srw.name);
     }
@@ -79,23 +81,34 @@ public class BaseSyncHelper : MonoBehaviourPunCallbacks, ISerializableHelper
 
     //Check And Swap For Properties
     TaskCompletionSource<bool> roomPropUpdateResult;
-    public static string updateKey;
-    object updateVal;
+
+    string BuildSerialNumber(string keyBase)
+    {
+        return $"{keyBase}-{Random.Range(0, 1000).ToString()}";
+            
+    }
+
+    public static string updateRPKey="rpSerial";
+    public static string updateRPValue;
+    [SerializeField] private ExitGames.Client.Photon.Hashtable tmpHT;
     public async Task<bool> UpdateRoomProperties(string key, object value)
     {
-        if (updateKey != null)
+        if (updateRPValue != null)
         {
             Debug.Log("Was UpdateRoomProperties");
             return false;
         }
 
-        updateKey = key;
+        updateRPValue = BuildSerialNumber("rp");
 
         ht.Clear();
         ht.Add(key, value);
+        ht.Add(updateRPKey, updateRPValue);
 
+        tmpHT = PhotonNetwork.CurrentRoom.CustomProperties;
+        
         orght.Clear();
-        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(key, out object rVal))
+        if (tmpHT.TryGetValue(key, out object rVal))
         {
             orght.Add(key, rVal);
         }
@@ -106,43 +119,152 @@ public class BaseSyncHelper : MonoBehaviourPunCallbacks, ISerializableHelper
 
         if (!PhotonNetwork.CurrentRoom.SetCustomProperties(ht, orght))
         {
-            updateKey = null;
+            updateRPValue = null;
             return false;
         }
-
-        updateVal = value;
+        
         roomPropUpdateResult = new TaskCompletionSource<bool>();
 
         return await roomPropUpdateResult.Task;
     }
+    
+    public async Task<bool> UpdateRoomProperties(params KeyObjectPair[] kvpair)
+    {
+        if (updateRPValue != null)
+        {
+            Debug.Log("Was UpdateRoomProperties");
+            return false;
+        }
 
+        ht.CleanInsert(kvpair);
+        updateRPValue = BuildSerialNumber("rp");
+        ht[updateRPKey] = updateRPValue;
+        
+        tmpHT = PhotonNetwork.CurrentRoom.CustomProperties;
+
+        orght.CleanInsertDefaultNull(tmpHT,kvpair);
+
+        if (!PhotonNetwork.CurrentRoom.SetCustomProperties(ht, orght))
+        {
+            updateRPValue = null;
+            return false;
+        }
+        
+        roomPropUpdateResult = new TaskCompletionSource<bool>();
+
+        return await roomPropUpdateResult.Task;
+    }
+    
+    #endregion
+    
+    #region PhotonCallbacks
     public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
     {
-        foreach (var de in propertiesThatChanged)
+        // One End for the UpdateRoomProperties; another possible end is NetworkingClientOnOpResponseReceived
+        if (propertiesThatChanged.TryGetValue(updateRPKey, out object value) && value != null && updateRPValue == (string)value)
         {
-            if (updateKey == de.Key.ToString() && updateVal == de.Value)
-            {
-                updateKey = null;
-                updateVal = null;
+            updateRPValue = null;
+            roomPropUpdateResult?.TrySetResult(true);
+        }
+        
+        //Who should NOT react to this ?
+        List<string> keys = propertiesThatChanged.StringKeys().Intersect(dataToSync.Keys).ToList();//intersection two set of key
+        if (keys.Count() <= 0)
+        {
+            return;
+        }
 
-                roomPropUpdateResult?.TrySetResult(true);
+        // apply every Registered Room States to local
+        foreach (var key in keys)
+        {
+            if (dataToSync.TryGetValue(key, out SerializableReadWrite srw))
+            {
+                srw?.Write(propertiesThatChanged[key]);
             }
         }
     }
 
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
+    {
+        base.OnPlayerPropertiesUpdate(targetPlayer, changedProps);
+
+        // only apply to local for PhotonView Owner
+        if (targetPlayer != photonView.Owner)
+            return;
+        
+        // apply every Registered Player States to local
+        foreach (var key in changedProps.Keys)
+        {
+            if (dataToSync.TryGetValue(key.ToString(), out SerializableReadWrite srw))
+            {
+                srw.Write(changedProps[key]);
+            }
+        }
+    }
+    
     // CAS failure
+    // One End for the UpdateRoomProperties; another possible end is OnRoomPropertiesUpdate
     private void NetworkingClientOnOpResponseReceived(OperationResponse opResponse)
     {
         if (opResponse.OperationCode == OperationCode.SetProperties && 
             opResponse.ReturnCode == ErrorCode.InvalidOperation &&
-            updateKey != null &&
+            updateRPValue != null &&
             opResponse.DebugMessage != null &&
-            opResponse.DebugMessage.Contains(updateKey))
+            opResponse.DebugMessage.Contains(updateRPValue))
         {
-            updateKey = null;
-            updateVal = null;
+            updateRPValue = null;
             roomPropUpdateResult?.TrySetResult(false);
         }
     }
     #endregion
+}
+
+public static class PhotonHashtableExtensions2
+{
+    public static void CleanInsert(this ExitGames.Client.Photon.Hashtable ht, params KeyObjectPair[] kvPair)
+    {
+        ht.Clear();
+        for (int i = 0; i < kvPair.Length; i++)
+        {
+            ht.Add(kvPair[i].k, kvPair[i].v);   
+        }
+    }
+    
+    public static void CleanInsertDefaultNull(this ExitGames.Client.Photon.Hashtable ht, ExitGames.Client.Photon.Hashtable refHT, params KeyObjectPair[] kvPair)
+    {
+        ht.Clear();
+        for (int i = 0; i < kvPair.Length; i++)
+        {
+            if(refHT.ContainsKey(kvPair[i].k))
+                ht.Add(kvPair[i].k, kvPair[i].v);
+            else
+            {
+                ht.Add(kvPair[i].k, null);
+            }
+        }
+    }
+    
+    public static List<string> StringKeys(this ExitGames.Client.Photon.Hashtable ht)
+    {
+        List<string> result = new List<string>();
+        foreach (object ke in ht.Keys)
+        {
+            if(ke != null)
+                result.Add((string)ke);
+        }
+
+        return result;
+    }
+
+    public static List<string> StringKeysIntersect(this ExitGames.Client.Photon.Hashtable ht, Dictionary<string,object> stringObjectDic)
+    {
+        return ht.StringKeys().Intersect(stringObjectDic.Keys.ToList()).ToList();//intersection two set of key
+    }
+}
+
+[Serializable]
+public class KeyObjectPair
+{
+    public string k;
+    public object v;
 }
