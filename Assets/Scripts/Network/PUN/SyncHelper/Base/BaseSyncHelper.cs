@@ -168,7 +168,7 @@ public class BaseSyncHelper : MonoBehaviourPunCallbacks, ISerializableHelper
         }
         
         //Who should NOT react to this ?
-        List<string> keys = propertiesThatChanged.StringKeys().Intersect(dataToSync.Keys).ToList();//intersection two set of key
+        List<string> keys = propertiesThatChanged.StringKeysIntersect(dataToSync);
         if (keys.Count() <= 0)
         {
             return;
@@ -256,7 +256,7 @@ public static class PhotonHashtableExtensions2
         return result;
     }
 
-    public static List<string> StringKeysIntersect(this ExitGames.Client.Photon.Hashtable ht, Dictionary<string,object> stringObjectDic)
+    public static List<string> StringKeysIntersect<T>(this ExitGames.Client.Photon.Hashtable ht, Dictionary<string,T> stringObjectDic)
     {
         return ht.StringKeys().Intersect(stringObjectDic.Keys.ToList()).ToList();//intersection two set of key
     }
