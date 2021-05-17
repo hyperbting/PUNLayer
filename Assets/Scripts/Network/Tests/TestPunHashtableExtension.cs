@@ -98,6 +98,24 @@ namespace Tests
                 Debug.Log($"{ke}");
             Debug.Log("Test Hashtable StringKeysIntersect");
         }
+        
+        [Test]
+        public void TestHashtableToDictionaryStringObject()
+        {
+            var ht = new ExitGames.Client.Photon.Hashtable();
+            ht["Invalid"] = true;
+            ht["valid"] = true;
+            ht["invalid22"] = 123;
+            ht["invalid4522"] = 123;
+
+            var dicStrObj = ht.ToDictionaryStringObject();
+            Assert.NotNull(dicStrObj);
+            Assert.AreEqual(4, dicStrObj.Count);
+            foreach(var ke in dicStrObj)
+                Debug.Log($"{ke} ({ke.Value.GetType()}");
+            
+            Debug.Log("Test Hashtable ToDictionaryStringObject");
+        }
     }
     
 }

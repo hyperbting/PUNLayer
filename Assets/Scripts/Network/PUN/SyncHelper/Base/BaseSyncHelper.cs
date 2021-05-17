@@ -11,6 +11,17 @@ using Random = UnityEngine.Random;
 
 public class BaseSyncHelper : MonoBehaviourPunCallbacks, ISerializableHelper
 {
+    protected KeyObjectPair[] CurrentRoomProperties
+    {
+        get
+        {
+            if (!PhotonNetwork.InRoom || PhotonNetwork.CurrentRoom.CustomProperties == null)
+                return null;
+
+            return PhotonNetwork.CurrentRoom.CustomProperties.ToKeyObjectPair();
+        }
+    }
+
     public override void OnEnable()
     {
         base.OnEnable();
@@ -260,6 +271,34 @@ public static class PhotonHashtableExtensions2
     {
         return ht.StringKeys().Intersect(stringObjectDic.Keys.ToList()).ToList();//intersection two set of key
     }
+
+    public static Dictionary<string, object> ToDictionaryStringObject(this ExitGames.Client.Photon.Hashtable ht)
+    {
+        var result = new Dictionary<string, object>();
+        foreach (var kvp in ht)
+        {
+            result[(string)kvp.Key] = kvp.Value;
+        }
+
+        return result;
+    }
+    public static KeyObjectPair[] ToKeyObjectPair(this ExitGames.Client.Photon.Hashtable ht)
+    {
+        var result = new KeyObjectPair[ht.Count];
+        int idx = 0;
+        foreach (var kvp in ht)
+        {
+            result[idx] = new KeyObjectPair()
+            {
+                k=(string)kvp.Key,
+                v = kvp.Value
+            };
+            idx++;
+        }
+
+        return result;
+    }
+    
 }
 
 [Serializable]

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
+/// Attach this to each RoomObject that needs to be synced at OnJoinedRoom/ OnJoinedOnlineRoom
+/// Define UNIQUE stateKey for each 
 /// State for Item is implemented by RoomProperties with OnRoomPropertiesUpdate() and PhotonNetwork.CurrentRoom.SetCustomProperties()
 public class RoomStateHelper : BaseSyncHelper
 {
@@ -11,19 +13,66 @@ public class RoomStateHelper : BaseSyncHelper
     public bool mcJoinedRoomMaintain = true;
     //public Action<string> initJoinRoomLoad;
     
+    Action<string> OnRoomStateRegistered;
+    Action<string> OnRoomStateUnregistered;
+    
+    #region stateKeyRepo to reminder which key is used in RoomState
+    static List<string> stateKeyRepo;
+    List<string> StateKeyRepo
+    {
+        get
+        {
+            if(stateKeyRepo == null)
+                stateKeyRepo = new List<string>();
+            return stateKeyRepo;
+        }
+    }
+
+    bool TryAddStateKey(string newKey)
+    {
+
+        if (string.IsNullOrWhiteSpace(newKey) || stateKey == "defRP")
+        {
+            Debug.LogError("StateKey Invalid!; RoomStateHelper WON'T work properly");
+            return false;
+        }
+        
+        if (StateKeyRepo.Contains(newKey))
+        {
+            Debug.LogError($"StateKey {newKey} USED somewhere!; RoomStateHelper WON'T work properly");
+            return false;
+        }
+        
+        StateKeyRepo.Add(newKey);
+        return true;
+    }
+
+    bool TryRemoveStateKey(string targetKey)
+    {
+        StateKeyRepo.Remove(targetKey);
+        return true;
+    }
+
+    #endregion
+    
     public override void OnEnable()
     {
         base.OnEnable();
 
-        if (string.IsNullOrWhiteSpace(stateKey) || stateKey == "defRP")
-        {
-            Debug.LogError("StateKey Invalid");
-        }
+        OnRoomStateRegistered += OnRoomStateRegisteredAct;
+        OnRoomStateUnregistered += OnRoomStateUnregisteredAct;
+        
+        TryAddStateKey(stateKey);
     }
 
     public override void OnDisable()
     {
         base.OnDisable();
+        
+        OnRoomStateRegistered -= OnRoomStateRegisteredAct;
+        OnRoomStateUnregistered -= OnRoomStateUnregisteredAct;
+        
+        TryRemoveStateKey(stateKey);
     }
 
     public async Task<bool> UpdateRoomProperties(string key)
@@ -36,23 +85,42 @@ public class RoomStateHelper : BaseSyncHelper
         return false;
     }
     
+    #region OnRoomStateRegistered/ OnRoomStateUnregistered
+    void OnRoomStateRegisteredAct(string keyName)
+    {
+        if (TryAddStateKey(keyName) && ServiceManager.Instance.networkSystem.IsOnlineRoom())
+        {
+            // Register and also in OnlineRoom
+        }
+    }
+    
+    void OnRoomStateUnregisteredAct(string keyName)
+    {
+        TryRemoveStateKey(keyName);
+    }
+    #endregion
+    
     #region override ISerializableHelper Register/UnRegister
     public override void Register(SerializableReadWrite srw)
     {
-        Debug.LogError($"RoomStateHelper {stateKey} Register");
+        var newName = $"{stateKey}_{srw.name}";
+        Debug.LogError($"RoomStateHelper change name {srw.name} to {newName}");
+        srw.name = newName;
         base.Register(srw);
+
+        OnRoomStateRegistered.Invoke(newName);
     }
     
     public override void Unregister(SerializableReadWrite srw)
     {
-        Debug.LogError($"RoomStateHelper{stateKey} Unregister");
+        var newName = $"{stateKey}_{srw.name}";
+        Debug.LogError($"RoomStateHelper change name {srw.name} to {newName}");
+        srw.name = newName;
         base.Unregister(srw);
+        
+        OnRoomStateUnregistered.Invoke(newName);
     }
     #endregion
-    
-    [Header("Debug Info")]
-    [SerializeField]
-    private List<KeyObjectPair> kvPair;
 
     void OnJoinedRoomAct(string roomName)
     {
@@ -69,13 +137,14 @@ public class RoomStateHelper : BaseSyncHelper
                 // }
             }
 
-            //// Update Info into RoomProperties
-            //_ = UpdateRoomProperties();
+            // Update Info into RoomProperties
+            
         }
         else
         {
-            Debug.Log($"{stateKey} try to download {roomName} Room State");
-            
+            Debug.Log($"{stateKey} try to download {roomName}_RoomState");
+
+            // Download RoomProperties to Local
         }
     }
 
