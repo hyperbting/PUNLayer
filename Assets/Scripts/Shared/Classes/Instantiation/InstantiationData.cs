@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Unity.Plastic.Newtonsoft.Json;
 
 [Serializable]
 public class InstantiationData : Dictionary<string, object>

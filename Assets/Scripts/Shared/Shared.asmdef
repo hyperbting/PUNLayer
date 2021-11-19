@@ -1,8 +1,10 @@
 {
     "name": "Shared",
+    "rootNamespace": "",
     "references": [
         "GUID:e82a9e08f241978418796ef64089d0fa",
-        "GUID:75469ad4d38634e559750d17036d5f7c"
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:ea73f805f48068f409cafb2b12726b78"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
