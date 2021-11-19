@@ -102,7 +102,6 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
         if (HavingToken())
         {
             Debug.LogWarning($"[TokenHandler] OnJoinedOnlineRoomAct Having Token");
-            if ()
             return;
         }
 
