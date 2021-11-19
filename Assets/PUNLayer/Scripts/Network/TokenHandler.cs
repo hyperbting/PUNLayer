@@ -33,6 +33,18 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
     {
         return trasnTokenGO != null;
 	}
+    
+    public bool HavingMineToken()
+    {
+        if (!HavingToken())
+            return false;
+
+        var tb = trasnTokenGO.GetComponent<ITransmissionBase>();
+        if (tb == null)
+            return false;
+
+        return tb.IsMine();
+    }
     #endregion
 
     #region Getter
@@ -70,6 +82,12 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
     #region JoinedRoom
     void TryOnJoinedRoomAct(OnOffline ooline)
     {
+        if(HavingMineToken())
+        {
+            Debug.LogWarning($"TryOnJoinedRoomAct Found My TransmissionToken!");
+            Destroy(trasnTokenGO);
+        }
+        
         if (ooline != OnOffline.Online)
         {
             Debug.Log($"[TokenHandler] TryOnJoinedRoomAct NotInOnlineRoom");
@@ -84,6 +102,7 @@ public class TokenHandler : MonoBehaviour, ITokenHandler
         if (HavingToken())
         {
             Debug.LogWarning($"[TokenHandler] OnJoinedOnlineRoomAct Having Token");
+            if ()
             return;
         }
 

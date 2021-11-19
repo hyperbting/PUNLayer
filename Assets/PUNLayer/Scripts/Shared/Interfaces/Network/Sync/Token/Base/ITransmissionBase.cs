@@ -16,4 +16,6 @@ public interface ITransmissionBase
     //void Unregister(params SerializableReadWrite[] srws);
 
     object RefObject { get; set; }
+
+    bool IsMine();
 }

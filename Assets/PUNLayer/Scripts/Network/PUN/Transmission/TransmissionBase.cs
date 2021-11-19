@@ -21,6 +21,11 @@ public class TransmissionBase : MonoBehaviourPunCallbacks, ITransmissionBase, IP
         }
     }
 
+    public bool IsMine()
+    {
+        return photonView.IsMine;
+    }
+
     [SerializeField] SyncTokenType tType;
     #region Properties
     [SerializeField] SerializableHelper seriHelper;
