@@ -13,9 +13,9 @@ public class OwnershipSubAdditive : MonoBehaviourPunCallbacks, IPunOwnershipCall
     [SerializeField] OwnershipOption ownershipOption = OwnershipOption.Request;
 
     #region Interface 
-    public Action<Player> ownershipRequestEvent;
+    public Action<Photon.Realtime.Player> ownershipRequestEvent;
 
-    public Action<Player,Player> ownershipTransferedEvent;
+    public Action<Photon.Realtime.Player,Photon.Realtime.Player> ownershipTransferedEvent;
     #endregion
 
     private void Awake()
@@ -83,7 +83,7 @@ public class OwnershipSubAdditive : MonoBehaviourPunCallbacks, IPunOwnershipCall
     }
 
     TaskCompletionSource<bool> tcsRequest;
-    public async Task<bool> RequestOwnership(Player newOwner)
+    public async Task<bool> RequestOwnership(Photon.Realtime.Player newOwner)
     {
         Debug.Log($"RequestOwnership: OwnedBy {photonView.OwnerActorNr}");
         if (photonView.Owner == PhotonNetwork.LocalPlayer)
@@ -128,7 +128,7 @@ public class OwnershipSubAdditive : MonoBehaviourPunCallbacks, IPunOwnershipCall
     #endregion
 
     #region Photon.Pun.IPunOwnershipCallbacks
-    void IPunOwnershipCallbacks.OnOwnershipRequest(PhotonView targetView, Player requester)
+    void IPunOwnershipCallbacks.OnOwnershipRequest(PhotonView targetView, Photon.Realtime.Player requester)
     {
         // only deal with the case that targetView is the same as my photonView
         if (targetView != photonView)
@@ -142,7 +142,7 @@ public class OwnershipSubAdditive : MonoBehaviourPunCallbacks, IPunOwnershipCall
             targetView.TransferOwnership(requester);
     }
 
-    void IPunOwnershipCallbacks.OnOwnershipTransfered(PhotonView targetView, Player previousOwner)
+    void IPunOwnershipCallbacks.OnOwnershipTransfered(PhotonView targetView, Photon.Realtime.Player previousOwner)
     {
         // only deal with the case that targetView is the same as my photonView
         if (targetView != photonView)
@@ -155,7 +155,7 @@ public class OwnershipSubAdditive : MonoBehaviourPunCallbacks, IPunOwnershipCall
         Debug.Log($"OnOwnershipTransfered: {targetView.ToString()} {(previousOwner==null ? "<Scene>" : previousOwner.ToString())} to {(targetView.Owner == null ? "<Scene>" : targetView.Owner.ToString())}");
     }
 
-    void IPunOwnershipCallbacks.OnOwnershipTransferFailed(PhotonView targetView, Player senderOfFailedRequest)
+    void IPunOwnershipCallbacks.OnOwnershipTransferFailed(PhotonView targetView, Photon.Realtime.Player senderOfFailedRequest)
     {
         Debug.LogWarning($"OnOwnershipTransferFailed: {targetView.ToString()}, RequestBy {senderOfFailedRequest.ToString()}");
     }

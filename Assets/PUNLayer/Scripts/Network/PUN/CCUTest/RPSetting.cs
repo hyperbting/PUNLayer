@@ -80,7 +80,7 @@ public class RPSetting : MonoBehaviourPunCallbacks
         PhotonNetwork.CurrentRoom.SetCustomProperties(tmpHT);
     }
 
-    public override void OnPlayerLeftRoom(Player otherPlayer)
+    public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
     {
         base.OnPlayerLeftRoom(otherPlayer);
         totalPeopleCount.text = CalculateTotalPeople().ToString();
@@ -93,7 +93,7 @@ public class RPSetting : MonoBehaviourPunCallbacks
         SyncWithProp(propertiesThatChanged);
     }
 
-    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+    public override void OnPlayerPropertiesUpdate(Photon.Realtime.Player targetPlayer, Hashtable changedProps)
     {
         base.OnPlayerPropertiesUpdate(targetPlayer, changedProps);
 

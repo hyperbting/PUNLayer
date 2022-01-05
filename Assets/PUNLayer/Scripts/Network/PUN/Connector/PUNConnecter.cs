@@ -59,8 +59,8 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, INetworkConnect
     public Action OnLeftRoomAction;
     public Action<short, string> OnCreateRoomFailedAction;
     public Action<short, string> OnJoinRoomFailedAction;
-    public Action<Player> OnPlayerEnteredRoomAction;
-    public Action<Player> OnPlayerLeftRoomAction;
+    public Action<Photon.Realtime.Player> OnPlayerEnteredRoomAction;
+    public Action<Photon.Realtime.Player> OnPlayerLeftRoomAction;
 
     public Action<ExitGames.Client.Photon.EventData> OnEventAction;
 
@@ -68,7 +68,7 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, INetworkConnect
     /// Key, Value
     /// </summary>
     public Action<string, object> OnRoomPropertyUpdateAction;
-    public Action<Player, string, object> OnPlayerPropertyUpdateAction;
+    public Action<Photon.Realtime.Player, string, object> OnPlayerPropertyUpdateAction;
     #endregion
 
     #region Mono

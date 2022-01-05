@@ -28,7 +28,7 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, IOnEventCallback,
         return null;
     }
 
-    public object GetPlayerProperty(Player player, string key)
+    public object GetPlayerProperty(Photon.Realtime.Player player, string key)
     {
         if (PhotonNetwork.InRoom && player.CustomProperties.TryGetValue(key, out object val))
         {
@@ -185,7 +185,7 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, IOnEventCallback,
         return result;
     }
 
-    public async Task<bool> SetPlayerProperty(Player player, KeyValExpPair kvePair)
+    public async Task<bool> SetPlayerProperty(Photon.Realtime.Player player, KeyValExpPair kvePair)
     {
         var pk = new PlayerKey(player, kvePair.key);
         while (ppInProgress.ContainsKey(pk))
@@ -227,21 +227,21 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, IOnEventCallback,
     #endregion
 
     #region IInRoomCallbacks 
-    public override void OnPlayerEnteredRoom(Player newPlayer)
+    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
         base.OnPlayerEnteredRoom(newPlayer);
 
         OnPlayerEnteredRoomAction?.Invoke(newPlayer);
     }
 
-    public override void OnPlayerLeftRoom(Player otherPlayer)
+    public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
     {
         base.OnPlayerLeftRoom(otherPlayer);
 
         OnPlayerLeftRoomAction?.Invoke(otherPlayer);
     }
 
-    public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
+    public override void OnPlayerPropertiesUpdate(Photon.Realtime.Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
     {
         base.OnPlayerPropertiesUpdate(targetPlayer, changedProps);
 
@@ -261,14 +261,14 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, IOnEventCallback,
         }
     }
 
-    public override void OnMasterClientSwitched(Player newMasterClient)
+    public override void OnMasterClientSwitched(Photon.Realtime.Player newMasterClient)
     {
         base.OnMasterClientSwitched(newMasterClient);
     }
     #endregion
 
     #region
-    void CompareWithPPInProgress(Player player, string key, object val)
+    void CompareWithPPInProgress(Photon.Realtime.Player player, string key, object val)
     {
         var pk = new PlayerKey(player, key);
         Debug.Log(pk.ToString());
@@ -319,10 +319,10 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks, IOnEventCallback,
 [Serializable]
 public class PlayerKey
 {
-    public Player player;
+    public Photon.Realtime.Player player;
     public string key;
 
-    public PlayerKey(Player pl, string ke)
+    public PlayerKey(Photon.Realtime.Player pl, string ke)
     {
         player = pl;
         key = ke;
