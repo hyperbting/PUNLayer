@@ -1,6 +1,5 @@
 ﻿using Photon.Pun;
 using Photon.Realtime;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -153,6 +152,7 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks
             case ServerTarget.ServerMasterTargetType.SpecificMaster:
                 Debug.Log($"{scriptName} ConnectToMaster");
                 //PhotonNetwork.ConnectToMaster(punMasterTarget.ipAddress, punMasterTarget.serverPort);
+                throw new System.NotImplementedException ();
                 break;
             case ServerTarget.ServerMasterTargetType.SpecificRegion:
                 Debug.Log($"{scriptName} ConnectToRegion");
