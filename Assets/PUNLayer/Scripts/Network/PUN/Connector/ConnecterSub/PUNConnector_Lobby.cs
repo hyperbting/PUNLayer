@@ -101,6 +101,24 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks
         }
     }
 
+    public bool ConnectOffline()
+    {
+        if (PhotonNetwork.OfflineMode)
+        {
+            Debug.Log($"ConnectOffline: AlreadyInOffline");
+            return false;
+        }
+
+        PhotonNetwork.OfflineMode = true;
+        return true;
+    }
+
+    [ContextMenu("Debug PhotonOffline")]
+    private void DebugOfflineMode()
+    {
+        ConnectOffline();
+    }
+
     /// <summary>
     /// 
     ///  Will Timeout after 60sec
@@ -259,7 +277,8 @@ public partial class PUNConnecter : MonoBehaviourPunCallbacks
 
     public override void OnConnectedToMaster()
     {
-        Debug.Log($"{scriptName} OnConnectedToMaster");
+        var reg = PhotonNetwork.OfflineMode ? "Offline" : PhotonNetwork.CloudRegion;
+        Debug.Log($"{scriptName} OnConnectedToMaster: {reg}");
         base.OnConnectedToMaster();
         CurrentPhotonRoomState = PhotonRoomState.CanJoinRoom;
         connectMSResult?.TrySetResult(true);
